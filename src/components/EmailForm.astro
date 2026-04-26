@@ -1,0 +1,160 @@
+---
+---
+
+<div class="email-form-container">
+	<form class="email-form" id="emailForm">
+		<div class="form-group">
+			<label for="emailInput">Your Email Address</label>
+			<div class="input-wrapper">
+				<input
+					type="email"
+					id="emailInput"
+					name="email"
+					placeholder="your@email.com"
+					required
+				/>
+				<button type="submit" class="submit-btn">Subscribe</button>
+			</div>
+			<span class="form-message"></span>
+		</div>
+	</form>
+</div>
+
+<script>
+	const form = document.getElementById('emailForm');
+	const emailInput = document.getElementById('emailInput');
+	const formMessage = document.querySelector('.form-message');
+
+	if (form) {
+		form.addEventListener('submit', (e) => {
+			e.preventDefault();
+
+			const email = emailInput?.value.trim();
+			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+			formMessage?.classList.remove('success', 'error');
+
+			if (!email) {
+				formMessage?.classList.add('error');
+				formMessage ? formMessage.textContent = 'Please enter an email address' : null;
+				return;
+			}
+
+			if (!emailRegex.test(email)) {
+				formMessage?.classList.add('error');
+				formMessage ? formMessage.textContent = 'Please enter a valid email address' : null;
+				return;
+			}
+
+			formMessage?.classList.add('success');
+			formMessage ? formMessage.textContent = 'Successfully subscribed! Check your email for updates.' : null;
+
+			if (emailInput) emailInput.value = '';
+
+			setTimeout(() => {
+				formMessage?.classList.remove('success');
+				formMessage ? formMessage.textContent = '' : null;
+			}, 5000);
+		});
+	}
+</script>
+
+<style>
+	.email-form-container {
+		width: 100%;
+	}
+
+	.email-form {
+		width: 100%;
+	}
+
+	.form-group {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+
+	label {
+		font-size: 16px;
+		font-weight: 600;
+		color: var(--color-dark);
+		font-family: 'Playfair Display', serif;
+	}
+
+	.input-wrapper {
+		display: flex;
+		gap: 8px;
+	}
+
+	input[type='email'] {
+		flex: 1;
+		padding: 14px 18px;
+		border: 2px solid var(--color-gray);
+		border-radius: 8px;
+		font-size: 15px;
+		font-family: 'Inter', sans-serif;
+		transition: all 0.3s ease;
+		background: white;
+	}
+
+	input[type='email']:focus {
+		outline: none;
+		border-color: var(--color-gold);
+		box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1);
+	}
+
+	input[type='email']::placeholder {
+		color: rgba(139, 125, 111, 0.5);
+	}
+
+	.submit-btn {
+		padding: 14px 32px;
+		background: var(--color-gold);
+		color: white;
+		border: none;
+		border-radius: 8px;
+		font-size: 15px;
+		font-weight: 600;
+		font-family: 'Inter', sans-serif;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		white-space: nowrap;
+	}
+
+	.submit-btn:hover {
+		background: var(--color-wood);
+		transform: translateY(-2px);
+		box-shadow: 0 8px 16px rgba(212, 165, 116, 0.3);
+	}
+
+	.submit-btn:active {
+		transform: translateY(0);
+	}
+
+	.form-message {
+		font-size: 14px;
+		min-height: 20px;
+		display: block;
+		transition: all 0.3s ease;
+	}
+
+	.form-message.success {
+		color: #27ae60;
+		font-weight: 500;
+	}
+
+	.form-message.error {
+		color: #e74c3c;
+		font-weight: 500;
+	}
+
+	@media (max-width: 640px) {
+		.input-wrapper {
+			flex-direction: column;
+		}
+
+		.submit-btn {
+			width: 100%;
+		}
+	}
+</style>

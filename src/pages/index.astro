@@ -1,11 +1,873 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import ProductCard from '../components/ProductCard.astro';
+import ImageSlider from '../components/ImageSlider.astro';
+import TestimonialCarousel from '../components/TestimonialCarousel.astro';
+import FAQAccordion from '../components/FAQAccordion.astro';
+import ProcessTimeline from '../components/ProcessTimeline.astro';
+import GalleryGrid from '../components/GalleryGrid.astro';
+import EmailForm from '../components/EmailForm.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const productImages = [
+{
+src: "data:image/svg+xml,%3Csvg width='800' height='600' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='wood' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23D2B48C;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%238B7355;stop-opacity:1' /%3E%3C/linearGradient%3E%3ClinearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FFFAF5;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23F0EBE6;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='600' fill='url(%23bg)'/%3E%3Crect x='150' y='100' width='500' height='400' fill='url(%23wood)' rx='8'/%3E%3Crect x='160' y='110' width='480' height='380' fill='%23E8D4B8' opacity='0.7'/%3E%3Ctext x='400' y='200' font-family='serif' font-size='32' fill='%236B5B47' text-anchor='middle' font-weight='bold'%3EPhilippians 4:8%3C/text%3E%3Ctext x='400' y='280' font-family='serif' font-size='18' fill='%236B5B47' text-anchor='middle'%3E%22Whatever is true, whatever is noble,%3C/text%3E%3Ctext x='400' y='310' font-family='serif' font-size='18' fill='%236B5B47' text-anchor='middle'%3Ewhatever is right...%22%3C/text%3E%3Ccircle cx='200' cy='450' r='15' fill='%23D4A574'/%3E%3Ccircle cx='600' cy='450' r='15' fill='%23D4A574'/%3E%3Crect x='300' y='440' width='200' height='4' fill='%23D4A574'/%3E%3C/svg%3E",
+alt: "Bible Verse Wall Art - Philippians 4:8",
+title: "Faith & Inspiration"
+},
+{
+src: "data:image/svg+xml,%3Csvg width='800' height='600' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='wood2' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23C19A6B;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%239B8B6F;stop-opacity:1' /%3E%3C/linearGradient%3E%3ClinearGradient id='bg2' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FFFAF5;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23F5F1ED;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='600' fill='url(%23bg2)'/%3E%3Crect x='100' y='80' width='600' height='450' fill='url(%23wood2)' rx='12'/%3E%3Ctext x='400' y='200' font-family='serif' font-size='56' fill='%23F5F1ED' text-anchor='middle' font-weight='bold'%3ELOVE%3C/text%3E%3Ctext x='400' y='350' font-family='serif' font-size='20' fill='%23F5F1ED' text-anchor='middle'%3E1 John 4:7-8%3C/text%3E%3Cpath d='M 250 420 Q 400 480 550 420' stroke='%23D4A574' stroke-width='3' fill='none'/%3E%3C/svg%3E",
+alt: "Love Scripture Display",
+title: "Divine Love"
+},
+{
+src: "data:image/svg+xml,%3Csvg width='800' height='600' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='wood3' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23D7A868;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%238B7355;stop-opacity:1' /%3E%3C/linearGradient%3E%3ClinearGradient id='bg3' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FFFBF7;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23F0ECE7;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='600' fill='url(%23bg3)'/%3E%3Crect x='150' y='120' width='500' height='350' fill='url(%23wood3)' rx='8'/%3E%3Ctext x='400' y='240' font-family='serif' font-size='40' fill='%23F5F1ED' text-anchor='middle' font-weight='bold'%3EGrace%3C/text%3E%3Ctext x='400' y='300' font-family='serif' font-size='16' fill='%23F5F1ED' text-anchor='middle'%3E%22By grace you have been saved%22%3C/text%3E%3Crect x='200' y='330' width='400' height='2' fill='%23D4A574'/%3E%3C/svg%3E",
+alt: "Grace Scripture Plaque",
+title: "Grace"
+},
+{
+src: "data:image/svg+xml,%3Csvg width='800' height='600' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='wood4' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23C8956F;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%239B8671;stop-opacity:1' /%3E%3C/linearGradient%3E%3ClinearGradient id='bg4' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FEFDFB;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23F5F2ED;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='600' fill='url(%23bg4)'/%3E%3Cpath d='M 100 300 L 400 100 L 700 300 L 600 500 L 200 500 Z' fill='url(%23wood4)'/%3E%3Ctext x='400' y='260' font-family='serif' font-size='48' fill='%23F5F1ED' text-anchor='middle' font-weight='bold'%3EPeace%3C/text%3E%3Ctext x='400' y='350' font-family='serif' font-size='14' fill='%23F5F1ED' text-anchor='middle'%3EJohn 14:27%3C/text%3E%3Ccircle cx='400' cy='420' r='12' fill='%23D4A574'/%3E%3C/svg%3E",
+alt: "Peace Scripture Diamond",
+title: "Inner Peace"
+}
+];
+
+const galleryImages = [
+{ src: "data:image/svg+xml,%3Csvg width='400' height='400' xmlns='http://www.w3.org/2000/svg'%3E%3Crect fill='%23D2B48C' width='400' height='400'/%3E%3Ctext x='200' y='200' font-size='18' fill='%236B5B47' text-anchor='middle' dy='.3em'%3EFaith Series%3C/text%3E%3C/svg%3E", alt: "Faith Collection", title: "Faith Series" },
+{ src: "data:image/svg+xml,%3Csvg width='400' height='400' xmlns='http://www.w3.org/2000/svg'%3E%3Crect fill='%23C19A6B' width='400' height='400'/%3E%3Ctext x='200' y='200' font-size='18' fill='%236B5B47' text-anchor='middle' dy='.3em'%3ECustom Orders%3C/text%3E%3C/svg%3E", alt: "Custom Pieces", title: "Custom Orders" },
+{ src: "data:image/svg+xml,%3Csvg width='400' height='400' xmlns='http://www.w3.org/2000/svg'%3E%3Crect fill='%238B7355' width='400' height='400'/%3E%3Ctext x='200' y='200' font-size='18' fill='%23F5F1ED' text-anchor='middle' dy='.3em'%3EPremium Range%3C/text%3E%3C/svg%3E", alt: "Premium Collection", title: "Premium Range" },
+{ src: "data:image/svg+xml,%3Csvg width='400' height='400' xmlns='http://www.w3.org/2000/svg'%3E%3Crect fill='%23BFA999' width='400' height='400'/%3E%3Ctext x='200' y='200' font-size='18' fill='%236B5B47' text-anchor='middle' dy='.3em'%3ESpecial Editions%3C/text%3E%3C/svg%3E", alt: "Special Editions", title: "Special Editions" },
+{ src: "data:image/svg+xml,%3Csvg width='400' height='400' xmlns='http://www.w3.org/2000/svg'%3E%3Crect fill='%23A0826D' width='400' height='400'/%3E%3Ctext x='200' y='200' font-size='18' fill='%23F5F1ED' text-anchor='middle' dy='.3em'%3EGift Sets%3C/text%3E%3C/svg%3E", alt: "Gift Packages", title: "Gift Sets" },
+{ src: "data:image/svg+xml,%3Csvg width='400' height='400' xmlns='http://www.w3.org/2000/svg'%3E%3Crect fill='%23D4A574' width='400' height='400'/%3E%3Ctext x='200' y='200' font-size='18' fill='%236B5B47' text-anchor='middle' dy='.3em'%3ELimited Series%3C/text%3E%3C/svg%3E", alt: "Limited Edition", title: "Limited Series" }
+];
+
+const testimonials = [
+{
+name: "Sarah Johnson",
+role: "Customer from California",
+image: "data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='100' cy='100' r='100' fill='%23D4A574'/%3E%3Ccircle cx='100' cy='80' r='30' fill='%23F5F1ED'/%3E%3Cellipse cx='100' cy='140' rx='35' ry='40' fill='%23F5F1ED'/%3E%3C/svg%3E",
+content: "The quality and attention to detail are exceptional. I gave one as a gift and they absolutely loved it. Every piece feels like a work of art.",
+rating: 5
+},
+{
+name: "Michael Chen",
+role: "Church Gift Coordinator",
+image: "data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='100' cy='100' r='100' fill='%238B7355'/%3E%3Ccircle cx='100' cy='80' r='30' fill='%23F5F1ED'/%3E%3Cellipse cx='100' cy='140' rx='35' ry='40' fill='%23F5F1ED'/%3E%3C/svg%3E",
+content: "We've ordered multiple pieces for our congregation. The craftsmanship is outstanding and the spiritual messages are truly inspiring.",
+rating: 5
+},
+{
+name: "Emma Rodriguez",
+role: "Interior Designer",
+image: "data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='100' cy='100' r='100' fill='%23C19A6B'/%3E%3Ccircle cx='100' cy='80' r='30' fill='%23F5F1ED'/%3E%3Cellipse cx='100' cy='140' rx='35' ry='40' fill='%23F5F1ED'/%3E%3C/svg%3E",
+content: "Perfect addition to my designs. My clients are always asking where these beautiful pieces come from. Koseli Crafts is a gem!",
+rating: 5
+}
+];
+
+const processSteps = [
+{ icon: "✍", title: "Design & Concept", description: "We start with your vision, creating custom designs that capture the spiritual essence you desire." },
+{ icon: "🔥", title: "Laser Engraving", description: "Precision laser technology engraves your design onto premium wood with exceptional detail." },
+{ icon: "🎨", title: "Handicraft Details", description: "Our artisans hand-finish each piece, adding unique touches and embellishments." },
+{ icon: "✨", title: "Quality Check & Finish", description: "Every piece is carefully inspected to ensure perfection before shipment to your home." }
+];
+
+const faqs = [
+{
+question: "What materials do you use?",
+answer: "We use premium quality wood sourced responsibly. Each piece is selected for its natural beauty and durability. The engravings are done using precision laser technology, and all finishes are eco-friendly."
+},
+{
+question: "Can I customize my order?",
+answer: "Absolutely! We offer extensive customization options. You can choose different scriptures, add names, change dimensions, or work with us on a completely custom design. Contact us for details."
+},
+{
+question: "What's your shipping timeline?",
+answer: "Standard orders are typically processed within 5-7 business days. Custom orders take 10-14 business days. We ship worldwide with tracking and insurance included."
+},
+{
+question: "Are your pieces suitable for gifts?",
+answer: "Yes! Our pieces make excellent gifts for birthdays, anniversaries, spiritual milestones, and more. We offer beautiful gift packaging and can include personalized messages."
+},
+{
+question: "How do I care for my piece?",
+answer: "Simply dust with a soft cloth occasionally. Avoid direct sunlight for extended periods to maintain the wood's natural color. Keep away from moisture and extreme temperature changes."
+},
+{
+question: "Do you have a return policy?",
+answer: "Yes, we offer 30-day returns for unused items in original condition. Custom orders are final sale. For damaged items, we provide replacement or refund."
+}
+];
 ---
 
 <Layout>
-	<Welcome />
+<div class="container">
+<nav class="navbar">
+<div class="nav-content">
+<div class="logo"><h2>Koseli Crafts</h2></div>
+<ul class="nav-links">
+<li><a href="#featured">Featured</a></li>
+<li><a href="#products">Products</a></li>
+<li><a href="#process">Process</a></li>
+<li><a href="#gallery">Gallery</a></li>
+<li><a href="#testimonials">Testimonials</a></li>
+<li><a href="#faq">FAQ</a></li>
+<li><a href="#newsletter">Newsletter</a></li>
+</ul>
+</div>
+</nav>
+
+<header class="hero">
+<div class="hero-content">
+<div class="hero-text">
+<h1>Sacred Art, Handcrafted with Love</h1>
+<p>Premium laser-engraved wooden pieces combining faith, artistry, and craftsmanship. Each creation is a unique expression of spirituality designed to inspire and uplift your sacred spaces.</p>
+<div class="hero-ctas">
+<a href="#products" class="cta-button primary">Explore Collection</a>
+<a href="#featured" class="cta-button secondary">View Featured</a>
+</div>
+</div>
+<div class="hero-visual">
+<div class="visual-placeholder">
+<div class="floating-card card-1"></div>
+<div class="floating-card card-2"></div>
+<div class="floating-card card-3"></div>
+</div>
+</div>
+</div>
+</header>
+
+<section id="featured" class="featured-section">
+<div class="section-header">
+<h2>Featured Collection</h2>
+<p>Discover Our Most Popular Pieces</p>
+</div>
+<ImageSlider images={productImages} autoPlay={true} interval={6000} />
+</section>
+
+<section id="products" class="products-section">
+<div class="section-header">
+<h2>Our Collection</h2>
+<p>Handcrafted pieces for your spiritual journey</p>
+</div>
+<div class="products-grid">
+<ProductCard title="Bible Verse Wall Art" description="Laser-engraved scripture on premium wood with hand-finished details. Perfect for living rooms, bedrooms, or offices. Includes mounting hardware." image={productImages[0].src} imageAlt={productImages[0].alt} />
+<ProductCard title="Inspirational Scripture Plaque" description="Divine words beautifully engraved with elegant handicraft details. Available in multiple wood finishes and sizes for any space." image={productImages[1].src} imageAlt={productImages[1].alt} />
+<ProductCard title="Custom Personalized Piece" description="Create something uniquely yours. Choose your scripture, add names, or request a completely custom design for that special occasion." image={productImages[2].src} imageAlt={productImages[2].alt} />
+<ProductCard title="Premium Display Masterpiece" description="Statement-sized artwork combining laser precision with hand-applied embellishments. Ideal for galleries, collections, and meaningful gifts." image={productImages[3].src} imageAlt={productImages[3].alt} />
+</div>
+</section>
+
+<section class="why-choose-section">
+<div class="section-header">
+<h2>Why Choose Koseli Crafts?</h2>
+<p>Premium quality meets spiritual purpose</p>
+</div>
+<div class="benefits-grid">
+<div class="benefit-card"><div class="benefit-icon">🌿</div><h4>Premium Materials</h4><p>We source only the finest sustainably-harvested wood, ensuring durability and natural beauty that lasts for generations.</p></div>
+<div class="benefit-card"><div class="benefit-icon">🎯</div><h4>Precision Crafted</h4><p>Advanced laser technology combines with traditional handicraft techniques to create pieces of exceptional quality and detail.</p></div>
+<div class="benefit-card"><div class="benefit-icon">✨</div><h4>Spiritual Purpose</h4><p>Every piece is created with intention to inspire daily reflection and bring spiritual meaning to your sacred spaces.</p></div>
+<div class="benefit-card"><div class="benefit-icon">🎁</div><h4>Perfect Gifts</h4><p>Thoughtful, meaningful gifts that touch the heart. Beautiful packaging available for all occasions and celebrations.</p></div>
+<div class="benefit-card"><div class="benefit-icon">🔧</div><h4>Customizable</h4><p>Work with us to create truly personal pieces. Custom scriptures, names, sizes, and finishes available for any vision.</p></div>
+<div class="benefit-card"><div class="benefit-icon">🌍</div><h4>Worldwide Shipping</h4><p>We ship globally with tracking and insurance. Fast, reliable delivery to bring your sacred art home with care.</p></div>
+</div>
+</section>
+
+<section id="process" class="process-section">
+<div class="section-header">
+<h2>Our Craftsmanship Process</h2>
+<p>From vision to masterpiece in four thoughtful steps</p>
+</div>
+<ProcessTimeline steps={processSteps} />
+</section>
+
+<section id="gallery" class="gallery-section">
+<div class="section-header">
+<h2>Our Gallery</h2>
+<p>A glimpse into our diverse collection of creations</p>
+</div>
+<GalleryGrid images={galleryImages} columns={3} />
+</section>
+
+<section id="testimonials" class="testimonials-section">
+<div class="section-header">
+<h2>What Our Customers Say</h2>
+<p>Trusted by thousands of happy customers worldwide</p>
+</div>
+<TestimonialCarousel testimonials={testimonials} />
+</section>
+
+<section id="faq" class="faq-section">
+<div class="section-header">
+<h2>Frequently Asked Questions</h2>
+<p>Everything you need to know about our products</p>
+</div>
+<FAQAccordion faqs={faqs} />
+</section>
+
+<section id="newsletter" class="newsletter-section">
+<div class="newsletter-content">
+<h2>Join Our Community</h2>
+<p>Subscribe for exclusive updates, new collection announcements, and special offers. We'll send you inspiration and beauty straight to your inbox.</p>
+<EmailForm />
+</div>
+</section>
+
+<section class="final-cta-section">
+<div class="final-cta-content">
+<h2>Ready to Transform Your Space?</h2>
+<p>Let Koseli Crafts bring spiritual beauty and meaning to your home or office.</p>
+<div class="final-cta-buttons">
+<button class="cta-button-large primary">Shop Now</button>
+<button class="cta-button-large secondary">Contact Us</button>
+</div>
+</div>
+</section>
+
+<footer class="footer">
+<div class="footer-content">
+<div class="footer-section">
+<h4>Koseli Crafts</h4>
+<p>Premium handcrafted spiritual art combining faith, artistry, and precision craftsmanship.</p>
+</div>
+<div class="footer-section">
+<h4>Quick Links</h4>
+<ul>
+<li><a href="#products">Products</a></li>
+<li><a href="#process">Our Process</a></li>
+<li><a href="#gallery">Gallery</a></li>
+<li><a href="#testimonials">Testimonials</a></li>
+</ul>
+</div>
+<div class="footer-section">
+<h4>Contact</h4>
+<p>Email: info@koselicraft.com</p>
+<p>Phone: +1 (555) 123-4567</p>
+</div>
+<div class="footer-section">
+<h4>Follow Us</h4>
+<div class="social-links">
+<a href="#">Instagram</a>
+<a href="#">Facebook</a>
+<a href="#">Twitter</a>
+</div>
+</div>
+</div>
+<div class="footer-bottom">
+<p>&copy; 2024 Koseli Crafts. Handcrafted with faith and love. All rights reserved.</p>
+</div>
+</footer>
+</div>
 </Layout>
+
+<style>
+.container {
+width: 100%;
+background-color: var(--color-cream);
+}
+
+/* Navigation */
+.navbar {
+position: sticky;
+top: 0;
+background: rgba(245, 241, 237, 0.98);
+backdrop-filter: blur(20px);
+border-bottom: 1px solid rgba(232, 229, 225, 0.6);
+z-index: 100;
+padding: 0 24px;
+box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+.nav-content {
+max-width: 1200px;
+margin: 0 auto;
+display: flex;
+justify-content: space-between;
+align-items: center;
+height: 80px;
+}
+
+.logo h2 {
+font-size: 28px;
+color: var(--color-wood);
+margin: 0;
+font-weight: 700;
+letter-spacing: -0.5px;
+}
+
+.nav-links {
+display: flex;
+list-style: none;
+gap: 40px;
+}
+
+.nav-links a {
+font-weight: 500;
+color: var(--color-dark);
+transition: var(--transition);
+font-size: 14px;
+position: relative;
+white-space: nowrap;
+}
+
+.nav-links a::after {
+content: '';
+position: absolute;
+bottom: -4px;
+left: 0;
+width: 0;
+height: 2px;
+background: var(--color-gold);
+transition: var(--transition);
+}
+
+.nav-links a:hover::after {
+width: 100%;
+}
+
+.nav-links a:hover {
+color: var(--color-gold);
+}
+
+/* Hero Section */
+.hero {
+max-width: 1200px;
+margin: 0 auto;
+padding: 100px 24px 80px;
+}
+
+.hero-content {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 80px;
+align-items: center;
+}
+
+.hero-text h1 {
+font-size: 68px;
+line-height: 1.1;
+margin-bottom: 24px;
+color: var(--color-dark);
+font-weight: 700;
+letter-spacing: -2px;
+}
+
+.hero-text p {
+font-size: 18px;
+color: var(--color-light);
+margin-bottom: 40px;
+line-height: 1.9;
+max-width: 550px;
+}
+
+.hero-ctas {
+display: flex;
+gap: 16px;
+align-items: center;
+}
+
+.cta-button {
+display: inline-block;
+padding: 16px 40px;
+font-weight: 600;
+border-radius: 10px;
+transition: var(--transition);
+border: 2px solid;
+font-size: 15px;
+letter-spacing: 0.3px;
+text-decoration: none;
+cursor: pointer;
+font-family: var(--font-sans);
+}
+
+.cta-button.primary {
+background: var(--color-gold);
+color: white;
+border-color: var(--color-gold);
+}
+
+.cta-button.primary:hover {
+background: var(--color-wood);
+border-color: var(--color-wood);
+transform: translateY(-3px);
+box-shadow: 0 12px 28px rgba(212, 165, 116, 0.3);
+}
+
+.cta-button.secondary {
+background: transparent;
+color: var(--color-wood);
+border-color: var(--color-wood);
+}
+
+.cta-button.secondary:hover {
+background: var(--color-wood);
+color: white;
+transform: translateY(-3px);
+}
+
+.hero-visual {
+display: flex;
+justify-content: center;
+align-items: center;
+position: relative;
+}
+
+.visual-placeholder {
+width: 100%;
+max-width: 450px;
+aspect-ratio: 1;
+background: linear-gradient(135deg, #FFFFFA 0%, #F5F1ED 30%, #E8E5E1 60%, #DDD9D1 100%);
+border-radius: 24px;
+box-shadow: 0 30px 80px rgba(58, 51, 42, 0.2), 0 10px 30px rgba(58, 51, 42, 0.1);
+position: relative;
+overflow: hidden;
+}
+
+.visual-placeholder::before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.6) 0%, transparent 50%);
+pointer-events: none;
+}
+
+.floating-card {
+position: absolute;
+border-radius: 12px;
+box-shadow: 0 8px 24px rgba(58, 51, 42, 0.2);
+}
+
+.card-1 {
+width: 120px;
+height: 140px;
+background: linear-gradient(135deg, #D4A574 0%, #C19A6B 100%);
+top: 10%;
+left: 5%;
+animation: float 4s ease-in-out infinite;
+}
+
+.card-2 {
+width: 100px;
+height: 120px;
+background: linear-gradient(135deg, #8B7355 0%, #6B5B47 100%);
+bottom: 15%;
+right: 8%;
+animation: float 5s ease-in-out infinite 0.5s;
+}
+
+.card-3 {
+width: 140px;
+height: 110px;
+background: linear-gradient(135deg, #C8956F 0%, #A0826D 100%);
+bottom: 25%;
+left: 10%;
+animation: float 4.5s ease-in-out infinite 1s;
+}
+
+@keyframes float {
+0%, 100% { transform: translateY(0px); }
+50% { transform: translateY(-20px); }
+}
+
+/* Featured Section */
+.featured-section {
+max-width: 1200px;
+margin: 0 auto;
+padding: 120px 24px;
+}
+
+/* Section Header */
+.section-header {
+text-align: center;
+margin-bottom: 80px;
+}
+
+.section-header h2 {
+font-size: 56px;
+margin-bottom: 16px;
+color: var(--color-dark);
+font-weight: 700;
+letter-spacing: -1.5px;
+}
+
+.section-header p {
+font-size: 18px;
+color: var(--color-light);
+max-width: 500px;
+margin: 0 auto;
+}
+
+/* Products Section */
+.products-section {
+max-width: 1200px;
+margin: 0 auto;
+padding: 140px 24px;
+}
+
+.products-grid {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 40px;
+}
+
+/* Why Choose Section */
+.why-choose-section {
+background: white;
+padding: 140px 24px;
+margin: 0;
+}
+
+.benefits-grid {
+max-width: 1200px;
+margin: 0 auto;
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 32px;
+}
+
+.benefit-card {
+background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(245, 241, 237, 0.5) 100%);
+padding: 36px;
+border-radius: 16px;
+border: 1px solid rgba(232, 229, 225, 0.8);
+text-align: center;
+transition: all 0.3s ease;
+box-shadow: 0 2px 8px rgba(58, 51, 42, 0.04);
+}
+
+.benefit-card:hover {
+transform: translateY(-8px);
+box-shadow: 0 16px 40px rgba(212, 165, 116, 0.15);
+border-color: var(--color-gold);
+}
+
+.benefit-icon {
+font-size: 48px;
+margin-bottom: 16px;
+display: block;
+}
+
+.benefit-card h4 {
+font-size: 20px;
+color: var(--color-wood);
+margin: 0 0 12px 0;
+}
+
+.benefit-card p {
+font-size: 15px;
+color: var(--color-light);
+margin: 0;
+line-height: 1.7;
+}
+
+/* Process Section */
+.process-section {
+max-width: 1200px;
+margin: 0 auto;
+padding: 140px 24px;
+}
+
+/* Gallery Section */
+.gallery-section {
+background: linear-gradient(180deg, #FAFAF8 0%, white 100%);
+padding: 140px 24px;
+margin: 0;
+}
+
+/* Testimonials Section */
+.testimonials-section {
+max-width: 1200px;
+margin: 0 auto;
+padding: 140px 24px;
+}
+
+/* FAQ Section */
+.faq-section {
+background: white;
+padding: 140px 24px;
+margin: 0;
+}
+
+/* Newsletter Section */
+.newsletter-section {
+background: linear-gradient(135deg, rgba(212, 165, 116, 0.08) 0%, rgba(107, 91, 71, 0.04) 100%);
+padding: 140px 24px;
+margin: 0;
+}
+
+.newsletter-content {
+max-width: 700px;
+margin: 0 auto;
+text-align: center;
+}
+
+.newsletter-content h2 {
+font-size: 48px;
+color: var(--color-dark);
+margin: 0 0 16px 0;
+font-weight: 700;
+}
+
+.newsletter-content p {
+font-size: 18px;
+color: var(--color-light);
+margin: 0 0 40px 0;
+line-height: 1.8;
+}
+
+/* Final CTA Section */
+.final-cta-section {
+background: linear-gradient(135deg, var(--color-wood) 0%, #5A4C3F 100%);
+color: white;
+padding: 160px 24px;
+text-align: center;
+}
+
+.final-cta-content {
+max-width: 700px;
+margin: 0 auto;
+}
+
+.final-cta-content h2 {
+font-size: 56px;
+margin: 0 0 16px 0;
+font-weight: 700;
+letter-spacing: -1.5px;
+}
+
+.final-cta-content p {
+font-size: 20px;
+color: rgba(255, 255, 255, 0.95);
+margin: 0 0 48px 0;
+line-height: 1.7;
+}
+
+.final-cta-buttons {
+display: flex;
+gap: 20px;
+justify-content: center;
+flex-wrap: wrap;
+}
+
+.cta-button-large {
+padding: 18px 52px;
+font-weight: 700;
+font-size: 17px;
+border: none;
+border-radius: 10px;
+cursor: pointer;
+transition: all 0.3s ease;
+display: inline-block;
+letter-spacing: 0.3px;
+font-family: var(--font-sans);
+}
+
+.cta-button-large.primary {
+background: var(--color-gold);
+color: var(--color-wood);
+}
+
+.cta-button-large.primary:hover {
+background: white;
+transform: translateY(-3px);
+box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+}
+
+.cta-button-large.secondary {
+background: rgba(255, 255, 255, 0.2);
+color: white;
+border: 2px solid white;
+}
+
+.cta-button-large.secondary:hover {
+background: white;
+color: var(--color-wood);
+transform: translateY(-3px);
+}
+
+/* Footer */
+.footer {
+background: linear-gradient(180deg, #3A332A 0%, #2D261E 100%);
+color: rgba(255, 255, 255, 0.8);
+padding: 80px 24px 40px;
+border-top: 1px solid rgba(212, 165, 116, 0.1);
+margin-top: 40px;
+}
+
+.footer-content {
+max-width: 1200px;
+margin: 0 auto;
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 60px;
+margin-bottom: 60px;
+}
+
+.footer-section h4 {
+color: white;
+font-size: 18px;
+margin: 0 0 16px 0;
+font-weight: 700;
+}
+
+.footer-section p {
+margin: 8px 0;
+font-size: 14px;
+line-height: 1.8;
+}
+
+.footer-section ul {
+list-style: none;
+padding: 0;
+margin: 0;
+}
+
+.footer-section li {
+margin: 8px 0;
+}
+
+.footer-section a {
+color: rgba(255, 255, 255, 0.8);
+transition: var(--transition);
+}
+
+.footer-section a:hover {
+color: var(--color-gold);
+}
+
+.social-links {
+display: flex;
+gap: 16px;
+}
+
+.footer-bottom {
+max-width: 1200px;
+margin: 0 auto;
+text-align: center;
+padding-top: 40px;
+border-top: 1px solid rgba(212, 165, 116, 0.1);
+font-size: 14px;
+color: rgba(255, 255, 255, 0.6);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+.benefits-grid {
+grid-template-columns: repeat(2, 1fr);
+}
+.footer-content {
+grid-template-columns: repeat(2, 1fr);
+gap: 40px;
+}
+}
+
+@media (max-width: 768px) {
+.hero-content {
+grid-template-columns: 1fr;
+gap: 40px;
+}
+.hero-text h1 {
+font-size: 42px;
+letter-spacing: -1px;
+}
+.hero-text p {
+font-size: 16px;
+margin-bottom: 32px;
+}
+.hero-ctas {
+flex-direction: column;
+}
+.cta-button {
+width: 100%;
+text-align: center;
+}
+.visual-placeholder {
+height: 300px;
+}
+.featured-section,
+.products-section,
+.process-section,
+.testimonials-section,
+.faq-section {
+padding: 80px 16px;
+}
+.products-grid {
+grid-template-columns: 1fr;
+gap: 32px;
+}
+.benefits-grid {
+grid-template-columns: 1fr;
+gap: 24px;
+}
+.section-header h2 {
+font-size: 40px;
+}
+.benefit-card {
+padding: 28px;
+}
+.final-cta-section {
+padding: 100px 16px;
+}
+.final-cta-content h2 {
+font-size: 40px;
+}
+.final-cta-content p {
+font-size: 18px;
+}
+.why-choose-section,
+.gallery-section,
+.newsletter-section {
+padding: 80px 16px;
+}
+.footer-content {
+grid-template-columns: repeat(2, 1fr);
+gap: 32px;
+margin-bottom: 40px;
+}
+}
+
+@media (max-width: 480px) {
+.hero-text h1 {
+font-size: 32px;
+line-height: 1.2;
+}
+.hero-text p {
+font-size: 15px;
+}
+.section-header h2 {
+font-size: 28px;
+margin-bottom: 12px;
+}
+.section-header p {
+font-size: 14px;
+}
+.cta-button {
+padding: 14px 28px;
+font-size: 14px;
+}
+.final-cta-content h2 {
+font-size: 28px;
+}
+.final-cta-content p {
+font-size: 16px;
+margin-bottom: 32px;
+}
+.cta-button-large {
+padding: 16px 40px;
+font-size: 15px;
+}
+.benefit-card {
+padding: 20px;
+}
+.benefit-icon {
+font-size: 40px;
+}
+.footer-content {
+grid-template-columns: 1fr;
+gap: 32px;
+margin-bottom: 32px;
+}
+}
+</style>

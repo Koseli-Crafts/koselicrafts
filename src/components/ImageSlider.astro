@@ -1,0 +1,230 @@
+---
+interface Props {
+	images: { src: string; alt: string; title: string }[];
+	autoPlay?: boolean;
+	interval?: number;
+}
+
+const { images, autoPlay = true, interval = 5000 } = Astro.props;
+---
+
+<div class="slider-container">
+	<div class="slider-wrapper">
+		<div class="slides">
+			{images.map((image, index) => (
+				<div class="slide" data-slide={index}>
+					<img src={image.src} alt={image.alt} />
+					{image.title && <div class="slide-title">{image.title}</div>}
+				</div>
+			))}
+		</div>
+	</div>
+
+	<button class="slider-btn prev" aria-label="Previous slide">←</button>
+	<button class="slider-btn next" aria-label="Next slide">→</button>
+
+	<div class="slider-dots">
+		{images.map((_, index) => (
+			<button class="dot" data-dot={index} aria-label={`Go to slide ${index + 1}`}></button>
+		))}
+	</div>
+</div>
+
+<script define:vars={{ autoPlay, interval, imageCount: images.length }}>
+	let currentSlide = 0;
+	const totalSlides = imageCount;
+	let autoPlayInterval;
+
+	const slides = document.querySelectorAll('.slide');
+	const dots = document.querySelectorAll('.dot');
+	const prevBtn = document.querySelector('.slider-btn.prev');
+	const nextBtn = document.querySelector('.slider-btn.next');
+
+	function showSlide(n) {
+		slides.forEach(slide => slide.classList.remove('active'));
+		dots.forEach(dot => dot.classList.remove('active'));
+
+		slides[n].classList.add('active');
+		dots[n].classList.add('active');
+	}
+
+	function nextSlide() {
+		currentSlide = (currentSlide + 1) % totalSlides;
+		showSlide(currentSlide);
+		if (autoPlay) resetAutoPlay();
+	}
+
+	function prevSlide() {
+		currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+		showSlide(currentSlide);
+		if (autoPlay) resetAutoPlay();
+	}
+
+	function goToSlide(n) {
+		currentSlide = n;
+		showSlide(currentSlide);
+		if (autoPlay) resetAutoPlay();
+	}
+
+	function resetAutoPlay() {
+		if (autoPlayInterval) clearInterval(autoPlayInterval);
+		if (autoPlay) {
+			autoPlayInterval = setInterval(nextSlide, interval);
+		}
+	}
+
+	prevBtn?.addEventListener('click', prevSlide);
+	nextBtn?.addEventListener('click', nextSlide);
+
+	dots.forEach((dot, index) => {
+		dot.addEventListener('click', () => goToSlide(index));
+	});
+
+	showSlide(0);
+	if (autoPlay) {
+		autoPlayInterval = setInterval(nextSlide, interval);
+	}
+</script>
+
+<style>
+	.slider-container {
+		position: relative;
+		width: 100%;
+		max-width: 100%;
+	}
+
+	.slider-wrapper {
+		position: relative;
+		width: 100%;
+		overflow: hidden;
+		border-radius: 16px;
+		aspect-ratio: 16 / 9;
+	}
+
+	.slides {
+		position: relative;
+		width: 100%;
+		height: 100%;
+	}
+
+	.slide {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		opacity: 0;
+		transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: linear-gradient(135deg, #f0ebe6 0%, #e8e5e1 100%);
+	}
+
+	.slide.active {
+		opacity: 1;
+		z-index: 1;
+	}
+
+	.slide img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.slide-title {
+		position: absolute;
+		bottom: 24px;
+		left: 24px;
+		color: white;
+		font-size: 28px;
+		font-weight: 700;
+		text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+		font-family: 'Playfair Display', serif;
+	}
+
+	.slider-btn {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		background: rgba(212, 165, 116, 0.9);
+		color: white;
+		border: none;
+		width: 48px;
+		height: 48px;
+		border-radius: 50%;
+		cursor: pointer;
+		font-size: 24px;
+		transition: all 0.3s ease;
+		z-index: 10;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.slider-btn:hover {
+		background: rgba(107, 91, 71, 1);
+		transform: translateY(-50%) scale(1.1);
+	}
+
+	.slider-btn.prev {
+		left: 16px;
+	}
+
+	.slider-btn.next {
+		right: 16px;
+	}
+
+	.slider-dots {
+		display: flex;
+		justify-content: center;
+		gap: 12px;
+		margin-top: 20px;
+		padding: 0 16px;
+	}
+
+	.dot {
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		background: rgba(232, 229, 225, 0.8);
+		border: 2px solid var(--color-gold);
+		cursor: pointer;
+		transition: all 0.3s ease;
+	}
+
+	.dot.active {
+		background: var(--color-gold);
+		transform: scale(1.3);
+	}
+
+	.dot:hover {
+		background: var(--color-gold);
+	}
+
+	@media (max-width: 640px) {
+		.slider-wrapper {
+			aspect-ratio: 4 / 3;
+		}
+
+		.slider-btn {
+			width: 40px;
+			height: 40px;
+			font-size: 20px;
+		}
+
+		.slider-btn.prev {
+			left: 8px;
+		}
+
+		.slider-btn.next {
+			right: 8px;
+		}
+
+		.slide-title {
+			font-size: 18px;
+			bottom: 16px;
+			left: 16px;
+		}
+	}
+</style>

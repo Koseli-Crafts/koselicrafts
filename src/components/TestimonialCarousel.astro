@@ -1,0 +1,200 @@
+---
+interface Props {
+	testimonials: {
+		name: string;
+		role: string;
+		image: string;
+		content: string;
+		rating: number;
+	}[];
+}
+
+const { testimonials } = Astro.props;
+---
+
+<div class="testimonial-carousel">
+	<div class="testimonial-track">
+		{testimonials.map((testimonial, index) => (
+			<div class="testimonial-card" data-testimonial={index}>
+				<div class="testimonial-header">
+					<img src={testimonial.image} alt={testimonial.name} class="testimonial-image" />
+					<div class="testimonial-info">
+						<h4>{testimonial.name}</h4>
+						<p class="role">{testimonial.role}</p>
+						<div class="stars">
+							{[...Array(5)].map((_, i) => (
+								<span class={i < testimonial.rating ? 'star filled' : 'star'}>★</span>
+							))}
+						</div>
+					</div>
+				</div>
+				<p class="testimonial-content">"{testimonial.content}"</p>
+			</div>
+		))}
+	</div>
+
+	<div class="carousel-controls">
+		<button class="carousel-btn prev" aria-label="Previous testimonial">←</button>
+		<button class="carousel-btn next" aria-label="Next testimonial">→</button>
+	</div>
+</div>
+
+<script>
+	let currentTestimonial = 0;
+	const cards = document.querySelectorAll('.testimonial-card');
+	const totalCards = cards.length;
+	const track = document.querySelector('.testimonial-track');
+
+	function showTestimonial(n) {
+		const offset = -n * 100;
+		track?.style.setProperty('--offset', `${offset}%`);
+		
+		cards.forEach((card, index) => {
+			card.classList.toggle('active', index === n);
+		});
+	}
+
+	function nextTestimonial() {
+		currentTestimonial = (currentTestimonial + 1) % totalCards;
+		showTestimonial(currentTestimonial);
+	}
+
+	function prevTestimonial() {
+		currentTestimonial = (currentTestimonial - 1 + totalCards) % totalCards;
+		showTestimonial(currentTestimonial);
+	}
+
+	document.querySelector('.carousel-btn.prev')?.addEventListener('click', prevTestimonial);
+	document.querySelector('.carousel-btn.next')?.addEventListener('click', nextTestimonial);
+
+	showTestimonial(0);
+</script>
+
+<style>
+	.testimonial-carousel {
+		position: relative;
+		width: 100%;
+	}
+
+	.testimonial-track {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 24px;
+		transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+		padding: 0;
+	}
+
+	.testimonial-card {
+		background: white;
+		padding: 32px;
+		border-radius: 12px;
+		border: 1px solid var(--color-gray);
+		box-shadow: 0 2px 8px rgba(58, 51, 42, 0.06);
+		transition: all 0.3s ease;
+		opacity: 0.5;
+		transform: scale(0.95);
+	}
+
+	.testimonial-card.active {
+		opacity: 1;
+		transform: scale(1);
+		border-color: var(--color-gold);
+		box-shadow: 0 8px 24px rgba(212, 165, 116, 0.1);
+	}
+
+	.testimonial-header {
+		display: flex;
+		gap: 16px;
+		margin-bottom: 20px;
+	}
+
+	.testimonial-image {
+		width: 60px;
+		height: 60px;
+		border-radius: 50%;
+		object-fit: cover;
+		border: 3px solid var(--color-gold);
+	}
+
+	.testimonial-info {
+		flex: 1;
+	}
+
+	.testimonial-info h4 {
+		margin: 0 0 4px 0;
+		font-size: 16px;
+		color: var(--color-dark);
+		font-weight: 700;
+	}
+
+	.testimonial-info .role {
+		margin: 0 0 8px 0;
+		font-size: 13px;
+		color: var(--color-light);
+	}
+
+	.stars {
+		display: flex;
+		gap: 2px;
+	}
+
+	.star {
+		color: var(--color-gray);
+		font-size: 14px;
+	}
+
+	.star.filled {
+		color: var(--color-gold);
+	}
+
+	.testimonial-content {
+		font-size: 15px;
+		color: var(--color-light);
+		line-height: 1.8;
+		font-style: italic;
+		margin: 0;
+	}
+
+	.carousel-controls {
+		display: flex;
+		justify-content: center;
+		gap: 12px;
+		margin-top: 32px;
+	}
+
+	.carousel-btn {
+		background: var(--color-gold);
+		color: white;
+		border: none;
+		width: 44px;
+		height: 44px;
+		border-radius: 50%;
+		cursor: pointer;
+		font-size: 20px;
+		transition: all 0.3s ease;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.carousel-btn:hover {
+		background: var(--color-wood);
+		transform: scale(1.1);
+	}
+
+	@media (max-width: 1024px) {
+		.testimonial-track {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (max-width: 768px) {
+		.testimonial-track {
+			grid-template-columns: 1fr;
+		}
+
+		.testimonial-card {
+			padding: 24px;
+		}
+	}
+</style>
