@@ -1,0 +1,17 @@
+@layer components {
+  .btn {
+    @apply inline-block cursor-pointer rounded-sm border-2 px-8 py-3 text-center text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5;
+  }
+
+  .btn-primary {
+    @apply border-patrol bg-patrol text-white hover:border-pine hover:bg-pine;
+  }
+
+  .btn-ghost {
+    @apply border-pine bg-transparent text-pine hover:bg-pine hover:text-white;
+  }
+
+  .btn-outline-light {
+    @apply border-white/85 bg-transparent text-white hover:bg-white hover:text-pine;
+  }
+}

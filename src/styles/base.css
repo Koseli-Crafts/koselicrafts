@@ -1,0 +1,28 @@
+@theme {
+  --color-pine: #1e1c18;
+  --color-spruce: #7d776d;
+  --color-patrol: #a23c2e;
+  --color-snow: #e9dfc7;
+  --color-surface: #f2e9d2;
+  --font-display: "Fraunces", serif;
+  --font-body: "Inter", sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply m-0 w-full bg-snow text-pine font-body leading-[1.7];
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display text-pine;
+  }
+}

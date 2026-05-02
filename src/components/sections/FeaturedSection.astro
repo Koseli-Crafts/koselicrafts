@@ -1,0 +1,15 @@
+---
+import ImageSlider from '../ui/ImageSlider.astro';
+import SectionHeader from '../ui/SectionHeader.astro';
+
+interface Props {
+  images: { src: string; alt: string; title: string }[];
+}
+
+const { images } = Astro.props;
+---
+
+<section id="featured" class="content-section">
+  <SectionHeader title="Featured Collection" subtitle="Discover Our Most Popular Pieces" />
+  <ImageSlider images={images} autoPlay={true} interval={6000} />
+</section>

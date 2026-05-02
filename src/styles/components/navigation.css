@@ -1,0 +1,21 @@
+@layer components {
+  .site-shell {
+    @apply w-full bg-snow;
+  }
+
+  .site-nav {
+    @apply sticky top-0 z-50 border-b border-spruce/20 bg-snow/95 px-4 backdrop-blur md:px-6;
+  }
+
+  .site-nav-inner {
+    @apply mx-auto flex h-20 max-w-6xl items-center justify-between;
+  }
+
+  .site-nav-links {
+    @apply hidden list-none items-center gap-8 text-sm font-medium text-pine md:flex;
+  }
+
+  .site-nav-links a {
+    @apply transition-colors duration-300 hover:text-patrol;
+  }
+}

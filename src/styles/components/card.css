@@ -1,0 +1,9 @@
+@layer components {
+  .info-card {
+    @apply rounded-lg border border-spruce/20 bg-surface p-7;
+  }
+
+  .info-card h4 {
+    @apply mb-3 text-lg font-semibold text-pine;
+  }
+}

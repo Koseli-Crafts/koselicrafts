@@ -1,0 +1,20 @@
+---
+import ProductCard from '../ui/ProductCard.astro';
+import SectionHeader from '../ui/SectionHeader.astro';
+
+interface Props {
+  images: { src: string; alt: string; title: string }[];
+}
+
+const { images } = Astro.props;
+---
+
+<section id="products" class="content-section">
+  <SectionHeader title="Our Collection" subtitle="Handcrafted pieces for your spiritual journey" />
+  <div class="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-10">
+    <ProductCard title="Bible Verse Wall Art" description="Laser-engraved scripture on premium wood with hand-finished details. Perfect for living rooms, bedrooms, or offices. Includes mounting hardware." image={images[0].src} imageAlt={images[0].alt} />
+    <ProductCard title="Inspirational Scripture Plaque" description="Divine words beautifully engraved with elegant handicraft details. Available in multiple wood finishes and sizes for any space." image={images[1].src} imageAlt={images[1].alt} />
+    <ProductCard title="Custom Personalized Piece" description="Create something uniquely yours. Choose your scripture, add names, or request a completely custom design for that special occasion." image={images[2].src} imageAlt={images[2].alt} />
+    <ProductCard title="Premium Display Masterpiece" description="Statement-sized artwork combining laser precision with hand-applied embellishments. Ideal for galleries, collections, and meaningful gifts." image={images[3].src} imageAlt={images[3].alt} />
+  </div>
+</section>

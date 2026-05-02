@@ -1,0 +1,28 @@
+---
+interface Props {
+	steps: {
+		icon: string;
+		title: string;
+		description: string;
+	}[];
+}
+
+const { steps } = Astro.props;
+---
+
+<div class="relative w-full py-5">
+	<div class="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-4">
+		{steps.map((step, index) => (
+			<div class="group flex flex-col items-start gap-4" data-step={index}>
+				<div class="relative flex items-center">
+					<div class="flex h-15 w-15 items-center justify-center rounded-full bg-patrol text-[1.75rem] text-white shadow-[0_8px_20px_rgba(212,37,30,0.25)] transition-all duration-300 group-hover:scale-110 group-hover:shadow-[0_12px_30px_rgba(212,37,30,0.35)] sm:h-17.5 sm:w-17.5 sm:text-[2rem] md:h-20 md:w-20 md:text-[2.5rem]">{step.icon}</div>
+					{index < steps.length - 1 && <div class="absolute top-1/2 left-21 hidden h-0.75 w-[calc(100%+2rem)] -translate-y-1/2 bg-patrol/45 lg:block"></div>}
+				</div>
+				<div class="flex-1">
+					<h4 class="mb-2 text-base font-semibold text-patrol sm:text-lg">{step.title}</h4>
+					<p class="text-[0.8125rem] leading-6 text-spruce sm:text-sm">{step.description}</p>
+				</div>
+			</div>
+		))}
+	</div>
+</div>

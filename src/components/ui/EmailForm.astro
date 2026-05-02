@@ -1,0 +1,61 @@
+---
+---
+
+<div class="w-full">
+	<form class="w-full" id="emailForm">
+		<div class="flex flex-col gap-3">
+			<label for="emailInput" class="font-display text-base font-semibold text-pine">Your Email Address</label>
+			<div class="flex flex-col gap-2 sm:flex-row">
+				<input
+					type="email"
+					id="emailInput"
+					name="email"
+					placeholder="your@email.com"
+					required
+					class="flex-1 rounded-lg border-2 border-spruce/20 bg-surface px-4 py-3 text-sm text-pine outline-none transition-all duration-300 placeholder:text-spruce/55 focus:border-patrol focus:shadow-[0_0_0_3px_rgba(212,37,30,0.12)]"
+				/>
+				<button type="submit" class="w-full cursor-pointer rounded-lg bg-patrol px-8 py-3 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-pine hover:shadow-[0_8px_16px_rgba(212,37,30,0.25)] sm:w-auto">Subscribe</button>
+			</div>
+			<span class="form-message block min-h-5 text-sm"></span>
+		</div>
+	</form>
+</div>
+
+<script>
+	const form = document.getElementById('emailForm');
+	const emailInput = document.getElementById('emailInput') as HTMLInputElement | null;
+	const formMessage = document.querySelector('.form-message');
+
+	if (form) {
+		form.addEventListener('submit', (e) => {
+			e.preventDefault();
+
+			const email = emailInput?.value.trim();
+			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+			formMessage?.classList.remove('text-emerald-600', 'text-red-600', 'font-medium');
+
+			if (!email) {
+				formMessage?.classList.add('text-red-600', 'font-medium');
+				formMessage ? formMessage.textContent = 'Please enter an email address' : null;
+				return;
+			}
+
+			if (!emailRegex.test(email)) {
+				formMessage?.classList.add('text-red-600', 'font-medium');
+				formMessage ? formMessage.textContent = 'Please enter a valid email address' : null;
+				return;
+			}
+
+			formMessage?.classList.add('text-emerald-600', 'font-medium');
+			formMessage ? formMessage.textContent = 'Successfully subscribed! Check your email for updates.' : null;
+
+			if (emailInput) emailInput.value = '';
+
+			setTimeout(() => {
+				formMessage?.classList.remove('text-emerald-600', 'text-red-600', 'font-medium');
+				formMessage ? formMessage.textContent = '' : null;
+			}, 5000);
+		});
+	}
+</script>

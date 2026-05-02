@@ -1,0 +1,21 @@
+---
+import TestimonialCarousel from '../ui/TestimonialCarousel.astro';
+import SectionHeader from '../ui/SectionHeader.astro';
+
+interface Props {
+  testimonials: {
+    name: string;
+    role: string;
+    image: string;
+    content: string;
+    rating: number;
+  }[];
+}
+
+const { testimonials } = Astro.props;
+---
+
+<section id="testimonials" class="content-section">
+  <SectionHeader title="What Our Customers Say" subtitle="Trusted by thousands of happy customers worldwide" />
+  <TestimonialCarousel testimonials={testimonials} />
+</section>

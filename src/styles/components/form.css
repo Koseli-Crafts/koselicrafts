@@ -1,0 +1,5 @@
+@layer components {
+  .input-field {
+    @apply rounded-sm border-2 border-spruce/20 bg-surface px-4 py-3 text-sm text-pine outline-none transition-all duration-300 placeholder:text-spruce/55 focus:border-patrol focus:shadow-[0_0_0_3px_rgba(162,60,46,0.12)];
+  }
+}

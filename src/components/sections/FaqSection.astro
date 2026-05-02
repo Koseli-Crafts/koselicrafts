@@ -1,0 +1,17 @@
+---
+import FAQAccordion from '../ui/FAQAccordion.astro';
+import SectionHeader from '../ui/SectionHeader.astro';
+
+interface Props {
+  faqs: { question: string; answer: string }[];
+}
+
+const { faqs } = Astro.props;
+---
+
+<section id="faq" class="surface-section">
+  <div class="mx-auto max-w-6xl">
+    <SectionHeader title="Frequently Asked Questions" subtitle="Everything you need to know about our products" />
+    <FAQAccordion faqs={faqs} />
+  </div>
+</section>
