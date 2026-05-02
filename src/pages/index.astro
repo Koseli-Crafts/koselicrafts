@@ -1,17 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/sections/Navbar.astro';
-import HeroSection from '../components/sections/HeroSection.astro';
-import FeaturedSection from '../components/sections/FeaturedSection.astro';
+import AdvancedSliderSection from '../components/sections/AdvancedSliderSection.astro';
 import ProductsSection from '../components/sections/ProductsSection.astro';
-import WhyChooseSection from '../components/sections/WhyChooseSection.astro';
-import ProcessSection from '../components/sections/ProcessSection.astro';
-import GallerySection from '../components/sections/GallerySection.astro';
 import TestimonialsSection from '../components/sections/TestimonialsSection.astro';
 import FaqSection from '../components/sections/FaqSection.astro';
-import NewsletterSection from '../components/sections/NewsletterSection.astro';
 import ContactSection from '../components/sections/ContactSection.astro';
-import FinalCtaSection from '../components/sections/FinalCtaSection.astro';
 import SiteFooter from '../components/sections/SiteFooter.astro';
 import productFaithInspiration from '../assets/product-faith-inspiration.jpg';
 import productDivineLove from '../assets/product-divine-love.jpg';
@@ -26,90 +20,95 @@ import galleryGiftSets from '../assets/gallery-gift-sets.jpg';
 const productImages = [
 {
 src: productFaithInspiration.src,
-alt: "Bible Verse Wall Art - Philippians 4:8",
-title: "Faith & Inspiration"
+alt: "Decorative engraved wall artwork with warm handcrafted finish",
+title: "Signature Display"
 },
 {
 src: productDivineLove.src,
-alt: "Love Scripture Display",
-title: "Divine Love"
+alt: "Decorative engraved panel with elegant typography",
+title: "Refined Detail"
 },
 {
 src: productGracePlaque.src,
-alt: "Grace Scripture Plaque",
-title: "Grace"
+alt: "Premium engraved plaque for curated interiors",
+title: "Premium Finish"
 },
 {
 src: productInnerPeace.src,
-alt: "Peace Scripture Diamond",
-title: "Inner Peace"
+alt: "Minimal handcrafted piece for calm modern spaces",
+title: "Modern Accent"
+},
+{
+src: galleryFaithSeries.src,
+alt: "Collection showcase with layered handcrafted textures",
+title: "Studio Collection"
+},
+{
+src: galleryCustomOrders.src,
+alt: "Custom order showcase with premium crafted details",
+title: "Custom Orders"
+},
+{
+src: galleryPremiumRange.src,
+alt: "Premium range showcase for home and retail styling",
+title: "Premium Range"
+},
+{
+src: gallerySpecialEditions.src,
+alt: "Special edition handcrafted decor display",
+title: "Special Editions"
+},
+{
+src: galleryGiftSets.src,
+alt: "Curated handcrafted gift set presentation",
+title: "Gift Sets"
 }
-];
-
-const galleryImages = [
-{ src: galleryFaithSeries.src, alt: "Faith Collection", title: "Faith Series" },
-{ src: galleryCustomOrders.src, alt: "Custom Pieces", title: "Custom Orders" },
-{ src: galleryPremiumRange.src, alt: "Premium Collection", title: "Premium Range" },
-{ src: gallerySpecialEditions.src, alt: "Special Editions", title: "Special Editions" },
-{ src: galleryGiftSets.src, alt: "Gift Packages", title: "Gift Sets" },
-{ src: productInnerPeace.src, alt: "Limited Edition", title: "Limited Series" }
 ];
 
 const testimonials = [
 {
 name: "Sarah Johnson",
-role: "Customer from California",
+role: "Boutique Owner, Kathmandu",
 image: productFaithInspiration.src,
-content: "The quality and attention to detail are exceptional. I gave one as a gift and they absolutely loved it. Every piece feels like a work of art.",
+content: "The finish feels premium and the piece immediately lifted the look of our store display.",
 rating: 5
 },
 {
 name: "Michael Chen",
-role: "Church Gift Coordinator",
+role: "Home Decor Client, Lalitpur",
 image: productDivineLove.src,
-content: "We've ordered multiple pieces for our congregation. The craftsmanship is outstanding and the spiritual messages are truly inspiring.",
+content: "We ordered multiple customized pieces and every one arrived polished, balanced, and ready to style.",
 rating: 5
 },
 {
 name: "Emma Rodriguez",
-role: "Interior Designer",
+role: "Interior Stylist, Bhaktapur",
 image: productGracePlaque.src,
-content: "Perfect addition to my designs. My clients are always asking where these beautiful pieces come from. Koseli Crafts is a gem!",
+content: "The designs work beautifully in homes, offices, and boutique interiors because they feel thoughtful without looking heavy.",
 rating: 5
 }
-];
-
-const processSteps = [
-{ icon: "✍", title: "Design & Concept", description: "We start with your vision, creating custom designs that capture the spiritual essence you desire." },
-{ icon: "🔥", title: "Laser Engraving", description: "Precision laser technology engraves your design onto premium wood with exceptional detail." },
-{ icon: "🎨", title: "Handicraft Details", description: "Our artisans hand-finish each piece, adding unique touches and embellishments." },
-{ icon: "✨", title: "Quality Check & Finish", description: "Every piece is carefully inspected to ensure perfection before shipment to your home." }
 ];
 
 const faqs = [
 {
 question: "What materials do you use?",
-answer: "We use premium quality wood sourced responsibly. Each piece is selected for its natural beauty and durability. The engravings are done using precision laser technology, and all finishes are eco-friendly."
+answer: "We use responsibly sourced hardwood selected for grain quality and durability. Engravings are done with precision laser technology and finished by hand with eco-conscious sealants."
 },
 {
 question: "Can I customize my order?",
-answer: "Absolutely! We offer extensive customization options. You can choose different scriptures, add names, change dimensions, or work with us on a completely custom design. Contact us for details."
+answer: "Yes, customization is one of our core offerings. You can request names, wording, dimensions, finishes, and styling preferences to suit your space."
 },
 {
 question: "What's your shipping timeline?",
-answer: "Standard orders are typically processed within 5-7 business days. Custom orders take 10-14 business days. We ship worldwide with tracking and insurance included."
+answer: "Most standard pieces are completed in 5-7 business days. Personalized projects generally take 10-14 business days depending on design complexity."
 },
 {
 question: "Are your pieces suitable for gifts?",
-answer: "Yes! Our pieces make excellent gifts for birthdays, anniversaries, spiritual milestones, and more. We offer beautiful gift packaging and can include personalized messages."
+answer: "Absolutely. Our collections are frequently selected for weddings, anniversaries, housewarmings, baptisms, and milestone celebrations, with optional personalization."
 },
 {
-question: "How do I care for my piece?",
-answer: "Simply dust with a soft cloth occasionally. Avoid direct sunlight for extended periods to maintain the wood's natural color. Keep away from moisture and extreme temperature changes."
-},
-{
-question: "Do you have a return policy?",
-answer: "Yes, we offer 30-day returns for unused items in original condition. Custom orders are final sale. For damaged items, we provide replacement or refund."
+question: "How should I care for the artwork?",
+answer: "Keep pieces away from excessive moisture and direct heat. A soft dry cloth is enough for regular cleaning, and occasional gentle polishing helps preserve the finish."
 }
 ];
 ---
@@ -117,17 +116,11 @@ answer: "Yes, we offer 30-day returns for unused items in original condition. Cu
 <Layout>
 <div class="site-shell">
 	<Navbar />
-	<FeaturedSection images={productImages} />
-	<HeroSection />
+	<AdvancedSliderSection />
 	<ProductsSection images={productImages} />
-	<WhyChooseSection />
-	<ProcessSection steps={processSteps} />
-	<GallerySection images={galleryImages} />
 	<TestimonialsSection testimonials={testimonials} />
 	<FaqSection faqs={faqs} />
-	<NewsletterSection />
 	<ContactSection />
-	<FinalCtaSection />
 	<SiteFooter />
 </div>
 </Layout>

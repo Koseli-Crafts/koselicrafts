@@ -9,9 +9,9 @@ interface Props {
 const { faqs } = Astro.props;
 ---
 
-<section id="faq" class="surface-section">
+<section id="faq" class="surface-section" data-aos="fade-up">
   <div class="mx-auto max-w-6xl">
-    <SectionHeader title="Frequently Asked Questions" subtitle="Everything you need to know about our products" />
+    <SectionHeader title="Frequently Asked Questions" subtitle="Quick answers at a glance" />
     <FAQAccordion faqs={faqs} />
   </div>
 </section>

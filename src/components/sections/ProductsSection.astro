@@ -7,14 +7,56 @@ interface Props {
 }
 
 const { images } = Astro.props;
+
+const products = [
+  {
+    title: 'Signature Display Collection',
+    description: 'Elegant focal pieces for styled interiors.',
+    gallery: [0, 4, 6]
+  },
+  {
+    title: 'Refined Plaque Series',
+    description: 'Warm wood and engraved detail.',
+    gallery: [2, 8, 1]
+  },
+  {
+    title: 'Custom Detail Line',
+    description: 'Warm tones with personalized finishing.',
+    gallery: [1, 5, 7]
+  },
+  {
+    title: 'Modern Accent Studio',
+    description: 'Minimal styling for calm spaces.',
+    gallery: [3, 6, 4]
+  },
+  {
+    title: 'Custom Signature Set',
+    description: 'Personalized names, wording, and milestones.',
+    gallery: [5, 0, 8]
+  },
+  {
+    title: 'Heirloom Wall Pieces',
+    description: 'Built for statement display.',
+    gallery: [6, 2, 4]
+  }
+];
 ---
 
-<section id="products" class="content-section">
-  <SectionHeader title="Our Collection" subtitle="Handcrafted pieces for your spiritual journey" />
-  <div class="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-10">
-    <ProductCard title="Bible Verse Wall Art" description="Laser-engraved scripture on premium wood with hand-finished details. Perfect for living rooms, bedrooms, or offices. Includes mounting hardware." image={images[0].src} imageAlt={images[0].alt} />
-    <ProductCard title="Inspirational Scripture Plaque" description="Divine words beautifully engraved with elegant handicraft details. Available in multiple wood finishes and sizes for any space." image={images[1].src} imageAlt={images[1].alt} />
-    <ProductCard title="Custom Personalized Piece" description="Create something uniquely yours. Choose your scripture, add names, or request a completely custom design for that special occasion." image={images[2].src} imageAlt={images[2].alt} />
-    <ProductCard title="Premium Display Masterpiece" description="Statement-sized artwork combining laser precision with hand-applied embellishments. Ideal for galleries, collections, and meaningful gifts." image={images[3].src} imageAlt={images[3].alt} />
+<section id="products" class="content-section" data-aos="fade-up">
+  <SectionHeader title="Our Collection" subtitle="Tap any piece to view it in full screen" />
+  <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+    {products.map((product, index) => {
+      const galleryImages = product.gallery.map((imageIndex) => images[imageIndex % images.length]);
+      return (
+        <ProductCard
+          title={product.title}
+          description={product.description}
+          image={galleryImages[0].src}
+          imageAlt={galleryImages[0].alt}
+          galleryImages={galleryImages}
+          delay={Math.min(index * 70, 420)}
+        />
+      );
+    })}
   </div>
 </section>

@@ -10,15 +10,15 @@ const { faqs } = Astro.props;
 ---
 
 <div class="mx-auto w-full max-w-4xl">
-	<div class="flex flex-col gap-3">
+	<div class="flex flex-col gap-2.5">
 		{faqs.map((faq, index) => (
 			<div class="faq-item overflow-hidden rounded-lg border border-spruce/20 bg-surface transition-all duration-300" data-faq={index}>
-				<button class="faq-question flex w-full cursor-pointer items-center justify-between bg-surface px-5 py-4 text-left font-display text-[0.95rem] font-semibold text-pine transition-all duration-300 md:px-6 md:py-5 md:text-base hover:bg-spruce/8">
+				<button class="faq-question flex w-full cursor-pointer items-center justify-between bg-surface px-4 py-3.5 text-left font-display text-[1rem] font-semibold text-pine transition-all duration-300 md:px-5 md:py-4 md:text-[1.02rem] hover:bg-spruce/8">
 					<span>{faq.question}</span>
-					<span class="icon inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-patrol text-lg font-bold text-white transition-transform duration-300">+</span>
+					<span class="icon inline-flex h-5.5 w-5.5 shrink-0 items-center justify-center rounded-md bg-patrol text-base font-bold text-white transition-transform duration-300">+</span>
 				</button>
 				<div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
-					<div class="answer-content px-5 pb-4 text-sm leading-7 text-spruce md:px-6 md:pb-5 md:text-[0.95rem]">
+					<div class="answer-content px-4 pb-4 text-[0.98rem] leading-7 text-spruce md:px-5 md:pb-4.5 md:text-[1rem]">
 						{faq.answer}
 					</div>
 				</div>

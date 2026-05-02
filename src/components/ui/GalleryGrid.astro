@@ -9,25 +9,136 @@ interface Props {
 }
 
 const { images, columns = 3 } = Astro.props;
+const sizeClasses = ['h-72', 'h-95', 'h-80', 'h-108', 'h-76', 'h-92'];
 ---
 
 <div
 	class:list={[
-		'grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6',
-		columns === 1 && 'lg:grid-cols-1',
-		columns === 2 && 'lg:grid-cols-2',
-		columns === 3 && 'lg:grid-cols-3',
-		columns === 4 && 'lg:grid-cols-4'
+		'columns-1 gap-4 sm:columns-2 lg:columns-3 xl:columns-4',
+		columns === 1 && 'xl:columns-1',
+		columns === 2 && 'xl:columns-2',
+		columns === 3 && 'xl:columns-3',
+		columns === 4 && 'xl:columns-4'
 	]}
 >
 	{images.map((image, index) => (
-		<div class="group aspect-4/3 cursor-pointer overflow-hidden rounded-xl shadow-[0_4px_12px_rgba(17,33,19,0.08)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_12px_32px_rgba(17,33,19,0.18)] md:aspect-square" data-item={index}>
-			<div class="relative h-full w-full bg-spruce/10">
-				<img src={image.src} alt={image.alt} loading="lazy" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110" />
-				<div class="absolute inset-0 flex items-end bg-pine/0 p-4 transition-colors duration-300 group-hover:bg-pine/70 sm:p-5">
-					<h4 class="translate-y-2 text-base font-semibold text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 sm:text-lg">{image.title}</h4>
+		<button type="button" class="group mb-4 block w-full break-inside-avoid cursor-zoom-in overflow-hidden rounded-[1.6rem] bg-transparent text-left transition-transform duration-500 hover:-translate-y-1" data-gallery-open={index} aria-label={`Open gallery image ${index + 1}: ${image.title}`}>
+			<div class:list={['relative overflow-hidden rounded-[1.6rem] bg-spruce/10', sizeClasses[index % sizeClasses.length]]}>
+				<img src={image.src} alt={image.alt} loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+				<div class="absolute inset-0 bg-linear-to-t from-pine/45 via-pine/0 to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-100"></div>
+				<div class="absolute right-3 bottom-3 left-3 flex items-end justify-between gap-3 text-white">
+					<div>
+						<p class="text-[0.68rem] font-semibold tracking-[0.18em] text-white/75 uppercase">Gallery</p>
+						<h4 class="text-base font-semibold sm:text-lg">{image.title}</h4>
+					</div>
+					<span class="rounded-full border border-white/35 bg-black/20 px-2.5 py-1 text-[0.68rem] font-semibold tracking-[0.16em] backdrop-blur-sm">OPEN</span>
 				</div>
 			</div>
-		</div>
+		</button>
 	))}
 </div>
+
+<dialog class="gallery-lightbox m-0 h-screen w-screen max-h-none max-w-none border-none bg-transparent p-0" data-gallery-modal>
+	<div class="fixed inset-0 bg-pine/94 p-4 sm:p-6">
+		<button type="button" class="absolute top-4 right-4 z-50 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/10 text-2xl text-white transition hover:bg-white hover:text-pine" data-gallery-close aria-label="Close gallery viewer">&times;</button>
+		<div class="mx-auto flex h-full max-w-7xl flex-col">
+			<div class="mb-4 flex items-end justify-between gap-3 text-white">
+				<div>
+					<p class="text-[0.72rem] font-semibold tracking-[0.2em] text-white/70 uppercase">Gallery View</p>
+					<h3 class="text-2xl font-semibold tracking-tight sm:text-3xl" data-gallery-title></h3>
+				</div>
+				<p class="hidden text-sm text-white/75 sm:block">Use arrows or thumbnails to browse</p>
+			</div>
+
+			<div class="relative flex-1 overflow-hidden rounded-[1.75rem] border border-white/15 bg-black/15">
+				<div class="flex h-full snap-x snap-mandatory overflow-x-auto scroll-smooth" data-gallery-track>
+					{images.map((image, index) => (
+						<figure class="h-full min-w-full snap-center">
+							<img src={image.src} alt={image.alt} loading="lazy" class="h-full w-full object-contain" data-gallery-image={index} />
+						</figure>
+					))}
+				</div>
+
+				<button type="button" class="absolute top-1/2 left-3 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-white/10 text-xl text-white transition hover:bg-white hover:text-pine" data-gallery-nav="prev" aria-label="Previous gallery image">&larr;</button>
+				<button type="button" class="absolute top-1/2 right-3 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-white/10 text-xl text-white transition hover:bg-white hover:text-pine" data-gallery-nav="next" aria-label="Next gallery image">&rarr;</button>
+			</div>
+
+			<div class="mt-3 flex gap-2 overflow-x-auto pb-1">
+				{images.map((image, index) => (
+					<button type="button" class="h-16 min-w-16 overflow-hidden rounded-lg border border-white/20 opacity-70 transition hover:opacity-100 sm:h-18 sm:min-w-18" data-gallery-thumb={index} aria-label={`Open thumbnail ${index + 1}`}>
+						<img src={image.src} alt={image.alt} loading="lazy" class="h-full w-full object-cover" />
+					</button>
+				))}
+			</div>
+		</div>
+	</div>
+</dialog>
+
+<script define:vars={{ imageTitles: images.map((image) => image.title) }}>
+	const galleryModal = document.querySelector('[data-gallery-modal]');
+	const galleryTrack = document.querySelector('[data-gallery-track]');
+	const galleryTitle = document.querySelector('[data-gallery-title]');
+	const galleryThumbs = Array.from(document.querySelectorAll('[data-gallery-thumb]'));
+	let activeGalleryIndex = 0;
+
+	const updateGalleryState = (index) => {
+		activeGalleryIndex = index;
+		if (galleryTitle) {
+			galleryTitle.textContent = imageTitles[index] || '';
+		}
+
+		galleryThumbs.forEach((thumb, thumbIndex) => {
+			thumb.classList.toggle('ring-2', thumbIndex === index);
+			thumb.classList.toggle('ring-white', thumbIndex === index);
+			thumb.classList.toggle('opacity-100', thumbIndex === index);
+			thumb.classList.toggle('opacity-70', thumbIndex !== index);
+		});
+	};
+
+	const goToGalleryIndex = (index) => {
+		if (!(galleryTrack instanceof HTMLElement)) return;
+		const boundedIndex = Math.max(0, Math.min(imageTitles.length - 1, index));
+		galleryTrack.scrollTo({ left: galleryTrack.clientWidth * boundedIndex, behavior: 'smooth' });
+		updateGalleryState(boundedIndex);
+	};
+
+	document.querySelectorAll('[data-gallery-open]').forEach((trigger, index) => {
+		trigger.addEventListener('click', () => {
+			if (!(galleryModal instanceof HTMLDialogElement) || !(galleryTrack instanceof HTMLElement)) return;
+			galleryModal.showModal();
+			document.body.style.overflow = 'hidden';
+			galleryTrack.scrollTo({ left: galleryTrack.clientWidth * index, behavior: 'auto' });
+			updateGalleryState(index);
+		});
+	});
+
+	document.querySelector('[data-gallery-close]')?.addEventListener('click', () => {
+		if (!(galleryModal instanceof HTMLDialogElement)) return;
+		galleryModal.close();
+		document.body.style.overflow = '';
+	});
+
+	if (galleryModal instanceof HTMLDialogElement) {
+		galleryModal.addEventListener('click', (event) => {
+			if (event.target === galleryModal) {
+				galleryModal.close();
+				document.body.style.overflow = '';
+			}
+		});
+	}
+
+	document.querySelector('[data-gallery-nav="prev"]')?.addEventListener('click', () => goToGalleryIndex(activeGalleryIndex - 1));
+	document.querySelector('[data-gallery-nav="next"]')?.addEventListener('click', () => goToGalleryIndex(activeGalleryIndex + 1));
+
+	galleryThumbs.forEach((thumb, index) => {
+		thumb.addEventListener('click', () => goToGalleryIndex(index));
+	});
+
+	if (galleryTrack instanceof HTMLElement) {
+		galleryTrack.addEventListener('scroll', () => {
+			const frameWidth = galleryTrack.clientWidth;
+			const index = Math.round(galleryTrack.scrollLeft / frameWidth);
+			updateGalleryState(index);
+		});
+	}
+</script>

@@ -13,14 +13,14 @@ const { testimonials } = Astro.props;
 ---
 
 <div class="relative w-full">
-	<div class="testimonial-track grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+	<div class="testimonial-track grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
 		{testimonials.map((testimonial, index) => (
-			<div class="testimonial-card scale-95 rounded-xl border border-spruce/20 bg-surface p-6 opacity-50 shadow-[0_2px_8px_rgba(17,33,19,0.06)] transition-all duration-300 md:p-8" data-testimonial={index}>
-				<div class="mb-5 flex gap-4">
-					<img src={testimonial.image} alt={testimonial.name} class="h-15 w-15 rounded-full border-2 border-patrol object-cover" />
+			<div class="testimonial-card scale-95 rounded-[1.2rem] border border-spruce/18 bg-surface p-5 opacity-50 shadow-[0_2px_8px_rgba(17,33,19,0.06)] transition-all duration-300 md:p-6" data-testimonial={index}>
+				<div class="mb-4 flex gap-3.5">
+					<img src={testimonial.image} alt={testimonial.name} class="h-13 w-13 rounded-full border-2 border-patrol object-cover" />
 					<div class="flex-1">
-						<h4 class="mb-1 text-base font-semibold text-pine">{testimonial.name}</h4>
-						<p class="mb-2 text-[0.8125rem] text-spruce">{testimonial.role}</p>
+						<h4 class="mb-1 text-[0.95rem] font-semibold text-pine">{testimonial.name}</h4>
+						<p class="mb-2 text-[0.76rem] text-spruce">{testimonial.role}</p>
 						<div class="flex gap-0.5">
 							{[...Array(5)].map((_, i) => (
 								<span class={i < testimonial.rating ? 'text-patrol' : 'text-spruce/40'}>★</span>
@@ -28,14 +28,14 @@ const { testimonials } = Astro.props;
 						</div>
 					</div>
 				</div>
-				<p class="text-[0.95rem] leading-8 text-spruce italic">"{testimonial.content}"</p>
+				<p class="text-[0.87rem] leading-6.5 text-spruce italic">"{testimonial.content}"</p>
 			</div>
 		))}
 	</div>
 
-	<div class="mt-8 flex justify-center gap-3">
-		<button class="carousel-btn prev flex h-11 w-11 items-center justify-center rounded-full bg-patrol text-xl text-white transition-all duration-300 hover:scale-110 hover:bg-pine" aria-label="Previous testimonial">←</button>
-		<button class="carousel-btn next flex h-11 w-11 items-center justify-center rounded-full bg-patrol text-xl text-white transition-all duration-300 hover:scale-110 hover:bg-pine" aria-label="Next testimonial">→</button>
+	<div class="mt-6 flex justify-center gap-2.5">
+		<button class="carousel-btn prev flex h-9 w-9 items-center justify-center rounded-full bg-patrol text-base text-white transition-all duration-300 hover:scale-105 hover:bg-pine" aria-label="Previous testimonial">←</button>
+		<button class="carousel-btn next flex h-9 w-9 items-center justify-center rounded-full bg-patrol text-base text-white transition-all duration-300 hover:scale-105 hover:bg-pine" aria-label="Next testimonial">→</button>
 	</div>
 </div>
 

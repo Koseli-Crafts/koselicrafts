@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import 'aos/dist/aos.css';
+import 'lenis/dist/lenis.css';
 ---
 
 <!doctype html>
@@ -16,10 +18,15 @@ import '../styles/global.css';
 			href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600;700&display=swap"
 			rel="stylesheet"
 		/>
-		<title>Koseli Crafts - Handcrafted Spiritual Art</title>
-		<meta name="description" content="Handcrafted decorative items featuring laser-engraved Bible verses and spiritual art on wood." />
+		<title>Koseli Crafts - Handcrafted Decorative Pieces</title>
+		<meta name="description" content="Handcrafted decorative pieces for homes, shops, studios, and offices, with premium engraved and custom-finished details." />
 	</head>
 	<body class="bg-snow text-pine antialiased">
 		<slot />
+		<script>
+			import initSiteMotion from '../scripts/site-motion';
+
+			initSiteMotion();
+		</script>
 	</body>
 </html>

@@ -1,0 +1,147 @@
+---
+import productFaithInspiration from '../../assets/product-faith-inspiration.jpg';
+import productDivineLove from '../../assets/product-divine-love.jpg';
+import productGracePlaque from '../../assets/product-grace-plaque.jpg';
+
+const slides = [
+  {
+    title: 'Handcrafted Pieces for Beautiful Spaces',
+    caption:
+      'Decorative crafted details for homes, studios, shops, and offices.',
+    image: productFaithInspiration.src,
+    imageAlt: 'Handcrafted decorative piece by Koseli Crafts.'
+  },
+  {
+    title: 'Made for Personal Style',
+    caption:
+      'Custom touches that make displays feel warm and memorable.',
+    image: productDivineLove.src,
+    imageAlt: 'Personalized decorative design with handcrafted details.'
+  },
+  {
+    title: 'Crafted to Elevate Everyday Interiors',
+    caption:
+      'Premium wood, elegant engraving, and a clean visual finish.',
+    image: productGracePlaque.src,
+    imageAlt: 'Premium engraved wooden decor crafted by Koseli Crafts.'
+  }
+];
+
+const sectionId = 'section-template--29470876205386__advanced_slider_CAJQ4a';
+---
+
+<section id="featured" class="advanced-slider-block" data-advanced-slider-section data-aos="fade-up">
+  <div id={sectionId} class="advanced-slider-shell">
+    <div class="advanced-slider-stage">
+      {slides.map((slide, index) => (
+        <article
+          class:list={['advanced-slide', index === 0 && 'is-active']}
+          data-slide
+          aria-hidden={index === 0 ? 'false' : 'true'}
+        >
+          <img src={slide.image} alt={slide.imageAlt} loading={index === 0 ? 'eager' : 'lazy'} />
+          <div class="advanced-slide__veil"></div>
+          <div class="advanced-slide__content">
+            <span class="advanced-slide__eyebrow">Koseli Crafts</span>
+            <h2>{slide.title}</h2>
+            <p>{slide.caption}</p>
+          </div>
+        </article>
+      ))}
+
+    </div>
+
+    <div class="advanced-slider-footer">
+      <div class="advanced-slider-progress" aria-hidden="true">
+        <span class="advanced-slider-progress__fill" data-slider-progress></span>
+      </div>
+
+      <div class="advanced-slider-pagination" role="tablist" aria-label="Slider pagination">
+        {slides.map((slide, index) => (
+          <button
+            type="button"
+            class:list={['advanced-slider-dot', index === 0 && 'is-active']}
+            data-slider-dot
+            data-index={index}
+            aria-label={`Show slide ${index + 1}: ${slide.title}`}
+            aria-selected={index === 0 ? 'true' : 'false'}
+            role="tab"
+          >
+            <span>{String(index + 1).padStart(2, '0')}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script define:vars={{ autoPlayDelay: 5000 }}>
+  const sliderSections = document.querySelectorAll('[data-advanced-slider-section]');
+
+  sliderSections.forEach((section) => {
+    const slides = Array.from(section.querySelectorAll('[data-slide]'));
+    const dots = Array.from(section.querySelectorAll('[data-slider-dot]'));
+    const progressFill = section.querySelector('[data-slider-progress]');
+
+    if (!slides.length || !dots.length) {
+      return;
+    }
+
+    let activeIndex = 0;
+    let intervalId;
+
+    const syncUi = (index) => {
+      slides.forEach((slide, slideIndex) => {
+        const isActive = slideIndex === index;
+        slide.classList.toggle('is-active', isActive);
+        slide.setAttribute('aria-hidden', String(!isActive));
+      });
+
+      dots.forEach((dot, dotIndex) => {
+        const isActive = dotIndex === index;
+        dot.classList.toggle('is-active', isActive);
+        dot.setAttribute('aria-selected', String(isActive));
+      });
+
+      runProgressAnimation();
+    };
+
+    const runProgressAnimation = () => {
+      if (!progressFill) {
+        return;
+      }
+
+      progressFill.classList.remove('is-animating');
+      // Force reflow so the animation cleanly restarts every slide.
+      void progressFill.offsetWidth;
+      progressFill.classList.add('is-animating');
+    };
+
+    const goToSlide = (index) => {
+      activeIndex = (index + slides.length) % slides.length;
+      syncUi(activeIndex);
+      restartAutoPlay();
+    };
+
+    const restartAutoPlay = () => {
+      window.clearInterval(intervalId);
+      intervalId = window.setInterval(() => {
+        activeIndex = (activeIndex + 1) % slides.length;
+        syncUi(activeIndex);
+      }, autoPlayDelay);
+    };
+
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => goToSlide(index));
+    });
+
+    section.addEventListener('mouseenter', () => window.clearInterval(intervalId));
+    section.addEventListener('mouseleave', () => {
+      runProgressAnimation();
+      restartAutoPlay();
+    });
+
+    syncUi(activeIndex);
+    restartAutoPlay();
+  });
+</script>

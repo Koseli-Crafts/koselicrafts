@@ -4,19 +4,256 @@ interface Props {
 	description: string;
 	image: string;
 	imageAlt: string;
+	galleryImages: { src: string; alt: string; title: string }[];
+	delay?: number;
 }
 
-const { title, description, image, imageAlt } = Astro.props;
+const { title, description, image, imageAlt, galleryImages, delay = 0 } = Astro.props;
+const cardId = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 ---
 
-<div class="group flex h-full cursor-pointer flex-col overflow-hidden rounded-xl border border-spruce/20 bg-surface shadow-[0_2px_8px_rgba(17,33,19,0.06),0_4px_16px_rgba(17,33,19,0.08)] transition-all duration-300 hover:-translate-y-2 hover:border-patrol/35 hover:shadow-[0_10px_26px_rgba(17,33,19,0.14),0_18px_42px_rgba(17,33,19,0.1)] sm:rounded-2xl">
-	<div class="relative w-full overflow-hidden bg-spruce/10 pb-[100%]">
-		<img src={image} alt={imageAlt} loading="lazy" class="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-110" />
-		<div class="absolute inset-0 bg-patrol/0 transition-colors duration-300 group-hover:bg-pine/10"></div>
-	</div>
-	<div class="flex flex-1 flex-col p-5 sm:p-7">
-		<h3 class="mb-3 text-[1.25rem] leading-tight font-semibold tracking-tight text-pine sm:text-[1.5rem]">{title}</h3>
-		<p class="mb-5 flex-1 text-sm leading-7 text-spruce sm:text-[0.95rem]">{description}</p>
-		<a href="#" class="inline-block w-fit border-b-2 border-transparent py-1 text-sm font-semibold text-patrol transition-all duration-300 hover:border-patrol hover:pl-1 hover:text-pine">View Details →</a>
-	</div>
-</div>
+<article class="group h-full" data-aos="fade-up" data-aos-delay={String(delay)}>
+	<button type="button" class="product-card-trigger flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-xl border border-spruce/18 bg-surface text-left shadow-[0_4px_14px_rgba(17,33,19,0.08)] transition-all duration-300 hover:-translate-y-1 hover:border-patrol/32 hover:shadow-[0_12px_28px_rgba(17,33,19,0.13)]" data-open-product={cardId} aria-label={`Open ${title} gallery`}>
+		<div class="relative w-full overflow-hidden bg-spruce/10 pb-[118%]">
+			<img src={image} alt={imageAlt} loading="lazy" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+			<div class="absolute inset-0 bg-linear-to-t from-pine/35 via-pine/0 to-pine/0"></div>
+			<div class="absolute right-3 bottom-3 rounded-md border border-white/45 bg-black/25 px-2.5 py-1 text-[0.72rem] font-semibold tracking-[0.14em] text-white backdrop-blur-sm">VIEW</div>
+		</div>
+		<div class="flex flex-1 flex-col p-3.5 sm:p-4">
+			<h3 class="mb-1 text-[1rem] leading-tight font-semibold tracking-tight text-pine sm:text-[1.05rem]">{title}</h3>
+			<p class="text-[0.92rem] leading-6 text-spruce/90">{description}</p>
+		</div>
+	</button>
+
+	<dialog class="product-viewer m-0 h-screen w-screen max-h-none max-w-none border-none bg-transparent p-0" data-product-modal={cardId}>
+		<div class="product-viewer-backdrop fixed inset-0 bg-pine/90 backdrop-blur-md p-4 sm:p-5">
+			<button type="button" class="product-viewer-close absolute top-4 right-4 z-50 flex h-10 w-10 items-center justify-center rounded-md border border-white/20 bg-white/10 text-[1.35rem] text-white transition hover:bg-white hover:text-pine" data-close-product={cardId} aria-label="Close full screen viewer">&times;</button>
+
+			<div class="mx-auto flex h-full max-w-6xl flex-col">
+				<div class="mb-3 flex flex-col items-start justify-between gap-3 rounded-lg border border-white/10 bg-white/6 px-4 py-3 text-white sm:flex-row sm:items-center">
+					<div>
+						<h3 class="text-[1.45rem] font-semibold tracking-tight text-white sm:text-[1.9rem]">{title}</h3>
+						<p class="text-[0.95rem] text-white/78">Swipe, pinch to zoom, use arrows, or tap thumbnails to browse.</p>
+					</div>
+					<div class="flex items-center gap-2 text-[0.82rem] tracking-[0.08em] text-white/70">
+						<span data-product-count={cardId} data-product-total={galleryImages.length}>1 / {galleryImages.length}</span>
+					</div>
+				</div>
+
+				<div class="relative flex-1 overflow-hidden rounded-xl border border-white/14 bg-black/28 shadow-[0_20px_50px_rgba(0,0,0,0.22)]">
+					<div class="product-viewer-track flex h-full snap-x snap-mandatory overflow-x-auto overscroll-x-contain scroll-smooth" data-product-track={cardId}>
+						{galleryImages.map((galleryImage, galleryIndex) => (
+							<figure class="flex h-full min-w-full snap-center items-center justify-center p-4 sm:p-6" data-viewer-slide={galleryIndex}>
+								<div class="product-panzoom flex h-full w-full items-center justify-center overflow-hidden rounded-lg touch-none" data-panzoom-wrapper={cardId} data-panzoom-index={galleryIndex}>
+									<img src={galleryImage.src} alt={galleryImage.alt} loading="lazy" class="h-full w-full object-contain select-none" draggable="false" />
+								</div>
+							</figure>
+						))}
+					</div>
+
+					<button type="button" class="absolute top-1/2 left-3 z-30 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-md border border-white/20 bg-white/10 text-base text-white transition hover:bg-white hover:text-pine sm:flex" data-slide-dir="prev" data-product-nav={cardId} aria-label="Previous image">&larr;</button>
+					<button type="button" class="absolute top-1/2 right-3 z-30 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-md border border-white/20 bg-white/10 text-base text-white transition hover:bg-white hover:text-pine sm:flex" data-slide-dir="next" data-product-nav={cardId} aria-label="Next image">&rarr;</button>
+				</div>
+
+				<div class="mt-3 flex gap-2 overflow-x-auto pb-1.5" data-product-thumbs={cardId}>
+					{galleryImages.map((galleryImage, galleryIndex) => (
+						<button type="button" class="h-14 min-w-14 overflow-hidden rounded-md border border-white/20 opacity-75 transition hover:opacity-100 sm:h-18 sm:min-w-18" data-thumb-index={galleryIndex} data-product-thumb={cardId} aria-label={`Go to image ${galleryIndex + 1}`}>
+							<img src={galleryImage.src} alt={galleryImage.alt} loading="lazy" class="h-full w-full object-cover" />
+						</button>
+					))}
+				</div>
+
+				<div class="mt-2 flex items-center justify-center gap-2 sm:hidden">
+					<button type="button" class="flex h-10 w-10 items-center justify-center rounded-md border border-white/20 bg-white/10 text-base text-white transition hover:bg-white hover:text-pine" data-slide-dir="prev" data-product-nav={cardId} aria-label="Previous image mobile">&larr;</button>
+					<button type="button" class="flex h-10 w-10 items-center justify-center rounded-md border border-white/20 bg-white/10 text-base text-white transition hover:bg-white hover:text-pine" data-slide-dir="next" data-product-nav={cardId} aria-label="Next image mobile">&rarr;</button>
+				</div>
+			</div>
+		</div>
+	</dialog>
+</article>
+
+<script>
+	import Panzoom from '@panzoom/panzoom';
+
+	const panzoomInstances = new Map();
+	const openButtons = document.querySelectorAll('[data-open-product]');
+
+	function getPanzoomKey(productId: string, index: string) {
+		return `${productId}:${index}`;
+	}
+
+	function ensurePanzoom(productId: string) {
+		document.querySelectorAll(`[data-panzoom-wrapper="${productId}"]`).forEach((wrapper) => {
+			if (!(wrapper instanceof HTMLElement)) return;
+
+			const index = wrapper.getAttribute('data-panzoom-index') ?? '0';
+			const key = getPanzoomKey(productId, index);
+			if (panzoomInstances.has(key)) return;
+
+			const instance = Panzoom(wrapper, {
+				maxScale: 3,
+				minScale: 1,
+				contain: 'outside',
+				panOnlyWhenZoomed: true,
+				pinchAndPan: true,
+				cursor: 'grab'
+			});
+
+			panzoomInstances.set(key, instance);
+		});
+	}
+
+	function resetPanzoom(productId: string) {
+		document.querySelectorAll(`[data-panzoom-wrapper="${productId}"]`).forEach((wrapper) => {
+			if (!(wrapper instanceof HTMLElement)) return;
+
+			const index = wrapper.getAttribute('data-panzoom-index') ?? '0';
+			const key = getPanzoomKey(productId, index);
+			const instance = panzoomInstances.get(key);
+			if (!instance) return;
+			instance.reset({ animate: false });
+		});
+	}
+
+	openButtons.forEach((button) => {
+		button.addEventListener('click', () => {
+			const productId = button.getAttribute('data-open-product');
+			if (!productId) return;
+
+			const modal = document.querySelector(`[data-product-modal="${productId}"]`);
+			const track = document.querySelector(`[data-product-track="${productId}"]`);
+			if (!(modal instanceof HTMLDialogElement) || !(track instanceof HTMLElement)) return;
+
+			ensurePanzoom(productId);
+			modal.showModal();
+			document.body.style.overflow = 'hidden';
+			track.scrollTo({ left: 0, behavior: 'auto' });
+			resetPanzoom(productId);
+			refreshThumbState(productId, 0);
+		});
+	});
+
+	const closeButtons = document.querySelectorAll('[data-close-product]');
+	closeButtons.forEach((button) => {
+		button.addEventListener('click', () => {
+			const productId = button.getAttribute('data-close-product');
+			if (!productId) return;
+
+			const modal = document.querySelector(`[data-product-modal="${productId}"]`);
+			if (!(modal instanceof HTMLDialogElement)) return;
+			resetPanzoom(productId);
+			modal.close();
+			document.body.style.overflow = '';
+		});
+	});
+
+	document.querySelectorAll('[data-product-modal]').forEach((modalNode) => {
+		if (!(modalNode instanceof HTMLDialogElement)) return;
+		modalNode.addEventListener('click', (event) => {
+			if (event.target === modalNode) {
+				const productId = modalNode.getAttribute('data-product-modal');
+				if (productId) {
+					resetPanzoom(productId);
+				}
+				modalNode.close();
+				document.body.style.overflow = '';
+			}
+		});
+	});
+
+	function refreshThumbState(productId: string, activeIndex: number) {
+		const count = document.querySelector(`[data-product-count="${productId}"]`);
+		if (count) {
+			const total = count.getAttribute('data-product-total') ?? '1';
+			count.textContent = `${activeIndex + 1} / ${total}`;
+		}
+
+		document.querySelectorAll(`[data-product-thumb="${productId}"]`).forEach((thumb, index) => {
+			thumb.classList.toggle('ring-2', index === activeIndex);
+			thumb.classList.toggle('ring-white', index === activeIndex);
+			thumb.classList.toggle('opacity-100', index === activeIndex);
+			thumb.classList.toggle('opacity-75', index !== activeIndex);
+		});
+	}
+
+	document.querySelectorAll('[data-product-nav]').forEach((navButton) => {
+		navButton.addEventListener('click', () => {
+			const productId = navButton.getAttribute('data-product-nav');
+			const direction = navButton.getAttribute('data-slide-dir');
+			if (!productId || !direction) return;
+
+			const track = document.querySelector(`[data-product-track="${productId}"]`);
+			if (!(track instanceof HTMLElement)) return;
+
+			const frameWidth = track.clientWidth;
+			const currentIndex = Math.round(track.scrollLeft / frameWidth);
+			const total = track.querySelectorAll('[data-viewer-slide]').length;
+			const nextIndex = direction === 'next'
+				? Math.min(total - 1, currentIndex + 1)
+				: Math.max(0, currentIndex - 1);
+
+			track.scrollTo({ left: frameWidth * nextIndex, behavior: 'smooth' });
+			resetPanzoom(productId);
+			refreshThumbState(productId, nextIndex);
+		});
+	});
+
+	document.querySelectorAll('[data-product-thumb]').forEach((thumbButton) => {
+		thumbButton.addEventListener('click', () => {
+			const productId = thumbButton.getAttribute('data-product-thumb');
+			const indexText = thumbButton.getAttribute('data-thumb-index');
+			if (!productId || !indexText) return;
+
+			const index = Number.parseInt(indexText, 10);
+			const track = document.querySelector(`[data-product-track="${productId}"]`);
+			if (!(track instanceof HTMLElement)) return;
+
+			track.scrollTo({ left: track.clientWidth * index, behavior: 'smooth' });
+			resetPanzoom(productId);
+			refreshThumbState(productId, index);
+		});
+	});
+
+	document.querySelectorAll('[data-product-track]').forEach((trackNode) => {
+		if (!(trackNode instanceof HTMLElement)) return;
+		const productId = trackNode.getAttribute('data-product-track');
+		if (!productId) return;
+
+		trackNode.addEventListener('scroll', () => {
+			const frameWidth = trackNode.clientWidth;
+			const index = Math.round(trackNode.scrollLeft / frameWidth);
+			refreshThumbState(productId, index);
+		});
+	});
+
+	document.addEventListener('keydown', (event) => {
+		const openModal = document.querySelector('[data-product-modal][open]');
+		if (!(openModal instanceof HTMLDialogElement)) return;
+
+		const productId = openModal.getAttribute('data-product-modal');
+		if (!productId) return;
+
+		if (event.key === 'Escape') {
+			resetPanzoom(productId);
+			openModal.close();
+			document.body.style.overflow = '';
+			return;
+		}
+
+		if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+
+		const track = document.querySelector(`[data-product-track="${productId}"]`);
+		if (!(track instanceof HTMLElement)) return;
+
+		const frameWidth = track.clientWidth;
+		const currentIndex = Math.round(track.scrollLeft / frameWidth);
+		const total = track.querySelectorAll('[data-viewer-slide]').length;
+		const nextIndex = event.key === 'ArrowRight'
+			? Math.min(total - 1, currentIndex + 1)
+			: Math.max(0, currentIndex - 1);
+
+		track.scrollTo({ left: frameWidth * nextIndex, behavior: 'smooth' });
+		resetPanzoom(productId);
+		refreshThumbState(productId, nextIndex);
+	});
+</script>
