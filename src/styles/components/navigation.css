@@ -4,7 +4,44 @@
   }
 
   .site-nav {
-    @apply sticky top-0 z-50 border-b border-spruce/15 bg-snow/92 px-4 backdrop-blur md:px-6;
+    @apply fixed inset-x-0 top-0 z-50 px-4 md:px-6;
+    border-bottom: 1px solid transparent;
+    background-color: transparent;
+    transition:
+      background-color 420ms ease,
+      border-color 420ms ease,
+      backdrop-filter 420ms ease;
+  }
+
+  .site-nav--transparent {
+    background-color: transparent;
+    border-bottom-color: transparent;
+  }
+
+  .site-nav--transparent .site-nav__title {
+    @apply text-white;
+  }
+
+  .site-nav--transparent .site-nav__sub {
+    @apply text-white/72;
+  }
+
+  .site-nav--solid {
+    @apply bg-snow/92 backdrop-blur;
+    border-bottom-color: rgba(125, 119, 109, 0.15);
+  }
+
+  .site-nav--solid .site-nav__title {
+    @apply text-pine;
+  }
+
+  .site-nav--solid .site-nav__sub {
+    @apply text-spruce;
+  }
+
+  .site-nav__title,
+  .site-nav__sub {
+    transition: color 400ms ease;
   }
 
   .site-nav-inner {

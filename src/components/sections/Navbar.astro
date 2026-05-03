@@ -1,9 +1,26 @@
 ---
 ---
 
-<nav class="site-nav" data-aos="fade-down">
+<nav class="site-nav site-nav--transparent" data-site-nav>
   <div class="site-nav-inner">
-    <div class="logo"><h2 class="text-[1.65rem] font-semibold tracking-tight text-pine md:text-[1.85rem]">Koseli Crafts</h2></div>
-    <p class="hidden text-[0.76rem] font-medium tracking-[0.14em] text-spruce md:block">Handcrafted Decorative Pieces</p>
+    <div class="logo"><h2 class="site-nav__title text-[1.65rem] font-semibold tracking-tight md:text-[1.85rem]">Koseli Crafts</h2></div>
+    <p class="site-nav__sub hidden text-[0.76rem] font-medium tracking-[0.14em] md:block">Handcrafted Decorative Pieces</p>
   </div>
 </nav>
+
+<script>
+  const nav = document.querySelector('[data-site-nav]') as HTMLElement | null;
+
+  if (nav) {
+    const THRESHOLD = nav.offsetHeight;
+
+    const update = () => {
+      const isPastThreshold = window.scrollY > THRESHOLD;
+      nav.classList.toggle('site-nav--transparent', !isPastThreshold);
+      nav.classList.toggle('site-nav--solid', isPastThreshold);
+    };
+
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  }
+</script>

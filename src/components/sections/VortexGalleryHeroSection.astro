@@ -1,0 +1,148 @@
+---
+import productFaithInspiration from '../../assets/product-faith-inspiration.jpg';
+import productDivineLove from '../../assets/product-divine-love.jpg';
+import productGracePlaque from '../../assets/product-grace-plaque.jpg';
+import productInnerPeace from '../../assets/product-inner-peace.jpg';
+import galleryFaithSeries from '../../assets/gallery-faith-series.jpg';
+import galleryCustomOrders from '../../assets/gallery-custom-orders.jpg';
+import galleryPremiumRange from '../../assets/gallery-premium-range.jpg';
+import gallerySpecialEditions from '../../assets/gallery-special-editions.jpg';
+import galleryGiftSets from '../../assets/gallery-gift-sets.jpg';
+
+const featuredPool = [
+  { src: productFaithInspiration.src, alt: 'Handcrafted engraved decor with warm wood tones' },
+  { src: productDivineLove.src, alt: 'Decorative engraved panel with elegant finishing' },
+  { src: productGracePlaque.src, alt: 'Polished crafted plaque styled for modern interiors' },
+  { src: productInnerPeace.src, alt: 'Minimal handcrafted piece for calm spaces' },
+  { src: galleryFaithSeries.src, alt: 'Faith series collection with layered textures' },
+  { src: galleryCustomOrders.src, alt: 'Custom order showcase with personalized craft details' },
+  { src: galleryPremiumRange.src, alt: 'Premium range for home and boutique styling' },
+  { src: gallerySpecialEditions.src, alt: 'Special editions collection in studio arrangement' },
+  { src: galleryGiftSets.src, alt: 'Curated handcrafted gift sets ready for presentation' },
+];
+
+// 4 rows × 9 tiles = 36 cells.
+// Rows alternate drift direction so they look like a living wall.
+// Each row has its own speed so they never feel in sync.
+const COLS = 9;
+const center = (COLS - 1) / 2; // 4.0
+
+const rowConfig = [
+  { dir:  1, duration: 18, animDelay: '0s'  },
+  { dir: -1, duration: 22, animDelay: '-3s' },
+  { dir:  1, duration: 20, animDelay: '-7s' },
+  { dir: -1, duration: 25, animDelay: '-2s' },
+];
+
+const wallRows = rowConfig.map((row, rowIndex) => {
+  const cells = Array.from({ length: COLS }, (_, colIndex) => {
+    const cellIndex = rowIndex * COLS + colIndex;
+    const t = (colIndex - center) / center;   // −1 (left edge) → +1 (right edge)
+    const rotateY    = t * -22;               // concave: edges angle inward
+    const translateZ = Math.abs(t) * -48;     // edges recede in depth
+    const tilt       = ((colIndex % 5) - 2) * 0.55; // subtle per-tile in-plane tilt
+    // First 9 cells use local assets; rest use unique picsum seeds
+    const src = cellIndex < featuredPool.length
+      ? featuredPool[cellIndex].src
+      : `https://picsum.photos/seed/${cellIndex + 101}/800/600`;
+    return { src, rotateY, translateZ, tilt, delay: colIndex * 65 + rowIndex * 25 };
+  });
+  return { ...row, cells };
+});
+---
+
+<section class="vortex-gallery-hero" id="vortex-gallery" data-vortex-gallery>
+  <div class="vortex-gallery-hero__atmosphere" aria-hidden="true"></div>
+
+  <div class="vortex-gallery-hero__wall" aria-hidden="true">
+    {wallRows.map((row) => (
+      <div
+        class="vortex-gallery-row"
+        style={`--row-dir:${row.dir};--row-duration:${row.duration}s;--row-anim-delay:${row.animDelay};`}
+      >
+        {row.cells.map((cell) => (
+          <div
+            class="vortex-gallery-cell"
+            style={[
+              `--rotate-y:${cell.rotateY}deg`,
+              `--tz:${cell.translateZ}px`,
+              `--tilt:${cell.tilt}deg`,
+              `--cell-delay:${cell.delay}ms`,
+            ].join(';')}
+          >
+            <img src={cell.src} alt="" loading="lazy" decoding="async" />
+          </div>
+        ))}
+      </div>
+    ))}
+  </div>
+
+  <div class="vortex-gallery-hero__veil" aria-hidden="true"></div>
+
+  <div class="vortex-gallery-hero__center" role="region" aria-live="polite" aria-label="Featured artwork">
+    <img
+      data-vortex-main-image
+      class="vortex-gallery-hero__main-image"
+      src={featuredPool[0].src}
+      alt={featuredPool[0].alt}
+      loading="eager"
+    />
+  </div>
+</section>
+
+<script define:vars={{ autoPlayDelay: 2000, featuredPool }}>
+  const gallerySections = document.querySelectorAll('[data-vortex-gallery]');
+
+  gallerySections.forEach((section) => {
+    const mainImage = section.querySelector('[data-vortex-main-image]');
+    if (!mainImage || !featuredPool.length) return;
+
+    let activeIndex = 0;
+    let intervalId;
+    let queue = [];
+
+    const shuffle = (arr) => {
+      const next = [...arr];
+      for (let i = next.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [next[i], next[j]] = [next[j], next[i]];
+      }
+      return next;
+    };
+
+    const refillQueue = () => {
+      const indexes = Array.from({ length: featuredPool.length }, (_, i) => i);
+      queue = shuffle(indexes.filter((i) => i !== activeIndex));
+    };
+
+    const syncUi = (index) => {
+      const item = featuredPool[index];
+      if (!item) return;
+      mainImage.classList.remove('is-ready');
+      window.setTimeout(() => {
+        mainImage.src = item.src;
+        mainImage.alt = item.alt;
+        const finish = () => mainImage.classList.add('is-ready');
+        if (mainImage.complete) finish();
+        else mainImage.onload = finish;
+      }, 300);
+    };
+
+    // Center image always cycles — no hover pause
+    const startAutoPlay = () => {
+      window.clearInterval(intervalId);
+      intervalId = window.setInterval(() => {
+        if (!queue.length) refillQueue();
+        activeIndex = queue.shift() ?? 0;
+        syncUi(activeIndex);
+      }, autoPlayDelay);
+    };
+
+    mainImage.classList.add('is-ready');
+    refillQueue();
+
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      startAutoPlay();
+    }
+  });
+</script>
