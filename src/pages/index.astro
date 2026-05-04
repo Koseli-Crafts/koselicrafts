@@ -1,8 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/sections/Navbar.astro';
-import VortexGalleryHeroSection from '../components/sections/VortexGalleryHeroSection.astro';
-// import AdvancedSliderSection from '../components/sections/AdvancedSliderSection.astro';
+// import VortexGalleryHeroSection from '../components/sections/VortexGalleryHeroSection.astro';
+import AdvancedSliderSection from '../components/sections/AdvancedSliderSection.astro';
 import ProductsSection from '../components/sections/ProductsSection.astro';
 import TestimonialsSection from '../components/sections/TestimonialsSection.astro';
 import FaqSection from '../components/sections/FaqSection.astro';
@@ -117,8 +117,8 @@ answer: "Keep pieces away from excessive moisture and direct heat. A soft dry cl
 <Layout>
 <div class="site-shell">
 	<Navbar />
-	<VortexGalleryHeroSection />
-	{/* <AdvancedSliderSection /> — hidden; replaced by VortexGalleryHeroSection */}
+	<!-- <VortexGalleryHeroSection /> -->
+	<AdvancedSliderSection />
 	<ProductsSection images={productImages} />
 	<TestimonialsSection testimonials={testimonials} />
 	<FaqSection faqs={faqs} />
