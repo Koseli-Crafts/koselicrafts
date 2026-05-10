@@ -24,14 +24,14 @@ const cardId = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 		</div>
 	</button>
 
-	<dialog class="product-viewer backdrop:bg-black/40 top-1/2 left-1/2 -translate-1/2" data-product-modal={cardId}>
-		<div class="w-screen max-w-5xl rounded-2xl bg-white p-6 sm:p-8 m-auto">
-			<button type="button" class="product-viewer-close absolute cursor-pointer top-5 right-5 flex h-8 w-8 items-center justify-center text-2xl text-spruce/40 transition hover:text-spruce" data-close-product={cardId} aria-label="Close">&times;</button>
+	<dialog class="product-viewer backdrop:bg-black/60 max-sm:inset-0 max-sm:m-0 max-sm:h-dvh max-sm:max-h-dvh max-sm:w-screen max-sm:max-w-none max-sm:overflow-y-auto max-sm:bg-transparent max-sm:p-0 sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:max-h-[92dvh] sm:max-w-5xl sm:rounded-2xl" data-product-modal={cardId}>
+		<div class="relative min-h-full w-full bg-white max-sm:p-4 max-sm:pt-12 sm:w-screen sm:max-w-5xl sm:rounded-2xl sm:p-8">
+			<button type="button" class="product-viewer-close max-sm:fixed max-sm:top-3 max-sm:right-3 max-sm:z-50 max-sm:rounded-full max-sm:bg-white/90 max-sm:shadow-md max-sm:backdrop-blur-sm absolute cursor-pointer sm:top-5 sm:right-5 flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center text-2xl text-spruce/40 transition hover:text-spruce" data-close-product={cardId} aria-label="Close">&times;</button>
 
-			<div class="grid grid-cols-1 gap-8 md:grid-cols-5">
+			<div class="grid grid-cols-1 gap-6 md:grid-cols-5 md:gap-8 max-md:pt-6">
 				<!-- Left: Image Slider (3 cols on desktop) -->
 				<div class="md:col-span-3">
-					<div class="relative w-full bg-spruce/6 rounded-xl overflow-hidden" style="aspect-ratio: 1;">
+					<div class="relative w-full bg-spruce/6 rounded-xl overflow-hidden [aspect-ratio:4/3] sm:[aspect-ratio:1]">
 						<div class="product-viewer-track absolute inset-0 flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain scroll-smooth" data-product-track={cardId}>
 							{galleryImages.map((galleryImage, galleryIndex) => (
 								<figure class="flex min-w-full snap-center items-center justify-center" data-viewer-slide={galleryIndex}>
@@ -51,7 +51,7 @@ const cardId = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 					</div>
 
 					<!-- Thumbnails below on mobile -->
-					<div class="mt-4 flex gap-2 overflow-x-auto md:hidden" data-product-thumbs={cardId}>
+					<div class="mt-3 flex gap-2 overflow-x-auto pb-1 md:hidden" data-product-thumbs={cardId}>
 						{galleryImages.map((galleryImage, galleryIndex) => (
 							<button type="button" class="h-14 min-w-14 shrink-0 overflow-hidden rounded-lg border border-spruce/15 opacity-50 transition hover:opacity-100" data-thumb-index={galleryIndex} data-product-thumb={cardId} aria-label={`Image ${galleryIndex + 1}`}>
 								<img src={galleryImage.src} alt={galleryImage.alt} loading="lazy" class="h-full w-full object-cover" />
