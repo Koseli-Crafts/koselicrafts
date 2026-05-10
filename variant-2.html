@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koseli Crafts | Handcrafted Decor</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Manrope:wght@200;300;400;500&display=swap');
+
+        :root {
+            --bg: #0a0908;
+            --text-main: #f4eee8;
+            --text-muted: #a39b93;
+            --accent: #c49a6c;
+            --border: #2a2522;
+            
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Manrope', sans-serif;
+            
+            --ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Grain Texture Overlay */
+        .noise {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.04;
+            background: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, .display-text {
+            font-family: var(--font-display);
+            font-weight: 400;
+        }
+
+        h1 { font-size: clamp(4rem, 12vw, 10rem); line-height: 0.9; text-transform: uppercase; letter-spacing: -0.02em; }
+        h2 { font-size: clamp(2.5rem, 6vw, 5rem); line-height: 1.1; margin-bottom: 1rem; }
+        h3 { font-size: clamp(1.5rem, 3vw, 2.5rem); }
+        
+        p { font-size: 1rem; line-height: 1.6; font-weight: 300; color: var(--text-muted); }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 2rem 4vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            mix-blend-mode: difference;
+        }
+        
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            text-decoration: none;
+            color: var(--text-main);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px; left: 0;
+            width: 0%; height: 1px;
+            background: var(--accent);
+            transition: width 0.4s var(--ease-out);
+        }
+
+        .nav-links a:hover::after { width: 100%; }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 4vw;
+            position: relative;
+        }
+
+        .hero-images {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 35vw;
+            height: 60vh;
+            z-index: -1;
+            overflow: hidden;
+            border-radius: 200px 200px 0 0;
+            opacity: 0;
+            animation: imageReveal 2s var(--ease-out) 0.5s forwards;
+        }
+
+        .hero-images img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            filter: brightness(0.7) contrast(1.1);
+        }
+
+        .hero h1 {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: textUp 1.5s var(--ease-out) forwards;
+        }
+
+        .hero h1 span {
+            display: block;
+            font-style: italic;
+            font-size: clamp(2rem, 5vw, 4rem);
+            color: var(--accent);
+            margin-top: -1rem;
+            transform: translateX(10%);
+        }
+
+        .hero-subtitle {
+            position: absolute;
+            bottom: 4rem; right: 4vw;
+            max-width: 300px;
+            text-align: right;
+        }
+
+        /* Intro Section */
+        .intro {
+            padding: 10rem 4vw;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .intro-text h2 { margin-bottom: 2rem; }
+        .intro-text p { font-size: 1.2rem; margin-bottom: 1.5rem; }
+
+        .intro-image {
+            width: 100%;
+            height: 80vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .intro-image img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 1.5s var(--ease-out);
+        }
+
+        .intro-image:hover img { transform: scale(1.05); }
+
+        /* Collections */
+        .collections {
+            padding: 8rem 4vw;
+        }
+
+        .collections-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 6rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 2rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 2rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            group: hover;
+            background: #110e0c; /* Loading fallback */
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(40%) contrast(1.1);
+            transition: all 0.8s var(--ease-out);
+        }
+
+        .gallery-item:hover img {
+            filter: grayscale(0%) contrast(1.1);
+            transform: scale(1.03);
+        }
+
+        .item-1 { grid-column: 1 / 7; aspect-ratio: 3/4; }
+        .item-2 { grid-column: 7 / 13; aspect-ratio: 4/5; margin-top: 10rem; }
+        .item-3 { grid-column: 2 / 6; aspect-ratio: 1/1; margin-top: -5rem; }
+        .item-4 { grid-column: 6 / 12; aspect-ratio: 16/9; }
+        .item-5 { grid-column: 4 / 10; aspect-ratio: 3/2; margin-top: 4rem; }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%;
+            padding: 2rem;
+            background: linear-gradient(to top, rgba(10,9,8,0.9), transparent);
+            transform: translateY(100%);
+            transition: transform 0.6s var(--ease-out);
+        }
+
+        .gallery-item:hover .gallery-caption {
+            transform: translateY(0);
+        }
+
+        .gallery-caption h3 { color: var(--text-main); font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .gallery-caption p { color: var(--accent); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 10rem 4vw;
+            background: #110e0c;
+            text-align: center;
+        }
+
+        .testimonial-slider {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .quote-icon {
+            font-family: var(--font-display);
+            font-size: 6rem;
+            color: var(--accent);
+            opacity: 0.3;
+            line-height: 0;
+            margin-bottom: 2rem;
+        }
+
+        .testimonial-text {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-style: italic;
+            margin-bottom: 3rem;
+            color: var(--text-main);
+        }
+
+        .testimonial-author {
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.85rem;
+            color: var(--accent);
+        }
+        .testimonial-author span {
+            display: block;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        /* FAQ */
+        .faq {
+            padding: 10rem 4vw;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+            padding: 2rem 0;
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--text-main);
+        }
+
+        .faq-icon {
+            font-size: 1.5rem;
+            transition: transform 0.4s ease;
+            color: var(--accent);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.6s var(--ease-out), padding 0.6s var(--ease-out);
+            color: var(--text-muted);
+            padding-right: 2rem;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            padding-top: 1.5rem;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        /* Contact */
+        .contact {
+            padding: 10rem 4vw;
+            background: #151210;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+        }
+
+        .contact-info h2 { color: var(--accent); }
+        .contact-info p { margin-bottom: 2rem; font-size: 1.2rem; }
+        
+        .contact-details { margin-top: 4rem; }
+        .contact-details div { margin-bottom: 2rem; }
+        .contact-details h4 { font-family: var(--font-body); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.5rem; }
+        .contact-details a, .contact-details p { color: var(--text-main); text-decoration: none; font-size: 1.2rem; font-family: var(--font-display); }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+            color: var(--text-main);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea { resize: vertical; min-height: 100px; }
+
+        input:focus, select:focus, textarea:focus {
+            border-bottom-color: var(--accent);
+        }
+
+        label {
+            position: absolute;
+            top: 1rem; left: 0;
+            color: var(--text-muted);
+            pointer-events: none;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        input:focus ~ label, input:valid ~ label, textarea:focus ~ label, textarea:valid ~ label {
+            top: -10px;
+            font-size: 0.75rem;
+            color: var(--accent);
+        }
+
+        select { color: var(--text-muted); }
+        select option { background: var(--bg); color: var(--text-main); }
+
+        button {
+            align-self: flex-start;
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--accent);
+            padding: 1rem 3rem;
+            font-family: var(--font-body);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: color 0.4s ease;
+            margin-top: 1rem;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--accent);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s var(--ease-out);
+            z-index: -1;
+        }
+
+        button:hover { color: var(--bg); }
+        button:hover::before { transform: scaleX(1); transform-origin: left; }
+
+        /* Footer */
+        footer {
+            padding: 4rem 4vw;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
+        footer p {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Animations */
+        @keyframes textUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes imageReveal {
+            to { opacity: 1; clip-path: inset(0 0 0 0); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s var(--ease-out);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .intro { grid-template-columns: 1fr; }
+            .hero-images { width: 70vw; border-radius: 100px 100px 0 0; }
+            .gallery-grid { display: flex; flex-direction: column; }
+            .gallery-item { aspect-ratio: 4/5 !important; margin: 0 0 2rem 0 !important; }
+            .contact { grid-template-columns: 1fr; gap: 4rem; }
+            nav { padding: 1.5rem 4vw; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="noise"></div>
+
+    <nav>
+        <a href="#" class="logo">Koseli</a>
+        <div class="nav-links">
+            <a href="#about">Philosophy</a>
+            <a href="#collection">Collections</a>
+            <a href="#faq">FAQ</a>
+            <a href="#contact">Connect</a>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <div class="hero-images" style="clip-path: inset(100% 0 0 0);">
+                <img src="https://makektm.github.io/koselicrafts/_astro/product-grace-plaque.DM1HRUe9.jpg" alt="Premium wooden decor artwork">
+            </div>
+            <h1>Koseli <span>Crafts</span></h1>
+            <div class="hero-subtitle reveal">
+                <p>Handcrafted decorative pieces designed to elevate modern spaces with warmth and elegant precision.</p>
+            </div>
+        </section>
+
+        <section id="about" class="intro">
+            <div class="intro-text reveal">
+                <h2>Crafted to Elevate<br>Everyday Interiors</h2>
+                <p>We source premium hardwood, selected for grain quality and enduring beauty. Every detail is meticulously engraved using precision laser technology and finished entirely by hand with eco-conscious sealants.</p>
+                <p>From homes and studios to curated retail spaces, our heirloom pieces provide a grounding presence—adding warmth, texture, and personalized character to any environment.</p>
+            </div>
+            <div class="intro-image reveal">
+                <img src="https://makektm.github.io/koselicrafts/_astro/gallery-faith-series.Be2Bmu4k.jpg" alt="Engraved wood details">
+            </div>
+        </section>
+
+        <section id="collection" class="collections">
+            <div class="collections-header reveal">
+                <h2>Curated<br>Collections</h2>
+                <p>Built for statement display.<br>Swipe to view detail.</p>
+            </div>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item item-1 reveal">
+                    <img src="https://makektm.github.io/koselicrafts/_astro/product-faith-inspiration.CyWicV6-.jpg" alt="Signature Display">
+                    <div class="gallery-caption">
+                        <h3>Signature Display</h3>
+                        <p>Elegant focal pieces</p>
+                    </div>
+                </div>
+                <div class="gallery-item item-2 reveal" style="transition-delay: 0.2s">
+                    <img src="https://makektm.github.io/koselicrafts/_astro/gallery-premium-range.DJWEaVTg.jpg" alt="Refined Plaque">
+                    <div class="gallery-caption">
+                        <h3>Refined Plaques</h3>
+                        <p>Warm wood & engraved detail</p>
+                    </div>
+                </div>
+                <div class="gallery-item item-3 reveal">
+                    <img src="https://makektm.github.io/koselicrafts/_astro/product-inner-peace.DPTIalpk.jpg" alt="Modern Accent">
+                    <div class="gallery-caption">
+                        <h3>Modern Accent</h3>
+                        <p>Minimal styling for calm spaces</p>
+                    </div>
+                </div>
+                <div class="gallery-item item-4 reveal" style="transition-delay: 0.1s">
+                    <img src="https://makektm.github.io/koselicrafts/_astro/product-divine-love.B8ZQ12tz.jpg" alt="Heirloom Pieces">
+                    <div class="gallery-caption">
+                        <h3>Heirloom Walls</h3>
+                        <p>Built for statement display</p>
+                    </div>
+                </div>
+                <div class="gallery-item item-5 reveal" style="transition-delay: 0.3s">
+                    <img src="https://makektm.github.io/koselicrafts/_astro/gallery-custom-orders.B5qWOdld.jpg" alt="Custom Detail">
+                    <div class="gallery-caption">
+                        <h3>Custom Signatures</h3>
+                        <p>Personalized milestones</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonials reveal">
+            <div class="testimonial-slider">
+                <div class="quote-icon">"</div>
+                <p class="testimonial-text">The finish feels incredibly premium. This single piece immediately lifted the look and atmospheric weight of our entire store display.</p>
+                <div class="testimonial-author">
+                    Sarah Johnson
+                    <span>Boutique Owner, Kathmandu</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="faq" class="faq reveal">
+            <h2 style="text-align: center; margin-bottom: 4rem;">Inquiries</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    What materials do you use?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    We use responsibly sourced hardwood selected for grain quality and durability. Engravings are done with precision laser technology and finished by hand with eco-conscious sealants.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    Can I customize my order?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    Yes, customization is one of our core offerings. You can request names, wording, dimensions, finishes, and styling preferences to perfectly suit your intended space.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    What is your shipping timeline?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    Most standard pieces are completed in 5-7 business days. Personalized projects generally take 10-14 business days depending on design complexity.
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact reveal">
+            <div class="contact-info">
+                <h2>Let's Connect</h2>
+                <p>Commission a custom piece, inquire about our collections, or simply say hello.</p>
+                
+                <div class="contact-details">
+                    <div>
+                        <h4>Email</h4>
+                        <a href="mailto:info@koselicraft.com">info@koselicraft.com</a>
+                    </div>
+                    <div>
+                        <h4>Phone</h4>
+                        <a href="tel:+9779812345678">+977 9812345678</a>
+                    </div>
+                    <div>
+                        <h4>Studio</h4>
+                        <p>Kathmandu, Nepal<br><span style="font-size: 1rem; color: var(--text-muted); font-family: var(--font-body);">Lalitpur appointments available</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <form class="contact-form" onsubmit="event.preventDefault();">
+                <div class="input-group">
+                    <input type="text" id="name" required>
+                    <label for="name">Full Name</label>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="email" required>
+                    <label for="email">Email Address</label>
+                </div>
+                <div class="input-group">
+                    <select id="interest" required>
+                        <option value="" disabled selected></option>
+                        <option value="wall">Wall Display Piece</option>
+                        <option value="shelf">Counter or Shelf Accent</option>
+                        <option value="custom">Custom Personalized Piece</option>
+                        <option value="other">Other / Multiple Items</option>
+                    </select>
+                    <label for="interest" style="top: -10px; font-size: 0.75rem; color: var(--accent);">Product Interest</label>
+                </div>
+                <div class="input-group">
+                    <textarea id="message" required></textarea>
+                    <label for="message">Message or Special Requests</label>
+                </div>
+                <button type="submit">Send Inquiry</button>
+            </form>
+        </section>
+
+        <footer>
+            <p>&copy; 2026 Koseli Crafts. Designed and handcrafted in Nepal.</p>
+        </footer>
+    </main>
+
+    <script>
+        // Intersection Observer for scroll animations
+        const revealElements = document.querySelectorAll('.reveal');
+
+        const revealOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    return;
+                } else {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, revealOptions);
+
+        revealElements.forEach(el => {
+            revealOnScroll.observe(el);
+        });
+
+        // FAQ Accordion
+        const faqItems = document.querySelectorAll('.faq-item');
+        
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                
+                // Close all other items
+                faqItems.forEach(otherItem => {
+                    otherItem.classList.remove('active');
+                });
+
+                // Toggle current item
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

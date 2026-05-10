@@ -1,52 +1,57 @@
 ---
 import ProductCard from '../ui/ProductCard.astro';
 import SectionHeader from '../ui/SectionHeader.astro';
+import productsData from '../../data/products.json';
+import productFaithInspiration from '../../assets/product-faith-inspiration.jpg';
+import productDivineLove from '../../assets/product-divine-love.jpg';
+import productGracePlaque from '../../assets/product-grace-plaque.jpg';
+import productInnerPeace from '../../assets/product-inner-peace.jpg';
+import galleryFaithSeries from '../../assets/gallery-faith-series.jpg';
+import galleryCustomOrders from '../../assets/gallery-custom-orders.jpg';
+import galleryPremiumRange from '../../assets/gallery-premium-range.jpg';
+import gallerySpecialEditions from '../../assets/gallery-special-editions.jpg';
+import galleryGiftSets from '../../assets/gallery-gift-sets.jpg';
 
-interface Props {
-  images: { src: string; alt: string; title: string }[];
+interface ProductEntry {
+  title: string;
+  description: string;
+  gallery: ProductImageEntry[];
 }
 
-const { images } = Astro.props;
+interface ProductImageEntry {
+  asset: keyof typeof imageAssetMap;
+  alt: string;
+  title: string;
+}
 
-const products = [
-  {
-    title: 'Signature Display Collection',
-    description: 'Elegant focal pieces for styled interiors.',
-    gallery: [0, 4, 6]
-  },
-  {
-    title: 'Refined Plaque Series',
-    description: 'Warm wood and engraved detail.',
-    gallery: [2, 8, 1]
-  },
-  {
-    title: 'Custom Detail Line',
-    description: 'Warm tones with personalized finishing.',
-    gallery: [1, 5, 7]
-  },
-  {
-    title: 'Modern Accent Studio',
-    description: 'Minimal styling for calm spaces.',
-    gallery: [3, 6, 4]
-  },
-  {
-    title: 'Custom Signature Set',
-    description: 'Personalized names, wording, and milestones.',
-    gallery: [5, 0, 8]
-  },
-  {
-    title: 'Heirloom Wall Pieces',
-    description: 'Built for statement display.',
-    gallery: [6, 2, 4]
-  }
-];
+const imageAssetMap = {
+  'product-faith-inspiration': productFaithInspiration.src,
+  'product-divine-love': productDivineLove.src,
+  'product-grace-plaque': productGracePlaque.src,
+  'product-inner-peace': productInnerPeace.src,
+  'gallery-faith-series': galleryFaithSeries.src,
+  'gallery-custom-orders': galleryCustomOrders.src,
+  'gallery-premium-range': galleryPremiumRange.src,
+  'gallery-special-editions': gallerySpecialEditions.src,
+  'gallery-gift-sets': galleryGiftSets.src
+} as const;
+
+const products = productsData as ProductEntry[];
 ---
 
 <section id="products" class="content-section" data-aos="fade-up">
   <SectionHeader title="Our Collection" subtitle="Tap any piece to view it in full screen" />
-  <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+  <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
     {products.map((product, index) => {
-      const galleryImages = product.gallery.map((imageIndex) => images[imageIndex % images.length]);
+      const galleryImages = product.gallery
+        .map((galleryItem) => ({
+          src: imageAssetMap[galleryItem.asset],
+          alt: galleryItem.alt,
+          title: galleryItem.title
+        }));
+
+      if (!galleryImages.length) return null;
+
       return (
         <ProductCard
           title={product.title}

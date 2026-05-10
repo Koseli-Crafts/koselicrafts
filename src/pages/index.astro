@@ -1,94 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/sections/Navbar.astro';
-// import VortexGalleryHeroSection from '../components/sections/VortexGalleryHeroSection.astro';
 import AdvancedSliderSection from '../components/sections/AdvancedSliderSection.astro';
 import ProductsSection from '../components/sections/ProductsSection.astro';
-import TestimonialsSection from '../components/sections/TestimonialsSection.astro';
 import FaqSection from '../components/sections/FaqSection.astro';
-import ContactSection from '../components/sections/ContactSection.astro';
 import SiteFooter from '../components/sections/SiteFooter.astro';
-import productFaithInspiration from '../assets/product-faith-inspiration.jpg';
-import productDivineLove from '../assets/product-divine-love.jpg';
-import productGracePlaque from '../assets/product-grace-plaque.jpg';
-import productInnerPeace from '../assets/product-inner-peace.jpg';
-import galleryFaithSeries from '../assets/gallery-faith-series.jpg';
-import galleryCustomOrders from '../assets/gallery-custom-orders.jpg';
-import galleryPremiumRange from '../assets/gallery-premium-range.jpg';
-import gallerySpecialEditions from '../assets/gallery-special-editions.jpg';
-import galleryGiftSets from '../assets/gallery-gift-sets.jpg';
-
-const productImages = [
-{
-src: productFaithInspiration.src,
-alt: "Decorative engraved wall artwork with warm handcrafted finish",
-title: "Signature Display"
-},
-{
-src: productDivineLove.src,
-alt: "Decorative engraved panel with elegant typography",
-title: "Refined Detail"
-},
-{
-src: productGracePlaque.src,
-alt: "Premium engraved plaque for curated interiors",
-title: "Premium Finish"
-},
-{
-src: productInnerPeace.src,
-alt: "Minimal handcrafted piece for calm modern spaces",
-title: "Modern Accent"
-},
-{
-src: galleryFaithSeries.src,
-alt: "Collection showcase with layered handcrafted textures",
-title: "Studio Collection"
-},
-{
-src: galleryCustomOrders.src,
-alt: "Custom order showcase with premium crafted details",
-title: "Custom Orders"
-},
-{
-src: galleryPremiumRange.src,
-alt: "Premium range showcase for home and retail styling",
-title: "Premium Range"
-},
-{
-src: gallerySpecialEditions.src,
-alt: "Special edition handcrafted decor display",
-title: "Special Editions"
-},
-{
-src: galleryGiftSets.src,
-alt: "Curated handcrafted gift set presentation",
-title: "Gift Sets"
-}
-];
-
-const testimonials = [
-{
-name: "Sarah Johnson",
-role: "Boutique Owner, Kathmandu",
-image: productFaithInspiration.src,
-content: "The finish feels premium and the piece immediately lifted the look of our store display.",
-rating: 5
-},
-{
-name: "Michael Chen",
-role: "Home Decor Client, Lalitpur",
-image: productDivineLove.src,
-content: "We ordered multiple customized pieces and every one arrived polished, balanced, and ready to style.",
-rating: 5
-},
-{
-name: "Emma Rodriguez",
-role: "Interior Stylist, Bhaktapur",
-image: productGracePlaque.src,
-content: "The designs work beautifully in homes, offices, and boutique interiors because they feel thoughtful without looking heavy.",
-rating: 5
-}
-];
+import CTASection from '../components/sections/CTASection.astro';
 
 const faqs = [
 {
@@ -96,20 +13,20 @@ question: "What materials do you use?",
 answer: "We use responsibly sourced hardwood selected for grain quality and durability. Engravings are done with precision laser technology and finished by hand with eco-conscious sealants."
 },
 {
-question: "Can I customize my order?",
-answer: "Yes, customization is one of our core offerings. You can request names, wording, dimensions, finishes, and styling preferences to suit your space."
-},
-{
 question: "What's your shipping timeline?",
-answer: "Most standard pieces are completed in 5-7 business days. Personalized projects generally take 10-14 business days depending on design complexity."
+answer: "-"
 },
 {
 question: "Are your pieces suitable for gifts?",
-answer: "Absolutely. Our collections are frequently selected for weddings, anniversaries, housewarmings, baptisms, and milestone celebrations, with optional personalization."
+answer: "Yes, our handcrafted decor items make thoughtful and unique gifts for any occasion."
 },
 {
-question: "How should I care for the artwork?",
-answer: "Keep pieces away from excessive moisture and direct heat. A soft dry cloth is enough for regular cleaning, and occasional gentle polishing helps preserve the finish."
+question: "How can I place an order?",
+answer: "You can place an order by contacting us in WhatsApp. We will guide you through the process and help you select the perfect piece for your space or as a gift."
+},
+{
+question: "Do you offer custom designs?",
+answer: "Yes, we offer custom design services. Please contact us to discuss your ideas and we will work with you to create a unique piece that fits your vision."
 }
 ];
 ---
@@ -117,12 +34,10 @@ answer: "Keep pieces away from excessive moisture and direct heat. A soft dry cl
 <Layout>
 <div class="site-shell">
 	<Navbar />
-	<!-- <VortexGalleryHeroSection /> -->
 	<AdvancedSliderSection />
-	<ProductsSection images={productImages} />
-	<TestimonialsSection testimonials={testimonials} />
+	<ProductsSection />
 	<FaqSection faqs={faqs} />
-	<ContactSection />
+	<CTASection />
 	<SiteFooter />
 </div>
 </Layout>

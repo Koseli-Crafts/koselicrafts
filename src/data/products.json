@@ -1,0 +1,128 @@
+[
+  {
+      "title": "Signature Display Collection",
+      "description": "Elegant focal pieces for styled interiors.",
+      "gallery": [
+        {
+          "asset": "product-faith-inspiration",
+          "alt": "Decorative engraved wall artwork with warm handcrafted finish",
+          "title": "Signature Display"
+        },
+        {
+          "asset": "gallery-faith-series",
+          "alt": "Collection showcase with layered handcrafted textures",
+          "title": "Studio Collection"
+        },
+        {
+          "asset": "gallery-premium-range",
+          "alt": "Premium range showcase for home and retail styling",
+          "title": "Premium Range"
+        }
+      ]
+  },
+  {
+      "title": "Refined Plaque Series",
+      "description": "Warm wood and engraved detail.",
+      "gallery": [
+        {
+          "asset": "product-grace-plaque",
+          "alt": "Premium engraved plaque for curated interiors",
+          "title": "Premium Finish"
+        },
+        {
+          "asset": "gallery-gift-sets",
+          "alt": "Curated handcrafted gift set presentation",
+          "title": "Gift Sets"
+        },
+        {
+          "asset": "product-divine-love",
+          "alt": "Decorative engraved panel with elegant typography",
+          "title": "Refined Detail"
+        }
+      ]
+  },
+  {
+      "title": "Custom Detail Line",
+      "description": "Warm tones with personalized finishing.",
+      "gallery": [
+        {
+          "asset": "product-divine-love",
+          "alt": "Decorative engraved panel with elegant typography",
+          "title": "Refined Detail"
+        },
+        {
+          "asset": "gallery-custom-orders",
+          "alt": "Custom order showcase with premium crafted details",
+          "title": "Custom Orders"
+        },
+        {
+          "asset": "gallery-special-editions",
+          "alt": "Special edition handcrafted decor display",
+          "title": "Special Editions"
+        }
+      ]
+  },
+  {
+      "title": "Modern Accent Studio",
+      "description": "Minimal styling for calm spaces.",
+      "gallery": [
+        {
+          "asset": "product-inner-peace",
+          "alt": "Minimal handcrafted piece for calm modern spaces",
+          "title": "Modern Accent"
+        },
+        {
+          "asset": "gallery-premium-range",
+          "alt": "Premium range showcase for home and retail styling",
+          "title": "Premium Range"
+        },
+        {
+          "asset": "gallery-faith-series",
+          "alt": "Collection showcase with layered handcrafted textures",
+          "title": "Studio Collection"
+        }
+      ]
+  },
+  {
+      "title": "Custom Signature Set",
+      "description": "Personalized names, wording, and milestones.",
+      "gallery": [
+        {
+          "asset": "gallery-custom-orders",
+          "alt": "Custom order showcase with premium crafted details",
+          "title": "Custom Orders"
+        },
+        {
+          "asset": "product-faith-inspiration",
+          "alt": "Decorative engraved wall artwork with warm handcrafted finish",
+          "title": "Signature Display"
+        },
+        {
+          "asset": "gallery-gift-sets",
+          "alt": "Curated handcrafted gift set presentation",
+          "title": "Gift Sets"
+        }
+      ]
+  },
+  {
+      "title": "Heirloom Wall Pieces",
+      "description": "Built for statement display.",
+      "gallery": [
+        {
+          "asset": "gallery-premium-range",
+          "alt": "Premium range showcase for home and retail styling",
+          "title": "Premium Range"
+        },
+        {
+          "asset": "product-grace-plaque",
+          "alt": "Premium engraved plaque for curated interiors",
+          "title": "Premium Finish"
+        },
+        {
+          "asset": "gallery-faith-series",
+          "alt": "Collection showcase with layered handcrafted textures",
+          "title": "Studio Collection"
+        }
+      ]
+  }
+]

@@ -1,26 +1,12 @@
 ---
+import logo from "../../assets/KoseliCrafts_logo.png";
 ---
 
-<nav class="site-nav site-nav--transparent" data-site-nav>
-  <div class="site-nav-inner">
-    <div class="logo"><h2 class="site-nav__title text-[1.65rem] font-semibold tracking-tight md:text-[1.85rem]">Koseli Crafts</h2></div>
-    <p class="site-nav__sub hidden text-[0.76rem] font-medium tracking-[0.14em] md:block">Handcrafted Decorative Pieces</p>
+<nav class="fixed top-0 inset-x-0 bg-snow z-50 px-4 md:px-6 backdrop-blur border-b border-spruce/30">
+  <div class="mx-auto flex h-16 max-w-6xl items-center justify-between">
+    <div class="logo">
+      <img src={logo.src} alt="Koseli Crafts" class="h-9 w-auto md:h-10" />
+    </div>
+    <p class="text-spruce text-sm">Made in Nepal with ❤️</p>
   </div>
 </nav>
-
-<script>
-  const nav = document.querySelector('[data-site-nav]') as HTMLElement | null;
-
-  if (nav) {
-    const THRESHOLD = nav.offsetHeight;
-
-    const update = () => {
-      const isPastThreshold = window.scrollY > THRESHOLD;
-      nav.classList.toggle('site-nav--transparent', !isPastThreshold);
-      nav.classList.toggle('site-nav--solid', isPastThreshold);
-    };
-
-    window.addEventListener('scroll', update, { passive: true });
-    update();
-  }
-</script>
