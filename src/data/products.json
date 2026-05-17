@@ -1,128 +1,244 @@
 [
   {
-      "title": "Signature Display Collection",
-      "description": "Elegant focal pieces for styled interiors.",
-      "gallery": [
-        {
-          "asset": "product-faith-inspiration",
-          "alt": "Decorative engraved wall artwork with warm handcrafted finish",
-          "title": "Signature Display"
-        },
-        {
-          "asset": "gallery-faith-series",
-          "alt": "Collection showcase with layered handcrafted textures",
-          "title": "Studio Collection"
-        },
-        {
-          "asset": "gallery-premium-range",
-          "alt": "Premium range showcase for home and retail styling",
-          "title": "Premium Range"
-        }
-      ]
+    "sku": "KC-BM-001",
+    "title": "Laser-Engraved Bookmark",
+    "description": "Custom engraved MDF bookmark — perfect for personalised text, quotes, or verses.",
+    "gallery": [
+      {
+        "asset": "product-faith-inspiration",
+        "alt": "Laser-engraved wooden bookmark with custom text",
+        "title": "Custom Bookmark"
+      },
+      {
+        "asset": "gallery-gift-sets",
+        "alt": "Engraved bookmark gift presentation",
+        "title": "Gift Ready"
+      },
+      {
+        "asset": "gallery-special-editions",
+        "alt": "Bookmark collection with personalised engravings",
+        "title": "Personalised Set"
+      }
+    ]
   },
   {
-      "title": "Refined Plaque Series",
-      "description": "Warm wood and engraved detail.",
-      "gallery": [
-        {
-          "asset": "product-grace-plaque",
-          "alt": "Premium engraved plaque for curated interiors",
-          "title": "Premium Finish"
-        },
-        {
-          "asset": "gallery-gift-sets",
-          "alt": "Curated handcrafted gift set presentation",
-          "title": "Gift Sets"
-        },
-        {
-          "asset": "product-divine-love",
-          "alt": "Decorative engraved panel with elegant typography",
-          "title": "Refined Detail"
-        }
-      ]
+    "sku": "KC-WH-001",
+    "title": "Decorative Wall Hanging",
+    "description": "Laser-cut MDF wall hanging with a metal ring — a statement piece for any room.",
+    "gallery": [
+      {
+        "asset": "gallery-premium-range",
+        "alt": "Laser-cut decorative wall hanging with metal ring",
+        "title": "Wall Display"
+      },
+      {
+        "asset": "product-grace-plaque",
+        "alt": "Detailed wall hanging with engraved design",
+        "title": "Engraved Detail"
+      },
+      {
+        "asset": "gallery-faith-series",
+        "alt": "Wall hanging collection in styled interior",
+        "title": "Styled Collection"
+      }
+    ]
   },
   {
-      "title": "Custom Detail Line",
-      "description": "Warm tones with personalized finishing.",
-      "gallery": [
-        {
-          "asset": "product-divine-love",
-          "alt": "Decorative engraved panel with elegant typography",
-          "title": "Refined Detail"
-        },
-        {
-          "asset": "gallery-custom-orders",
-          "alt": "Custom order showcase with premium crafted details",
-          "title": "Custom Orders"
-        },
-        {
-          "asset": "gallery-special-editions",
-          "alt": "Special edition handcrafted decor display",
-          "title": "Special Editions"
-        }
-      ]
+    "sku": "KC-DC-001",
+    "title": "Half-Circle Macramé Decor",
+    "description": "Half-circle MDF piece with macramé fringe and an engraved verse — \"You are so loved.\"",
+    "gallery": [
+      {
+        "asset": "product-divine-love",
+        "alt": "Half-circle decor with macramé fringe and engraved verse",
+        "title": "Macramé Detail"
+      },
+      {
+        "asset": "gallery-custom-orders",
+        "alt": "Handcrafted half-circle decor showcase",
+        "title": "Custom Finish"
+      },
+      {
+        "asset": "product-inner-peace",
+        "alt": "Half-circle wall decor in calm setting",
+        "title": "Styled Display"
+      }
+    ]
   },
   {
-      "title": "Modern Accent Studio",
-      "description": "Minimal styling for calm spaces.",
-      "gallery": [
-        {
-          "asset": "product-inner-peace",
-          "alt": "Minimal handcrafted piece for calm modern spaces",
-          "title": "Modern Accent"
-        },
-        {
-          "asset": "gallery-premium-range",
-          "alt": "Premium range showcase for home and retail styling",
-          "title": "Premium Range"
-        },
-        {
-          "asset": "gallery-faith-series",
-          "alt": "Collection showcase with layered handcrafted textures",
-          "title": "Studio Collection"
-        }
-      ]
+    "sku": "KC-DC-002",
+    "title": "Circle Macramé Decor",
+    "description": "Round MDF circle with macramé fringe and engraved Bible verse — 11 cm keepsake.",
+    "gallery": [
+      {
+        "asset": "product-inner-peace",
+        "alt": "Round macramé decor with engraved verse",
+        "title": "Circle Accent"
+      },
+      {
+        "asset": "gallery-special-editions",
+        "alt": "Round decor piece with macramé detail",
+        "title": "Verse Detail"
+      },
+      {
+        "asset": "product-divine-love",
+        "alt": "Macramé circle decor in styled display",
+        "title": "Styled Display"
+      }
+    ]
   },
   {
-      "title": "Custom Signature Set",
-      "description": "Personalized names, wording, and milestones.",
-      "gallery": [
-        {
-          "asset": "gallery-custom-orders",
-          "alt": "Custom order showcase with premium crafted details",
-          "title": "Custom Orders"
-        },
-        {
-          "asset": "product-faith-inspiration",
-          "alt": "Decorative engraved wall artwork with warm handcrafted finish",
-          "title": "Signature Display"
-        },
-        {
-          "asset": "gallery-gift-sets",
-          "alt": "Curated handcrafted gift set presentation",
-          "title": "Gift Sets"
-        }
-      ]
+    "sku": "KC-PES-001",
+    "title": "Photo Engraving — Small",
+    "description": "Laser-engraved photo on natural wood MDF — 10 × 15 cm, portrait or landscape.",
+    "gallery": [
+      {
+        "asset": "product-grace-plaque",
+        "alt": "Small laser-engraved photo on MDF board",
+        "title": "Small Portrait"
+      },
+      {
+        "asset": "gallery-premium-range",
+        "alt": "Photo engraving detail on natural wood",
+        "title": "Natural Finish"
+      },
+      {
+        "asset": "gallery-gift-sets",
+        "alt": "Photo engraving presented as a gift",
+        "title": "Gift Ready"
+      }
+    ]
   },
   {
-      "title": "Heirloom Wall Pieces",
-      "description": "Built for statement display.",
-      "gallery": [
-        {
-          "asset": "gallery-premium-range",
-          "alt": "Premium range showcase for home and retail styling",
-          "title": "Premium Range"
-        },
-        {
-          "asset": "product-grace-plaque",
-          "alt": "Premium engraved plaque for curated interiors",
-          "title": "Premium Finish"
-        },
-        {
-          "asset": "gallery-faith-series",
-          "alt": "Collection showcase with layered handcrafted textures",
-          "title": "Studio Collection"
-        }
-      ]
+    "sku": "KC-PEM-002",
+    "title": "Photo Engraving — Medium",
+    "description": "Laser-engraved photo on MDF — 18 × 24 cm, portrait or landscape.",
+    "gallery": [
+      {
+        "asset": "gallery-premium-range",
+        "alt": "Medium laser-engraved photo on MDF board",
+        "title": "Medium Portrait"
+      },
+      {
+        "asset": "product-faith-inspiration",
+        "alt": "Detailed photo engraving on natural wood",
+        "title": "Engraved Detail"
+      },
+      {
+        "asset": "gallery-custom-orders",
+        "alt": "Medium photo engraving in styled display",
+        "title": "Custom Display"
+      }
+    ]
+  },
+  {
+    "sku": "KC-QR-001",
+    "title": "QR Code Stand",
+    "description": "Laser-engraved QR code on an MDF stand — links to any URL you choose.",
+    "gallery": [
+      {
+        "asset": "gallery-custom-orders",
+        "alt": "QR code engraved on MDF stand",
+        "title": "QR Stand"
+      },
+      {
+        "asset": "product-faith-inspiration",
+        "alt": "Custom QR code stand detail",
+        "title": "Custom Code"
+      },
+      {
+        "asset": "gallery-special-editions",
+        "alt": "QR code stand in retail setting",
+        "title": "Retail Ready"
+      }
+    ]
+  },
+  {
+    "sku": "KC-CF-001",
+    "title": "Coffee Filter Stand",
+    "description": "Laser-cut MDF holder for V60 and pour-over filter papers — tidy and functional.",
+    "gallery": [
+      {
+        "asset": "product-inner-peace",
+        "alt": "MDF coffee filter paper stand for pour-over setup",
+        "title": "Filter Stand"
+      },
+      {
+        "asset": "gallery-faith-series",
+        "alt": "Coffee filter holder in kitchen display",
+        "title": "Kitchen Display"
+      },
+      {
+        "asset": "gallery-premium-range",
+        "alt": "Minimalist coffee filter stand detail",
+        "title": "Minimal Detail"
+      }
+    ]
+  },
+  {
+    "sku": "KC-MBC-001",
+    "title": "Metal Business Card",
+    "description": "Laser-engraved stainless steel card with your name, title, and contact details.",
+    "gallery": [
+      {
+        "asset": "gallery-special-editions",
+        "alt": "Laser-engraved stainless steel business card",
+        "title": "Steel Card"
+      },
+      {
+        "asset": "gallery-premium-range",
+        "alt": "Metal business card with engraved details",
+        "title": "Premium Detail"
+      },
+      {
+        "asset": "gallery-gift-sets",
+        "alt": "Metal business card in professional presentation",
+        "title": "Professional Set"
+      }
+    ]
+  },
+  {
+    "sku": "KC-CE-001",
+    "title": "Custom Engraving — Standard",
+    "description": "Your text or logo laser-engraved on MDF — clean, precise, and personal.",
+    "gallery": [
+      {
+        "asset": "product-faith-inspiration",
+        "alt": "Custom text engraved on MDF board",
+        "title": "Custom Text"
+      },
+      {
+        "asset": "gallery-custom-orders",
+        "alt": "Standard custom engraving showcase",
+        "title": "Custom Order"
+      },
+      {
+        "asset": "product-grace-plaque",
+        "alt": "Engraved MDF with personalised logo",
+        "title": "Logo Engraving"
+      }
+    ]
+  },
+  {
+    "sku": "KC-CE-002",
+    "title": "Custom Engraving — With Design",
+    "description": "Full custom engraving with your own artwork or design — bring any idea to life.",
+    "gallery": [
+      {
+        "asset": "gallery-custom-orders",
+        "alt": "Custom artwork engraved on MDF panel",
+        "title": "Artwork Engraving"
+      },
+      {
+        "asset": "gallery-faith-series",
+        "alt": "Detailed custom design engraving",
+        "title": "Design Detail"
+      },
+      {
+        "asset": "product-divine-love",
+        "alt": "Full custom engraved piece in styled display",
+        "title": "Custom Display"
+      }
+    ]
   }
 ]
