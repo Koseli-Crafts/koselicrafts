@@ -3,9 +3,8 @@ import ProductCard from '../ui/ProductCard.astro';
 import SectionHeader from '../ui/SectionHeader.astro';
 import productsData from '../../data/products.json';
 import kcBm001 from '../../assets/KC-BM-001.jpg';
-import kcCf001 from '../../assets/KC-CF-001.jpg';
 import kcDc002 from '../../assets/KC-DC-002.jpg';
-import kcPes001 from '../../assets/KC-PES-001.jpg';
+import kcWh001 from '../../assets/KC-WH-001.jpg';
 
 interface ProductEntry {
   sku: keyof typeof imageAssetMap;
@@ -21,10 +20,9 @@ interface ProductImageEntry {
 }
 
 const imageAssetMap = {
+  'KC-WH-001': kcWh001.src,
   'KC-BM-001': kcBm001.src,
-  'KC-CF-001': kcCf001.src,
   'KC-DC-002': kcDc002.src,
-  'KC-PES-001': kcPes001.src
 } as const;
 
 const products = productsData as ProductEntry[];

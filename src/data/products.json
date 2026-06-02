@@ -1,5 +1,17 @@
 [
   {
+    "sku": "KC-WH-001",
+    "title": "Rustic Nepali Psalm 23 Multi-Tier Hanging Wall Art",
+    "description": "Bring a touch of faith and serenity into your home with this beautifully crafted multi-tiered hanging wall decor. Featuring the complete and beloved biblical scripture of Psalm 23 (भजनसंग्रह २३) written in elegant Nepali script, this piece serves as a meaningful daily reminder of spiritual guidance, comfort, and protection.",
+    "gallery": [
+      {
+        "asset": "KC-WH-001",
+        "alt": "Rustic Nepali Psalm 23 multi-tier hanging wall art",
+        "title": "Psalm 23 Wall Art"
+      }
+    ]
+  },
+  {
     "sku": "KC-BM-001",
     "title": "Laser-Engraved Bookmark",
     "description": "Custom engraved MDF bookmark — perfect for personalised text, quotes, or verses.",
@@ -20,30 +32,6 @@
         "asset": "KC-DC-002",
         "alt": "Round macramé decor with engraved verse",
         "title": "Circle Accent"
-      }
-    ]
-  },
-  {
-    "sku": "KC-PES-001",
-    "title": "Photo Engraving — Small",
-    "description": "Laser-engraved photo on natural wood MDF — 10 × 15 cm, portrait or landscape.",
-    "gallery": [
-      {
-        "asset": "KC-PES-001",
-        "alt": "Small laser-engraved photo on MDF board",
-        "title": "Small Portrait"
-      }
-    ]
-  },
-  {
-    "sku": "KC-CF-001",
-    "title": "Coffee Filter Stand",
-    "description": "Laser-cut MDF holder for V60 and pour-over filter papers — tidy and functional.",
-    "gallery": [
-      {
-        "asset": "KC-CF-001",
-        "alt": "MDF coffee filter paper stand for pour-over setup",
-        "title": "Filter Stand"
       }
     ]
   }
