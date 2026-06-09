@@ -1,275 +1,441 @@
 ---
 interface Props {
-	title: string;
-	description: string;
-	image: string;
-	imageAlt: string;
-	galleryImages: { src: string; alt: string; title: string }[];
-	delay?: number;
+  title: string;
+  description: string;
+  price?: number;
+  image: string;
+  imageAlt: string;
+  galleryImages: { src: string; alt: string; title: string }[];
+  delay?: number;
 }
 
-const { title, description, image, imageAlt, galleryImages, delay = 0 } = Astro.props;
-const cardId = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+const {
+  title,
+  description,
+  price,
+  image,
+  imageAlt,
+  galleryImages,
+  delay = 0,
+} = Astro.props;
+const cardId = title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+
+const whatsappNumber = "9779712095355";
+const whatsappMessage = `Hello, I like ${title} and want to place an order.`;
+const whatsappLink = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(whatsappMessage)}`;
 ---
 
 <article class="group h-full" data-aos="fade-up" data-aos-delay={String(delay)}>
-	<button type="button" class="product-card-trigger flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-sm bg-surface text-left shadow-[0_4px_14px_rgba(17,33,19,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(17,33,19,0.13)]" data-open-product={cardId} aria-label={`Open ${title} gallery`}>
-		<div class="relative w-full overflow-hidden bg-spruce/10 pb-[80%] lg:pb-[118%]">
-			<img src={image} alt={imageAlt} loading="lazy" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-			<div class="absolute inset-0 bg-linear-to-t from-pine/35 via-pine/0 to-pine/0"></div>
-			<div class="absolute right-3 bottom-3 rounded-md border border-white/45 bg-black/25 px-2.5 py-1 text-[0.72rem] font-semibold tracking-[0.14em] text-white backdrop-blur-sm">VIEW</div>
-		</div>
-		<div class="flex flex-1 flex-col p-3.5 sm:p-4">
-			<h3 class="mb-1 text-[1rem] leading-tight font-semibold tracking-tight text-pine sm:text-[1.05rem]">{title}</h3>
-		</div>
-	</button>
+  <button
+    type="button"
+    class="product-card-trigger flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-sm bg-surface text-left shadow-[0_4px_14px_rgba(17,33,19,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(17,33,19,0.13)]"
+    data-open-product={cardId}
+    aria-label={`Open ${title} gallery`}
+  >
+    <div
+      class="relative w-full overflow-hidden bg-spruce/10 pb-[80%] lg:pb-[118%]"
+    >
+      <img
+        src={image}
+        alt={imageAlt}
+        loading="lazy"
+        class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+      />
+      <div
+        class="absolute inset-0 bg-linear-to-t from-pine/35 via-pine/0 to-pine/0"
+      >
+      </div>
+      <div
+        class="absolute right-3 bottom-3 rounded-md border border-white/45 bg-black/25 px-2.5 py-1 text-[0.72rem] font-semibold tracking-[0.14em] text-white backdrop-blur-sm"
+      >
+        VIEW
+      </div>
+    </div>
+    <div class="flex flex-1 flex-col p-3.5 sm:p-4">
+      <h3
+        class="mb-1 text-[1rem] leading-tight font-semibold tracking-tight text-pine sm:text-[1.05rem]"
+      >
+        {title}
+      </h3>
+      <h4 class="text-patrol mt-auto font-body font-semibold">Rs. {price == 0 ? "TBD" : price}</h4>
+    </div>
+  </button>
 
-	<dialog class="product-viewer backdrop:bg-black/60 max-sm:inset-0 max-sm:m-0 max-sm:h-dvh max-sm:max-h-dvh max-sm:w-screen max-sm:max-w-none max-sm:overflow-y-auto max-sm:bg-transparent max-sm:p-0 sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:max-h-[92dvh] sm:max-w-5xl sm:rounded-2xl" data-product-modal={cardId}>
-		<div class="relative min-h-full w-full bg-white max-sm:p-4 max-sm:pt-12 sm:w-screen sm:max-w-5xl sm:rounded-2xl sm:p-8">
-			<button type="button" class="product-viewer-close max-sm:fixed max-sm:top-3 max-sm:right-3 max-sm:z-50 max-sm:rounded-full max-sm:bg-white/90 max-sm:shadow-md max-sm:backdrop-blur-sm absolute cursor-pointer sm:top-5 sm:right-5 flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center text-2xl text-spruce/40 transition hover:text-spruce" data-close-product={cardId} aria-label="Close">&times;</button>
+  <dialog
+    class="product-viewer backdrop:bg-black/60 max-sm:inset-0 max-sm:m-0 max-sm:h-dvh max-sm:max-h-dvh max-sm:w-screen max-sm:max-w-none max-sm:overflow-y-auto max-sm:bg-transparent max-sm:p-0 sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:max-h-[92dvh] sm:max-w-5xl sm:rounded-2xl"
+    data-product-modal={cardId}
+  >
+    <div
+      class="relative min-h-full w-full bg-white max-sm:p-4 max-sm:pt-12 sm:w-screen sm:max-w-5xl sm:rounded-2xl sm:p-8"
+    >
+      <button
+        type="button"
+        class="product-viewer-close max-sm:fixed max-sm:top-3 max-sm:right-3 max-sm:z-50 max-sm:rounded-full max-sm:bg-white/90 max-sm:shadow-md max-sm:backdrop-blur-sm absolute cursor-pointer sm:top-5 sm:right-5 flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center text-2xl text-spruce/40 transition hover:text-spruce"
+        data-close-product={cardId}
+        aria-label="Close">&times;</button
+      >
 
-			<div class="grid grid-cols-1 gap-6 md:grid-cols-5 md:gap-8 max-md:pt-6">
-				<!-- Left: Image Slider (3 cols on desktop) -->
-				<div class="md:col-span-3">
-					<div class="relative w-full bg-spruce/6 rounded-xl overflow-hidden [aspect-ratio:4/3] sm:[aspect-ratio:1]">
-						<div class="product-viewer-track absolute inset-0 flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain scroll-smooth" data-product-track={cardId}>
-							{galleryImages.map((galleryImage, galleryIndex) => (
-								<figure class="flex min-w-full snap-center items-center justify-center" data-viewer-slide={galleryIndex}>
-									<div class="product-panzoom flex h-full w-full items-center justify-center overflow-hidden touch-none" data-panzoom-wrapper={cardId} data-panzoom-index={galleryIndex}>
-										<img src={galleryImage.src} alt={galleryImage.alt} loading="lazy" class="h-full w-full object-contain select-none" draggable="false" />
-									</div>
-								</figure>
-							))}
-						</div>
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-5 md:gap-8 max-md:pt-6">
+        <!-- Left: Image Slider (3 cols on desktop) -->
+        <div class="md:col-span-3">
+          <div
+            class="relative w-full bg-spruce/6 rounded-xl overflow-hidden aspect-4/3 sm:aspect-square"
+          >
+            <div
+              class="product-viewer-track absolute inset-0 flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain scroll-smooth"
+              data-product-track={cardId}
+            >
+              {
+                galleryImages.map((galleryImage, galleryIndex) => (
+                  <figure
+                    class="flex min-w-full snap-center items-center justify-center"
+                    data-viewer-slide={galleryIndex}
+                  >
+                    <div
+                      class="product-panzoom flex h-full w-full items-center justify-center overflow-hidden touch-none"
+                      data-panzoom-wrapper={cardId}
+                      data-panzoom-index={galleryIndex}
+                    >
+                      <img
+                        src={galleryImage.src}
+                        alt={galleryImage.alt}
+                        loading="lazy"
+                        class="h-full w-full object-contain select-none"
+                        draggable="false"
+                      />
+                    </div>
+                  </figure>
+                ))
+              }
+            </div>
 
-						<button type="button" class="absolute cursor-pointer top-1/2 left-2 z-30 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-spruce/20 bg-white text-lg text-spruce transition hover:border-white hover:bg-spruce/10 hover:text-white sm:flex" data-slide-dir="prev" data-product-nav={cardId} aria-label="Previous">&lsaquo;</button>
-						<button type="button" class="absolute cursor-pointer top-1/2 right-2 z-30 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-spruce/20 bg-white text-lg text-spruce transition hover:border-white hover:bg-spruce/10 hover:text-white sm:flex" data-slide-dir="next" data-product-nav={cardId} aria-label="Next">&rsaquo;</button>
+            <button
+              type="button"
+              class="absolute cursor-pointer top-1/2 left-2 z-30 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-spruce/20 bg-white text-lg text-spruce transition hover:border-white hover:bg-spruce/10 hover:text-white sm:flex"
+              data-slide-dir="prev"
+              data-product-nav={cardId}
+              aria-label="Previous">&lsaquo;</button
+            >
+            <button
+              type="button"
+              class="absolute cursor-pointer top-1/2 right-2 z-30 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-spruce/20 bg-white text-lg text-spruce transition hover:border-white hover:bg-spruce/10 hover:text-white sm:flex"
+              data-slide-dir="next"
+              data-product-nav={cardId}
+              aria-label="Next">&rsaquo;</button
+            >
 
-						<div class="absolute bottom-3 left-3 z-30 text-[0.7rem] font-medium tracking-[0.08em] text-spruce/50">
-							<span data-product-count={cardId} data-product-total={galleryImages.length}>1 / {galleryImages.length}</span>
-						</div>
-					</div>
+            <div
+              class="absolute bottom-3 left-3 z-30 text-[0.7rem] font-medium tracking-[0.08em] text-spruce/50"
+            >
+              <span
+                data-product-count={cardId}
+                data-product-total={galleryImages.length}
+                >1 / {galleryImages.length}</span
+              >
+            </div>
+          </div>
 
-					<!-- Thumbnails below on mobile -->
-					<div class="mt-3 flex gap-2 overflow-x-auto pb-1 md:hidden" data-product-thumbs={cardId}>
-						{galleryImages.map((galleryImage, galleryIndex) => (
-							<button type="button" class="h-14 min-w-14 shrink-0 overflow-hidden rounded-lg border border-spruce/15 opacity-50 transition hover:opacity-100" data-thumb-index={galleryIndex} data-product-thumb={cardId} aria-label={`Image ${galleryIndex + 1}`}>
-								<img src={galleryImage.src} alt={galleryImage.alt} loading="lazy" class="h-full w-full object-cover" />
-							</button>
-						))}
-					</div>
+          <!-- Thumbnails below on mobile -->
+          <div
+            class="mt-3 flex gap-2 overflow-x-auto pb-1 md:hidden"
+            data-product-thumbs={cardId}
+          >
+            {
+              galleryImages.map((galleryImage, galleryIndex) => (
+                <button
+                  type="button"
+                  class="h-14 min-w-14 shrink-0 overflow-hidden rounded-lg border border-spruce/15 opacity-50 transition hover:opacity-100"
+                  data-thumb-index={galleryIndex}
+                  data-product-thumb={cardId}
+                  aria-label={`Image ${galleryIndex + 1}`}
+                >
+                  <img
+                    src={galleryImage.src}
+                    alt={galleryImage.alt}
+                    loading="lazy"
+                    class="h-full w-full object-cover"
+                  />
+                </button>
+              ))
+            }
+          </div>
 
-					<!-- Mobile nav buttons -->
-					<div class="mt-4 flex items-center justify-center gap-3 md:hidden">
-						<button type="button" class="flex h-10 w-10 items-center justify-center rounded-full border border-spruce/20 bg-spruce/8 text-lg text-spruce transition hover:bg-spruce/15" data-slide-dir="prev" data-product-nav={cardId} aria-label="Previous">&lsaquo;</button>
-						<button type="button" class="flex h-10 w-10 items-center justify-center rounded-full border border-spruce/20 bg-spruce/8 text-lg text-spruce transition hover:bg-spruce/15" data-slide-dir="next" data-product-nav={cardId} aria-label="Next">&rsaquo;</button>
-					</div>
-				</div>
+          <!-- Mobile nav buttons -->
+          <div class="mt-4 flex items-center justify-center gap-3 md:hidden">
+            <button
+              type="button"
+              class="flex h-10 w-10 items-center justify-center rounded-full border border-spruce/20 bg-spruce/8 text-lg text-spruce transition hover:bg-spruce/15"
+              data-slide-dir="prev"
+              data-product-nav={cardId}
+              aria-label="Previous">&lsaquo;</button
+            >
+            <button
+              type="button"
+              class="flex h-10 w-10 items-center justify-center rounded-full border border-spruce/20 bg-spruce/8 text-lg text-spruce transition hover:bg-spruce/15"
+              data-slide-dir="next"
+              data-product-nav={cardId}
+              aria-label="Next">&rsaquo;</button
+            >
+          </div>
+        </div>
 
-				<!-- Right: Product Info (2 cols on desktop) -->
-				<div class="md:col-span-2 flex flex-col justify-center gap-5">
-					<div>
-						<h2 class="text-[1.6rem] leading-tight font-semibold text-pine">{title}</h2>
-					</div>
+        <!-- Right: Product Info (2 cols on desktop) -->
+        <div class="md:col-span-2 flex flex-col justify-center gap-5">
+          <div>
+            <h2 class="text-[1.6rem] leading-tight font-semibold text-pine">
+              {title}
+            </h2>
+          </div>
 
-					<p class="text-[0.95rem] leading-7 text-spruce/80">{description}</p>
+          <p class="text-[0.95rem] leading-7 text-spruce/80">{description}</p>
 
-					<!-- Thumbnails sidebar on desktop -->
-					<div class="hidden md:grid grid-cols-2 gap-2 pt-2" data-product-thumbs={cardId}>
-						{galleryImages.map((galleryImage, galleryIndex) => (
-							<button type="button" class="h-20 overflow-hidden rounded-lg border border-spruce/15 opacity-50 transition hover:opacity-100" data-thumb-index={galleryIndex} data-product-thumb={cardId} aria-label={`Image ${galleryIndex + 1}`}>
-								<img src={galleryImage.src} alt={galleryImage.alt} loading="lazy" class="h-full w-full object-cover" />
-							</button>
-						))}
-					</div>
-				</div>
-			</div>
-		</div>
-	</dialog>
+          <h4 class="text-patrol font-body font-semibold">Rs. {price === 0 ? "TBD" : price}</h4>
+
+          <!-- Thumbnails sidebar on desktop -->
+          <div
+            class="hidden md:grid grid-cols-2 gap-2 pt-2"
+            data-product-thumbs={cardId}
+          >
+            {
+              galleryImages.map((galleryImage, galleryIndex) => (
+                <button
+                  type="button"
+                  class="h-20 overflow-hidden rounded-lg border border-spruce/15 opacity-50 transition hover:opacity-100"
+                  data-thumb-index={galleryIndex}
+                  data-product-thumb={cardId}
+                  aria-label={`Image ${galleryIndex + 1}`}
+                >
+                  <img
+                    src={galleryImage.src}
+                    alt={galleryImage.alt}
+                    loading="lazy"
+                    class="h-full w-full object-cover"
+                  />
+                </button>
+              ))
+            }
+          </div>
+
+		  <div>
+            <a
+              href={whatsappLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="rounded-lg bg-patrol px-8 py-3 font-semibold text-white transition hover:bg-pine inline-block"
+            >
+              Place Order on WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </dialog>
 </article>
 
 <script>
-	import Panzoom from '@panzoom/panzoom';
+  import Panzoom from "@panzoom/panzoom";
 
-	const panzoomInstances = new Map();
-	const openButtons = document.querySelectorAll('[data-open-product]');
+  const panzoomInstances = new Map();
+  const openButtons = document.querySelectorAll("[data-open-product]");
 
-	function getPanzoomKey(productId: string, index: string) {
-		return `${productId}:${index}`;
-	}
+  function getPanzoomKey(productId: string, index: string) {
+    return `${productId}:${index}`;
+  }
 
-	function ensurePanzoom(productId: string) {
-		document.querySelectorAll(`[data-panzoom-wrapper="${productId}"]`).forEach((wrapper) => {
-			if (!(wrapper instanceof HTMLElement)) return;
+  function ensurePanzoom(productId: string) {
+    document
+      .querySelectorAll(`[data-panzoom-wrapper="${productId}"]`)
+      .forEach((wrapper) => {
+        if (!(wrapper instanceof HTMLElement)) return;
 
-			const index = wrapper.getAttribute('data-panzoom-index') ?? '0';
-			const key = getPanzoomKey(productId, index);
-			if (panzoomInstances.has(key)) return;
+        const index = wrapper.getAttribute("data-panzoom-index") ?? "0";
+        const key = getPanzoomKey(productId, index);
+        if (panzoomInstances.has(key)) return;
 
-			const instance = Panzoom(wrapper, {
-				maxScale: 3,
-				minScale: 1,
-				contain: 'outside',
-				panOnlyWhenZoomed: true,
-				pinchAndPan: true,
-				cursor: 'grab'
-			});
+        const instance = Panzoom(wrapper, {
+          maxScale: 3,
+          minScale: 1,
+          contain: "outside",
+          panOnlyWhenZoomed: true,
+          pinchAndPan: true,
+          cursor: "grab",
+        });
 
-			panzoomInstances.set(key, instance);
-		});
-	}
+        panzoomInstances.set(key, instance);
+      });
+  }
 
-	function resetPanzoom(productId: string) {
-		document.querySelectorAll(`[data-panzoom-wrapper="${productId}"]`).forEach((wrapper) => {
-			if (!(wrapper instanceof HTMLElement)) return;
+  function resetPanzoom(productId: string) {
+    document
+      .querySelectorAll(`[data-panzoom-wrapper="${productId}"]`)
+      .forEach((wrapper) => {
+        if (!(wrapper instanceof HTMLElement)) return;
 
-			const index = wrapper.getAttribute('data-panzoom-index') ?? '0';
-			const key = getPanzoomKey(productId, index);
-			const instance = panzoomInstances.get(key);
-			if (!instance) return;
-			instance.reset({ animate: false });
-		});
-	}
+        const index = wrapper.getAttribute("data-panzoom-index") ?? "0";
+        const key = getPanzoomKey(productId, index);
+        const instance = panzoomInstances.get(key);
+        if (!instance) return;
+        instance.reset({ animate: false });
+      });
+  }
 
-	openButtons.forEach((button) => {
-		button.addEventListener('click', () => {
-			const productId = button.getAttribute('data-open-product');
-			if (!productId) return;
+  openButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const productId = button.getAttribute("data-open-product");
+      if (!productId) return;
 
-			const modal = document.querySelector(`[data-product-modal="${productId}"]`);
-			const track = document.querySelector(`[data-product-track="${productId}"]`);
-			if (!(modal instanceof HTMLDialogElement) || !(track instanceof HTMLElement)) return;
+      const modal = document.querySelector(
+        `[data-product-modal="${productId}"]`,
+      );
+      const track = document.querySelector(
+        `[data-product-track="${productId}"]`,
+      );
+      if (
+        !(modal instanceof HTMLDialogElement) ||
+        !(track instanceof HTMLElement)
+      )
+        return;
 
-			ensurePanzoom(productId);
-			modal.showModal();
-			document.body.style.overflow = 'hidden';
-			track.scrollTo({ left: 0, behavior: 'auto' });
-			resetPanzoom(productId);
-			refreshThumbState(productId, 0);
-		});
-	});
+      ensurePanzoom(productId);
+      modal.showModal();
+      document.body.style.overflow = "hidden";
+      track.scrollTo({ left: 0, behavior: "auto" });
+      resetPanzoom(productId);
+      refreshThumbState(productId, 0);
+    });
+  });
 
-	const closeButtons = document.querySelectorAll('[data-close-product]');
-	closeButtons.forEach((button) => {
-		button.addEventListener('click', () => {
-			const productId = button.getAttribute('data-close-product');
-			if (!productId) return;
+  const closeButtons = document.querySelectorAll("[data-close-product]");
+  closeButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const productId = button.getAttribute("data-close-product");
+      if (!productId) return;
 
-			const modal = document.querySelector(`[data-product-modal="${productId}"]`);
-			if (!(modal instanceof HTMLDialogElement)) return;
-			resetPanzoom(productId);
-			modal.close();
-			document.body.style.overflow = '';
-		});
-	});
+      const modal = document.querySelector(
+        `[data-product-modal="${productId}"]`,
+      );
+      if (!(modal instanceof HTMLDialogElement)) return;
+      resetPanzoom(productId);
+      modal.close();
+      document.body.style.overflow = "";
+    });
+  });
 
-	document.querySelectorAll('[data-product-modal]').forEach((modalNode) => {
-		if (!(modalNode instanceof HTMLDialogElement)) return;
-		modalNode.addEventListener('click', (event) => {
-			if (event.target === modalNode) {
-				const productId = modalNode.getAttribute('data-product-modal');
-				if (productId) {
-					resetPanzoom(productId);
-				}
-				modalNode.close();
-				document.body.style.overflow = '';
-			}
-		});
-	});
+  document.querySelectorAll("[data-product-modal]").forEach((modalNode) => {
+    if (!(modalNode instanceof HTMLDialogElement)) return;
+    modalNode.addEventListener("click", (event) => {
+      if (event.target === modalNode) {
+        const productId = modalNode.getAttribute("data-product-modal");
+        if (productId) {
+          resetPanzoom(productId);
+        }
+        modalNode.close();
+        document.body.style.overflow = "";
+      }
+    });
+  });
 
-	function refreshThumbState(productId: string, activeIndex: number) {
-		const count = document.querySelector(`[data-product-count="${productId}"]`);
-		if (count) {
-			const total = count.getAttribute('data-product-total') ?? '1';
-			count.textContent = `${activeIndex + 1} / ${total}`;
-		}
+  function refreshThumbState(productId: string, activeIndex: number) {
+    const count = document.querySelector(`[data-product-count="${productId}"]`);
+    if (count) {
+      const total = count.getAttribute("data-product-total") ?? "1";
+      count.textContent = `${activeIndex + 1} / ${total}`;
+    }
 
-		document.querySelectorAll(`[data-product-thumb="${productId}"]`).forEach((thumb, index) => {
-			thumb.classList.toggle('ring-2', index === activeIndex);
-			thumb.classList.toggle('ring-white', index === activeIndex);
-			thumb.classList.toggle('opacity-100', index === activeIndex);
-			thumb.classList.toggle('opacity-75', index !== activeIndex);
-		});
-	}
+    document
+      .querySelectorAll(`[data-product-thumb="${productId}"]`)
+      .forEach((thumb, index) => {
+        thumb.classList.toggle("ring-2", index === activeIndex);
+        thumb.classList.toggle("ring-white", index === activeIndex);
+        thumb.classList.toggle("opacity-100", index === activeIndex);
+        thumb.classList.toggle("opacity-75", index !== activeIndex);
+      });
+  }
 
-	document.querySelectorAll('[data-product-nav]').forEach((navButton) => {
-		navButton.addEventListener('click', () => {
-			const productId = navButton.getAttribute('data-product-nav');
-			const direction = navButton.getAttribute('data-slide-dir');
-			if (!productId || !direction) return;
+  document.querySelectorAll("[data-product-nav]").forEach((navButton) => {
+    navButton.addEventListener("click", () => {
+      const productId = navButton.getAttribute("data-product-nav");
+      const direction = navButton.getAttribute("data-slide-dir");
+      if (!productId || !direction) return;
 
-			const track = document.querySelector(`[data-product-track="${productId}"]`);
-			if (!(track instanceof HTMLElement)) return;
+      const track = document.querySelector(
+        `[data-product-track="${productId}"]`,
+      );
+      if (!(track instanceof HTMLElement)) return;
 
-			const frameWidth = track.clientWidth;
-			const currentIndex = Math.round(track.scrollLeft / frameWidth);
-			const total = track.querySelectorAll('[data-viewer-slide]').length;
-			const nextIndex = direction === 'next'
-				? Math.min(total - 1, currentIndex + 1)
-				: Math.max(0, currentIndex - 1);
+      const frameWidth = track.clientWidth;
+      const currentIndex = Math.round(track.scrollLeft / frameWidth);
+      const total = track.querySelectorAll("[data-viewer-slide]").length;
+      const nextIndex =
+        direction === "next"
+          ? Math.min(total - 1, currentIndex + 1)
+          : Math.max(0, currentIndex - 1);
 
-			track.scrollTo({ left: frameWidth * nextIndex, behavior: 'smooth' });
-			resetPanzoom(productId);
-			refreshThumbState(productId, nextIndex);
-		});
-	});
+      track.scrollTo({ left: frameWidth * nextIndex, behavior: "smooth" });
+      resetPanzoom(productId);
+      refreshThumbState(productId, nextIndex);
+    });
+  });
 
-	document.querySelectorAll('[data-product-thumb]').forEach((thumbButton) => {
-		thumbButton.addEventListener('click', () => {
-			const productId = thumbButton.getAttribute('data-product-thumb');
-			const indexText = thumbButton.getAttribute('data-thumb-index');
-			if (!productId || !indexText) return;
+  document.querySelectorAll("[data-product-thumb]").forEach((thumbButton) => {
+    thumbButton.addEventListener("click", () => {
+      const productId = thumbButton.getAttribute("data-product-thumb");
+      const indexText = thumbButton.getAttribute("data-thumb-index");
+      if (!productId || !indexText) return;
 
-			const index = Number.parseInt(indexText, 10);
-			const track = document.querySelector(`[data-product-track="${productId}"]`);
-			if (!(track instanceof HTMLElement)) return;
+      const index = Number.parseInt(indexText, 10);
+      const track = document.querySelector(
+        `[data-product-track="${productId}"]`,
+      );
+      if (!(track instanceof HTMLElement)) return;
 
-			track.scrollTo({ left: track.clientWidth * index, behavior: 'smooth' });
-			resetPanzoom(productId);
-			refreshThumbState(productId, index);
-		});
-	});
+      track.scrollTo({ left: track.clientWidth * index, behavior: "smooth" });
+      resetPanzoom(productId);
+      refreshThumbState(productId, index);
+    });
+  });
 
-	document.querySelectorAll('[data-product-track]').forEach((trackNode) => {
-		if (!(trackNode instanceof HTMLElement)) return;
-		const productId = trackNode.getAttribute('data-product-track');
-		if (!productId) return;
+  document.querySelectorAll("[data-product-track]").forEach((trackNode) => {
+    if (!(trackNode instanceof HTMLElement)) return;
+    const productId = trackNode.getAttribute("data-product-track");
+    if (!productId) return;
 
-		trackNode.addEventListener('scroll', () => {
-			const frameWidth = trackNode.clientWidth;
-			const index = Math.round(trackNode.scrollLeft / frameWidth);
-			refreshThumbState(productId, index);
-		});
-	});
+    trackNode.addEventListener("scroll", () => {
+      const frameWidth = trackNode.clientWidth;
+      const index = Math.round(trackNode.scrollLeft / frameWidth);
+      refreshThumbState(productId, index);
+    });
+  });
 
-	document.addEventListener('keydown', (event) => {
-		const openModal = document.querySelector('[data-product-modal][open]');
-		if (!(openModal instanceof HTMLDialogElement)) return;
+  document.addEventListener("keydown", (event) => {
+    const openModal = document.querySelector("[data-product-modal][open]");
+    if (!(openModal instanceof HTMLDialogElement)) return;
 
-		const productId = openModal.getAttribute('data-product-modal');
-		if (!productId) return;
+    const productId = openModal.getAttribute("data-product-modal");
+    if (!productId) return;
 
-		if (event.key === 'Escape') {
-			resetPanzoom(productId);
-			openModal.close();
-			document.body.style.overflow = '';
-			return;
-		}
+    if (event.key === "Escape") {
+      resetPanzoom(productId);
+      openModal.close();
+      document.body.style.overflow = "";
+      return;
+    }
 
-		if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
 
-		const track = document.querySelector(`[data-product-track="${productId}"]`);
-		if (!(track instanceof HTMLElement)) return;
+    const track = document.querySelector(`[data-product-track="${productId}"]`);
+    if (!(track instanceof HTMLElement)) return;
 
-		const frameWidth = track.clientWidth;
-		const currentIndex = Math.round(track.scrollLeft / frameWidth);
-		const total = track.querySelectorAll('[data-viewer-slide]').length;
-		const nextIndex = event.key === 'ArrowRight'
-			? Math.min(total - 1, currentIndex + 1)
-			: Math.max(0, currentIndex - 1);
+    const frameWidth = track.clientWidth;
+    const currentIndex = Math.round(track.scrollLeft / frameWidth);
+    const total = track.querySelectorAll("[data-viewer-slide]").length;
+    const nextIndex =
+      event.key === "ArrowRight"
+        ? Math.min(total - 1, currentIndex + 1)
+        : Math.max(0, currentIndex - 1);
 
-		track.scrollTo({ left: frameWidth * nextIndex, behavior: 'smooth' });
-		resetPanzoom(productId);
-		refreshThumbState(productId, nextIndex);
-	});
+    track.scrollTo({ left: frameWidth * nextIndex, behavior: "smooth" });
+    resetPanzoom(productId);
+    refreshThumbState(productId, nextIndex);
+  });
 </script>

@@ -1,37 +1,66 @@
 [
   {
-    "sku": "KC-WH-001",
+    "sku": "prd1",
     "title": "Rustic Nepali Psalm 23 Multi-Tier Hanging Wall Art",
     "description": "Bring a touch of faith and serenity into your home with this beautifully crafted multi-tiered hanging wall decor. Featuring the complete and beloved biblical scripture of Psalm 23 (भजनसंग्रह २३) written in elegant Nepali script, this piece serves as a meaningful daily reminder of spiritual guidance, comfort, and protection.",
+    "price": 3500,
     "gallery": [
       {
-        "asset": "KC-WH-001",
+        "asset": "prd1",
         "alt": "Rustic Nepali Psalm 23 multi-tier hanging wall art",
         "title": "Psalm 23 Wall Art"
       }
     ]
   },
   {
-    "sku": "KC-BM-001",
+    "sku": "prd2",
     "title": "Laser-Engraved Bookmark",
     "description": "Custom engraved MDF bookmark — perfect for personalised text, quotes, or verses.",
+    "price": 250,
     "gallery": [
       {
-        "asset": "KC-BM-001",
+        "asset": "prd2",
         "alt": "Laser-engraved wooden bookmark with custom text",
         "title": "Custom Bookmark"
       }
     ]
   },
   {
-    "sku": "KC-DC-002",
+    "sku": "prd3",
     "title": "Circle Macramé Decor",
     "description": "Round MDF circle with macramé fringe and engraved Bible verse — 11 cm keepsake.",
+    "price": 750,
     "gallery": [
       {
-        "asset": "KC-DC-002",
+        "asset": "prd3",
         "alt": "Round macramé decor with engraved verse",
         "title": "Circle Accent"
+      }
+    ]
+  },
+  {
+    "sku": "prd4",
+    "title": "The \"You Are So Loved\" Boho Arch Macrame Wall Hanging",
+    "description": "Bring a touch of warmth, comfort, and boho-chic charm to your space with this beautiful affirmation wall piece. This hanging decor perfectly blends rustic minimalist design with a heartfelt message, making it a beautiful daily reminder for your home or a sweet addition to a loved one's room.",
+    "price": 0,
+    "gallery": [
+      {
+        "asset": "prd4",
+        "alt": "The \"You Are So Loved\" Boho Arch Macrame Wall Hanging",
+        "title": "The \"You Are So Loved\" Boho Arch Macrame Wall Hanging"
+      }
+    ]
+  },
+  {
+    "sku": "prd5",
+    "title": "The Philippians 4:13 Nepali Scripture Macrame Wall Hanging",
+    "description": "Infuse your home with faith, encouragement, and artisanal elegance. This beautiful handmade wall piece showcases the powerful and uplifting biblical verse Philippians 4:13 laser-engraved in elegant Nepali script \"म सबै कुरा ख्रीष्टमा सक्षम छु जसले मलाई शक्ति दिनुहुन्छ। फिलिप्पी ४:१३\".",
+    "price": 0,
+    "gallery": [
+      {
+        "asset": "prd5",
+        "alt": "The Philippians 4:13 Nepali Scripture Macrame Wall Hanging",
+        "title": "The Philippians 4:13 Nepali Scripture Macrame Wall Hanging"
       }
     ]
   }

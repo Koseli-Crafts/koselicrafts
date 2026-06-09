@@ -2,14 +2,17 @@
 import ProductCard from '../ui/ProductCard.astro';
 import SectionHeader from '../ui/SectionHeader.astro';
 import productsData from '../../data/products.json';
-import kcBm001 from '../../assets/KC-BM-001.jpg';
-import kcDc002 from '../../assets/KC-DC-002.jpg';
-import kcWh001 from '../../assets/KC-WH-001.jpg';
+import prd1 from '../../assets/prd1.jpg';
+import prd2 from '../../assets/prd2.jpg';
+import prd3 from '../../assets/prd3.jpg';
+import prd4 from '../../assets/prd4.jpg';
+import prd5 from '../../assets/prd5.jpeg';
 
 interface ProductEntry {
   sku: keyof typeof imageAssetMap;
   title: string;
   description: string;
+  price?: number;
   gallery: ProductImageEntry[];
 }
 
@@ -20,9 +23,11 @@ interface ProductImageEntry {
 }
 
 const imageAssetMap = {
-  'KC-WH-001': kcWh001.src,
-  'KC-BM-001': kcBm001.src,
-  'KC-DC-002': kcDc002.src,
+  'prd1': prd1.src,
+  'prd2': prd2.src,
+  'prd3': prd3.src,
+  'prd4': prd4.src,
+  'prd5': prd5.src
 } as const;
 
 const products = productsData as ProductEntry[];
@@ -45,6 +50,7 @@ const products = productsData as ProductEntry[];
         <ProductCard
           title={product.title}
           description={product.description}
+          price={product.price}
           image={galleryImages[0].src}
           imageAlt={galleryImages[0].alt}
           galleryImages={galleryImages}
