@@ -12,7 +12,7 @@ interface ProductEntry {
   sku: keyof typeof imageAssetMap;
   title: string;
   description: string;
-  price?: number;
+  price?: number | string;
   gallery: ProductImageEntry[];
 }
 
