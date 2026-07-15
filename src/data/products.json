@@ -1,5 +1,18 @@
 [
   {
+    "sku": "prd4",
+    "title": "Nepali Psalm 23 Multi-Tier Hanging Wall Plaque",
+    "description": "A beautiful 5-panel hanging wall art piece featuring the complete biblical text of Psalm 23 (भजनसंग्रह २३) in elegant Nepali script. The panels are crafted with classic corner border accents and linked together by durable metal chains for easy wall mounting. It serves as a meaningful, faith-inspired decorative piece for home living spaces, prayer rooms, or as a thoughtful religious gift.",
+    "price": 4500,
+    "gallery": [
+      {
+        "asset": "prd4",
+        "alt": "Nepali Psalm 23 multi-tier hanging wall plaque",
+        "title": "Psalm 23 Wall Art"
+      }
+    ]
+  },
+  {
     "sku": "prd1",
     "title": "Rustic Nepali Psalm 23 Multi-Tier Hanging Wall Art",
     "description": "Bring a touch of faith and serenity into your home with this beautifully crafted multi-tiered hanging wall decor. Featuring the complete and beloved biblical scripture of Psalm 23 (भजनसंग्रह २३) written in elegant Nepali script, this piece serves as a meaningful daily reminder of spiritual guidance, comfort, and protection.",
@@ -45,19 +58,6 @@
         "asset": "prd3c",
         "alt": "The Philippians 4:13 Nepali Scripture Macrame Wall Hanging",
         "title": "The Philippians 4:13 Nepali Scripture Macrame Wall Hanging"
-      }
-    ]
-  },
-  {
-    "sku": "prd4",
-    "title": "Nepali Psalm 23 Multi-Tier Hanging Wall Plaque",
-    "description": "A beautiful 5-panel hanging wall art piece featuring the complete biblical text of Psalm 23 (भजनसंग्रह २३) in elegant Nepali script. The panels are crafted with classic corner border accents and linked together by durable metal chains for easy wall mounting. It serves as a meaningful, faith-inspired decorative piece for home living spaces, prayer rooms, or as a thoughtful religious gift.",
-    "price": 4500,
-    "gallery": [
-      {
-        "asset": "prd4",
-        "alt": "Nepali Psalm 23 multi-tier hanging wall plaque",
-        "title": "Psalm 23 Wall Art"
       }
     ]
   }
