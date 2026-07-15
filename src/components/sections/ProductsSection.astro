@@ -6,7 +6,8 @@ import prd1 from '../../assets/prd1.jpg';
 import prd2 from '../../assets/prd2-optimized.png';
 import prd3a from '../../assets/prd3-a-optimized.png';
 import prd3b from '../../assets/prd3-b-optimized.png';
-import prd3c from '../../assets/prd5.jpeg';
+import prd3c from '../../assets/prd3-c.jpeg';
+import prd4 from '../../assets/prd4.jpeg';
 
 interface ProductEntry {
   sku: keyof typeof imageAssetMap;
@@ -27,7 +28,8 @@ const imageAssetMap = {
   'prd2': prd2.src,
   'prd3a': prd3a.src,
   'prd3b': prd3b.src,
-  'prd3c': prd3c.src
+  'prd3c': prd3c.src,
+  'prd4': prd4.src
 } as const;
 
 const products = productsData as ProductEntry[];
