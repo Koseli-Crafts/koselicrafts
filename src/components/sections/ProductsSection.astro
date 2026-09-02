@@ -2,49 +2,47 @@
 import ProductCard from '../ui/ProductCard.astro';
 import SectionHeader from '../ui/SectionHeader.astro';
 import productsData from '../../data/products.json';
-import prd1 from '../../assets/prd1.jpg';
-import prd2 from '../../assets/prd2-optimized.png';
-import prd3a from '../../assets/prd3-a-optimized.png';
-import prd3b from '../../assets/prd3-b-optimized.png';
-import prd3c from '../../assets/prd3-c.jpeg';
-import prd4 from '../../assets/prd4.jpeg';
 
 interface ProductEntry {
-  sku: keyof typeof imageAssetMap;
   title: string;
   description: string;
   price?: number | string;
-  gallery: ProductImageEntry[];
+  images: string[];
 }
 
-interface ProductImageEntry {
-  asset: keyof typeof imageAssetMap;
-  alt: string;
-  title: string;
-}
+// Every file in src/assets/products/ is picked up automatically — drop an image
+// in that folder and reference it by filename in src/data/products.json.
+const imageModules = import.meta.glob<{ default: ImageMetadata }>(
+  '../../assets/products/*.{jpg,jpeg,png,webp,avif,gif}',
+  { eager: true }
+);
 
-const imageAssetMap = {
-  'prd1': prd1.src,
-  'prd2': prd2.src,
-  'prd3a': prd3a.src,
-  'prd3b': prd3b.src,
-  'prd3c': prd3c.src,
-  'prd4': prd4.src
-} as const;
+const imagesByFilename = Object.fromEntries(
+  Object.entries(imageModules).map(([path, mod]) => [path.split('/').pop()!, mod.default.src])
+);
 
 const products = productsData as ProductEntry[];
+
+for (const product of products) {
+  for (const filename of product.images) {
+    if (!imagesByFilename[filename]) {
+      throw new Error(
+        `Product "${product.title}" refers to the image "${filename}", but that file is not in src/assets/products/.\n` +
+        `Available images: ${Object.keys(imagesByFilename).join(', ')}`
+      );
+    }
+  }
+}
 ---
 
 <section id="products" class="content-section" data-aos="fade-up">
   <SectionHeader title="Our Collection" subtitle="Tap any piece to view it in full screen" />
   <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
     {products.map((product, index) => {
-      const galleryImages = product.gallery
-        .map((galleryItem) => ({
-          src: imageAssetMap[galleryItem.asset],
-          alt: galleryItem.alt,
-          title: galleryItem.title
-        }));
+      const galleryImages = product.images.map((filename) => ({
+        src: imagesByFilename[filename],
+        alt: product.title
+      }));
 
       if (!galleryImages.length) return null;
 
