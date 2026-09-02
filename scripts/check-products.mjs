@@ -21,8 +21,11 @@ try {
 const available = readdirSync(IMAGE_DIR).filter((f) => /\.(jpe?g|png|webp|avif|gif)$/i.test(f));
 const used = new Set();
 
-// Pages CMS stores images as "/products/name.jpg"; a hand-typed entry is often
-// just "name.jpg". Only the filename matters.
+// Pages CMS reads and writes images as "/products/name.jpg" (the `output` prefix
+// in .pages.yml). The site itself only cares about the filename, but the CMS
+// cannot resolve a value without the prefix — it shows a broken preview — so the
+// prefix is required here to keep hand-edits from breaking the editor.
+const PREFIX = '/products/';
 const basename = (imageRef) => String(imageRef).split('/').pop();
 
 if (!Array.isArray(products)) errors.push('The file must start with [ and end with ].');
@@ -31,6 +34,12 @@ products.forEach((product, i) => {
   const where = `Product #${i + 1}${product?.title ? ` ("${product.title}")` : ''}`;
   if (!product?.title?.trim()) errors.push(`${where}: "title" is missing or empty.`);
   if (!product?.description?.trim()) errors.push(`${where}: "description" is missing or empty.`);
+  if (product?.price !== undefined && typeof product.price !== 'string') {
+    errors.push(
+      `${where}: "price" must be in quotes, e.g. "${product.price}" instead of ${product.price}.\n` +
+      `   Pages CMS rejects a bare number with "Expected string, received number".`
+    );
+  }
   if (!Array.isArray(product?.images) || product.images.length === 0) {
     errors.push(`${where}: "images" must list at least one image filename.`);
     return;
@@ -38,6 +47,12 @@ products.forEach((product, i) => {
   for (const imageRef of product.images) {
     const filename = basename(imageRef);
     used.add(filename);
+    if (!String(imageRef).startsWith(PREFIX)) {
+      errors.push(
+        `${where}: image "${imageRef}" must be written as "${PREFIX}${filename}".\n` +
+        `   Without that prefix the photo shows up blank in the Pages CMS editor.`
+      );
+    }
     if (!available.includes(filename)) {
       errors.push(
         `${where}: image "${imageRef}" was not found in ${IMAGE_DIR}/.\n` +

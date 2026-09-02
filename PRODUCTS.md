@@ -138,8 +138,14 @@ Three rules keep the file valid:
 2. All text goes inside double quotes `"like this"`.
 3. Never delete the `[` on the first line or the `]` on the last line.
 
-Image entries may be a bare filename (`clock.jpg`) or a path
-(`/products/clock.jpg` — what Pages CMS writes). Either works.
+Two things must match what Pages CMS expects, or the editor breaks:
+
+- **The price goes in quotes** — `"1200"`, not `1200`. A bare number makes the
+  CMS refuse to save with *"Expected string, received number"*.
+- **Image paths start with `/products/`** — `"/products/clock.jpg"`, not
+  `"clock.jpg"`. Without the prefix the photo appears blank in the editor.
+
+`npm run check` catches both, and so does the build in CI.
 
 </details>
 
@@ -154,5 +160,7 @@ Image entries may be a bare filename (`clock.jpg`) or a path
   editors see; it has no effect on the built site.
 - `npm run check` validates `products.json` and its image references. The same
   check runs in CI before the build, so a bad edit fails without deploying.
-- Image references are resolved by filename only, so a CMS-written
-  `/products/x.jpg` and a hand-typed `x.jpg` behave identically.
+- The site resolves image references by filename, so the `/products/` prefix is
+  cosmetic to the build — but Pages CMS needs it to map a value back to
+  `src/assets/products/`, and it needs `price` as a string (ranges like
+  `750-1500` are not numbers). `check-products.mjs` enforces both.

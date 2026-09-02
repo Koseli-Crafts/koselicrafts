@@ -2,25 +2,35 @@
   {
     "title": "Nepali Psalm 23 Multi-Tier Hanging Wall Plaque",
     "description": "A beautiful 5-panel hanging wall art piece featuring the complete biblical text of Psalm 23 (भजनसंग्रह २३) in elegant Nepali script. The panels are crafted with classic corner border accents and linked together by durable metal chains for easy wall mounting. It serves as a meaningful, faith-inspired decorative piece for home living spaces, prayer rooms, or as a thoughtful religious gift.",
-    "price": 4500,
-    "images": ["psalm23-plaque.jpeg"]
+    "price": "4500",
+    "images": [
+      "/products/psalm23-plaque.jpeg"
+    ]
   },
   {
     "title": "Rustic Nepali Psalm 23 Multi-Tier Hanging Wall Art",
     "description": "Bring a touch of faith and serenity into your home with this beautifully crafted multi-tiered hanging wall decor. Featuring the complete and beloved biblical scripture of Psalm 23 (भजनसंग्रह २३) written in elegant Nepali script, this piece serves as a meaningful daily reminder of spiritual guidance, comfort, and protection.",
-    "price": 3500,
-    "images": ["psalm23-rustic.jpg"]
+    "price": "3500",
+    "images": [
+      "/products/psalm23-rustic.jpg"
+    ]
   },
   {
     "title": "Laser-Engraved Bookmark",
     "description": "Custom engraved MDF bookmark — perfect for personalised text, quotes, or verses.",
-    "price": 250,
-    "images": ["bookmark.png"]
+    "price": "250",
+    "images": [
+      "/products/bookmark.png"
+    ]
   },
   {
     "title": "Inspirational Wooden Macrame Hanging",
     "description": "This cute, handmade ornament combines a natural wooden plate with a soft cotton macrame fringe. Each version comes in a different shape—like a circle, arch, or rectangle—and features a beautifully engraved message or scripture verse in English or Nepali. It includes a simple top loop, making it easy to hang as a lovely daily reminder in your car, bedroom, or any small space around the house.",
     "price": "750-1500",
-    "images": ["macrame-circle.png", "macrame-arch.png", "macrame-philippians.jpeg"]
+    "images": [
+      "/products/macrame-circle.png",
+      "/products/macrame-arch.png",
+      "/products/macrame-philippians.jpeg"
+    ]
   }
 ]
