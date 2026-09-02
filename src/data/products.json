@@ -26,11 +26,19 @@
   {
     "title": "Inspirational Wooden Macrame Hanging",
     "description": "This cute, handmade ornament combines a natural wooden plate with a soft cotton macrame fringe. Each version comes in a different shape—like a circle, arch, or rectangle—and features a beautifully engraved message or scripture verse in English or Nepali. It includes a simple top loop, making it easy to hang as a lovely daily reminder in your car, bedroom, or any small space around the house.",
-    "price": "750-1501",
+    "price": "750-1500",
     "images": [
       "/products/macrame-circle.png",
       "/products/macrame-arch.png",
       "/products/macrame-philippians.jpeg"
+    ]
+  },
+  {
+    "title": "Test",
+    "description": "Test",
+    "price": "32323",
+    "images": [
+      "/products/macrame-circle.png"
     ]
   }
 ]
