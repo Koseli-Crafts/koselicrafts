@@ -32,13 +32,5 @@
       "/products/macrame-arch.png",
       "/products/macrame-philippians.jpeg"
     ]
-  },
-  {
-    "title": "Test",
-    "description": "Test",
-    "price": "32323",
-    "images": [
-      "/products/macrame-circle.png"
-    ]
   }
 ]
