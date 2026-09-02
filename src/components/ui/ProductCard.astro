@@ -20,6 +20,13 @@ const {
 } = Astro.props;
 const cardId = title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
+// Price may be a number (1200), a range string ("750-1500"), or empty/0 when
+// it has not been decided yet.
+const priceLabel =
+  price === undefined || price === null || price === "" || Number(price) === 0
+    ? "Price on request"
+    : `Rs. ${price}`;
+
 const whatsappNumber = "9779712095355";
 const whatsappMessage = `Hello, I like ${title} and want to place an order.`;
 const whatsappLink = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(whatsappMessage)}`;
@@ -57,7 +64,7 @@ const whatsappLink = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${
       >
         {title}
       </h3>
-      <h4 class="text-patrol mt-auto font-body font-semibold">Rs. {price == 0 ? "TBD" : price}</h4>
+      <h4 class="text-patrol mt-auto font-body font-semibold">{priceLabel}</h4>
     </div>
   </button>
 
@@ -189,7 +196,7 @@ const whatsappLink = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${
 
           <p class="text-[0.95rem] leading-7 text-spruce/80">{description}</p>
 
-          <h4 class="text-patrol font-body font-semibold">Rs. {price === 0 ? "TBD" : price}</h4>
+          <h4 class="text-patrol font-body font-semibold">{priceLabel}</h4>
 
           <!-- Thumbnails sidebar on desktop -->
           <div

@@ -11,7 +11,9 @@ interface ProductEntry {
 }
 
 // Every file in src/assets/products/ is picked up automatically — drop an image
-// in that folder and reference it by filename in src/data/products.json.
+// in that folder and reference it in src/data/products.json. Entries may be a
+// bare filename ("clock.jpg") or a path ("/products/clock.jpg", which is what
+// Pages CMS writes); only the filename is used to look the image up.
 const imageModules = import.meta.glob<{ default: ImageMetadata }>(
   '../../assets/products/*.{jpg,jpeg,png,webp,avif,gif}',
   { eager: true }
@@ -21,13 +23,15 @@ const imagesByFilename = Object.fromEntries(
   Object.entries(imageModules).map(([path, mod]) => [path.split('/').pop()!, mod.default.src])
 );
 
+const basename = (imageRef: string) => imageRef.split('/').pop()!;
+
 const products = productsData as ProductEntry[];
 
 for (const product of products) {
-  for (const filename of product.images) {
-    if (!imagesByFilename[filename]) {
+  for (const imageRef of product.images) {
+    if (!imagesByFilename[basename(imageRef)]) {
       throw new Error(
-        `Product "${product.title}" refers to the image "${filename}", but that file is not in src/assets/products/.\n` +
+        `Product "${product.title}" refers to the image "${imageRef}", but that file is not in src/assets/products/.\n` +
         `Available images: ${Object.keys(imagesByFilename).join(', ')}`
       );
     }
@@ -39,8 +43,8 @@ for (const product of products) {
   <SectionHeader title="Our Collection" subtitle="Tap any piece to view it in full screen" />
   <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
     {products.map((product, index) => {
-      const galleryImages = product.images.map((filename) => ({
-        src: imagesByFilename[filename],
+      const galleryImages = product.images.map((imageRef) => ({
+        src: imagesByFilename[basename(imageRef)],
         alt: product.title
       }));
 

@@ -6,8 +6,10 @@ Built with Astro + Tailwind.
 
 ## Managing products
 
-Adding, editing, or removing a product needs no code changes — see
-**[PRODUCTS.md](PRODUCTS.md)** for the step-by-step, non-technical guide.
+Products are managed through **[Pages CMS](https://app.pagescms.org)** — a free,
+form-based editor. No code changes, no JSON. Configured in `.pages.yml`.
+
+See **[PRODUCTS.md](PRODUCTS.md)** for the step-by-step, non-technical guide.
 
 ## Commands
 

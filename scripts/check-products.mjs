@@ -21,22 +21,26 @@ try {
 const available = readdirSync(IMAGE_DIR).filter((f) => /\.(jpe?g|png|webp|avif|gif)$/i.test(f));
 const used = new Set();
 
+// Pages CMS stores images as "/products/name.jpg"; a hand-typed entry is often
+// just "name.jpg". Only the filename matters.
+const basename = (imageRef) => String(imageRef).split('/').pop();
+
 if (!Array.isArray(products)) errors.push('The file must start with [ and end with ].');
 
 products.forEach((product, i) => {
   const where = `Product #${i + 1}${product?.title ? ` ("${product.title}")` : ''}`;
   if (!product?.title?.trim()) errors.push(`${where}: "title" is missing or empty.`);
   if (!product?.description?.trim()) errors.push(`${where}: "description" is missing or empty.`);
-  if (product?.price === undefined) errors.push(`${where}: "price" is missing (use 0 if not decided yet).`);
   if (!Array.isArray(product?.images) || product.images.length === 0) {
     errors.push(`${where}: "images" must list at least one image filename.`);
     return;
   }
-  for (const filename of product.images) {
+  for (const imageRef of product.images) {
+    const filename = basename(imageRef);
     used.add(filename);
     if (!available.includes(filename)) {
       errors.push(
-        `${where}: image "${filename}" was not found in ${IMAGE_DIR}/.\n` +
+        `${where}: image "${imageRef}" was not found in ${IMAGE_DIR}/.\n` +
         `   Upload it there, or fix the spelling. Names are case-sensitive and must include\n` +
         `   the extension (.jpg / .png). Available: ${available.join(', ')}`
       );

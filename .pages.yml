@@ -1,0 +1,42 @@
+# Configuration for Pages CMS (https://pagescms.org) — the visual editor for
+# products at https://app.pagescms.org. Editing this file changes the admin
+# form; the website itself reads src/data/products.json.
+
+media:
+  input: src/assets/products
+  output: /products
+  categories: [image]
+  rename: safe
+
+content:
+  - name: products
+    label: Products
+    type: file
+    path: src/data/products.json
+    format: json
+    list: true
+    fields:
+      - name: title
+        label: Product name
+        type: string
+        required: true
+        description: Shown on the product card, e.g. "Laser-Engraved Bookmark".
+
+      - name: description
+        label: Description
+        type: text
+        required: true
+        description: Two or three sentences, shown when someone taps the product.
+
+      - name: price
+        label: Price (Rs.)
+        type: string
+        description: 'Just the number, e.g. 1200. For a range use 750-1500. Leave empty to show "TBD".'
+
+      - name: images
+        label: Photos
+        type: image
+        list:
+          min: 1
+        required: true
+        description: The first photo is the one shown on the product card. Drag to reorder.

@@ -1,174 +1,158 @@
 # How to add, change, or remove a product
 
-**No coding needed.** Everything happens in two places on GitHub:
+You do this in **Pages CMS** — a simple form-based editor. No code, no JSON, no
+GitHub knowledge needed.
 
-| What | Where |
-| :--- | :--- |
-| Product photos | the folder `src/assets/products` |
-| Product text & prices | the file `src/data/products.json` |
+👉 **[app.pagescms.org](https://app.pagescms.org)**
 
-After you save a change, the website rebuilds and goes live on its own in about
-2 minutes. You do not need to tell anyone or press a deploy button.
+Save a change there and the website updates itself in about 2 minutes. There is
+no deploy button to press and no one to notify.
 
 ---
 
-## Before you start
+## First time only: getting access
 
-- Log in to GitHub with an account that can edit this repository.
-- Have your product photos ready on your computer.
-- **Photo tips:** square-ish photos look best. Keep each file under about 1 MB
-  so the site stays fast (use tinypng.com to shrink a big photo). Name files in
-  lowercase with dashes, e.g. `wooden-clock.jpg` — no spaces, no Nepali
-  characters in the filename.
+**If you own the repository (developer / admin):**
+
+1. Go to **[app.pagescms.org](https://app.pagescms.org)** and click **Sign in with GitHub**.
+2. Install the Pages CMS GitHub App and select **only** the
+   `Koseli-Crafts/koselicrafts` repository.
+3. Open the repository in Pages CMS. It reads `.pages.yml` from this repo and
+   shows a **Products** entry in the left sidebar.
+
+**To let someone else edit (shop staff, family, anyone):**
+
+They do **not** need a GitHub account. In Pages CMS, open **Settings →
+Collaborators**, invite them **by email**, and they get their own login that can
+edit products and photos — but cannot touch any settings or code.
+
+Pages CMS is 100% free and open source (MIT).
 
 ---
 
 ## Add a new product
 
-### Step 1 — Upload the photos
+1. Open **[app.pagescms.org](https://app.pagescms.org)** and click **Products**
+   in the left sidebar.
+2. Click **Add an entry**.
+3. Fill in the form:
 
-1. Open the repository on GitHub and click into `src` → `assets` → `products`.
-2. Click **Add file** → **Upload files**.
-3. Drag your photos in.
-4. In the "Commit changes" box, type what you did, e.g. `add photos for wooden clock`.
-5. Click **Commit changes**.
+   | Field | What to put |
+   | :--- | :--- |
+   | **Product name** | The name shown on the card, e.g. `Wooden Wall Clock`. |
+   | **Description** | Two or three sentences shown when someone taps the product. |
+   | **Price (Rs.)** | Just the number: `1200`. For a range: `750-1500`. Leave it **empty** and the site shows "Price on request". |
+   | **Photos** | Click to upload from your phone or computer. Add as many as you like. |
 
-### Step 2 — Add the product details
+4. Click **Save**.
 
-1. Go to `src` → `data` and click `products.json`.
-2. Click the **pencil icon** (✏️ Edit this file) at the top right.
-3. Copy the block below and paste it **right after the very first `[`**, so your
-   new product appears first on the website:
+The **first photo** is the one shown on the product card, so put the best one
+first. Drag the photos to reorder them.
 
-```json
-  {
-    "title": "Your Product Name",
-    "description": "Two or three sentences describing the product.",
-    "price": 1200,
-    "images": ["your-photo.jpg"]
-  },
-```
-
-4. Replace the text between the quotes with your own. Make sure
-   `"your-photo.jpg"` is **exactly** the filename you uploaded in Step 1
-   (including `.jpg` or `.png`, and lowercase/uppercase must match).
-5. Click **Commit changes** → **Commit changes** again.
-
-That's it. Wait ~2 minutes and refresh the website.
-
-### The four fields explained
-
-| Field | What to put |
-| :--- | :--- |
-| `title` | The product name shown on the card. |
-| `description` | The longer text shown when someone taps the product. |
-| `price` | A number like `1200`. For a range, use quotes: `"750-1500"`. Use `0` if the price is not decided — the site shows **TBD**. |
-| `images` | One or more filenames from `src/assets/products`, in quotes, separated by commas. The **first one** is the photo shown on the card. |
-
-Several photos for one product:
-
-```json
-    "images": ["clock-front.jpg", "clock-side.jpg", "clock-detail.jpg"]
-```
+Done. Wait about 2 minutes, then refresh [koselicrafts.com](https://www.koselicrafts.com/).
 
 ---
 
-## Change a product (price, name, description, photos)
+## Change a product
 
-1. Go to `src` → `data` → `products.json` and click the **pencil icon**.
-2. Edit the text between the quotes — the price, the title, whatever needs changing.
-3. Click **Commit changes** twice.
+Click **Products**, click the product, edit any field, click **Save**.
 
-To swap a photo: upload the new one to `src/assets/products` (Step 1 above),
-then change the filename inside `"images"` to the new one.
+To change a photo: remove the old one with its **✕**, upload the new one, and
+drag it into position.
 
 ---
 
 ## Remove a product
 
-1. Go to `src` → `data` → `products.json` and click the **pencil icon**.
-2. Delete the whole block for that product — from its opening `{` down to its
-   closing `}`, **including the comma after the `}`**.
-3. Click **Commit changes** twice.
+Click **Products**, open the product, and use the **⋯** menu → **Delete**.
 
-Optionally, also delete its now-unused photos from `src/assets/products`
-(open the photo → the **⋯** menu → **Delete file**).
+The photos stay in storage — that is fine, they simply stop appearing on the
+site. To clear them out too, open the **Media** section and delete them there.
 
 ---
 
 ## Reorder products
 
-Products appear on the website in the same order they appear in the file. Cut a
-whole `{ ... },` block and paste it higher or lower to move it.
-
----
-
-## The three rules that keep the file valid
-
-The file is picky about punctuation. Almost every mistake is one of these:
-
-1. **Every `}` needs a comma after it — except the very last one.**
-2. **All text goes inside double quotes** `"like this"`. Numbers like `4500` do not.
-3. **Never delete the `[` on the first line or the `]` on the last line.**
-
-A correct file looks like this:
-
-```json
-[
-  {
-    "title": "First product",
-    "description": "...",
-    "price": 500,
-    "images": ["one.jpg"]
-  },
-  {
-    "title": "Last product",
-    "description": "...",
-    "price": 900,
-    "images": ["two.jpg"]
-  }
-]
-```
-
-Note the comma after the first `}` and **no** comma after the last one.
+Products appear on the website in the order they appear in the list. **Drag a
+product up or down** in the Products list and click **Save**.
 
 ---
 
 ## Did it work?
 
-1. On GitHub, click the **Actions** tab at the top of the repository.
-2. Look at the run at the top of the list:
+Pages CMS shows a confirmation as soon as it saves. The website itself takes
+about 2 more minutes to update.
+
+If the site has not changed after a few minutes:
+
+1. Hard-refresh the page (Ctrl+Shift+R, or Cmd+Shift+R on a Mac) — your browser
+   may be showing you an old copy.
+2. Still nothing? Go to
+   [the Actions page](https://github.com/Koseli-Crafts/koselicrafts/actions) and
+   look at the run at the top:
    - 🟡 **yellow dot** — still publishing, wait a minute.
-   - ✅ **green tick** — live. Refresh the website.
-   - ❌ **red cross** — something in the file is wrong. **The website was not
-     changed and is still showing the old version**, so nothing is broken for
-     customers.
+   - ✅ **green tick** — it is live; hard-refresh again.
+   - ❌ **red cross** — click it, open **Build → Check products.json**, and it
+     prints a plain-English description of what is wrong.
 
-### If you see a red cross
+**A failure never breaks the live site.** If something is wrong, the website
+keeps showing the previous version until it is fixed. Customers never see a
+broken page.
 
-1. Click the failed run, then click the **Build** box.
-2. Click the step named **Check products.json**.
-3. It prints a plain-English message, for example:
+---
 
-   > Product #2 ("Wooden Clock"): image "clock.JPG" was not found in
-   > src/assets/products/. Upload it there, or fix the spelling.
+## Photo tips
 
-4. Go back and fix exactly what it says, then commit again.
+- Square-ish photos look best on the cards.
+- Keep each photo under about 1 MB so the site stays fast — use
+  [tinypng.com](https://tinypng.com) to shrink a large photo before uploading.
+- Any filename is fine; the editor cleans it up automatically.
 
-The most common causes are a missing or extra comma, a missing `"` quote, or a
-photo filename that does not match the uploaded file (`.JPG` vs `.jpg`).
+---
 
-Still stuck? The website is unaffected, so there is no rush. Ask a developer, or
-undo your change: open the **Commits** list, find your change, and revert it.
+<details>
+<summary><strong>Alternative: editing the files directly on GitHub</strong></summary>
+
+Pages CMS is only a friendly front end for two things in this repository. You
+can still edit them by hand if you prefer:
+
+| What | Where |
+| :--- | :--- |
+| Product photos | `src/assets/products/` |
+| Product text & prices | `src/data/products.json` |
+
+Each product is one block in `src/data/products.json`:
+
+```json
+  {
+    "title": "Your Product Name",
+    "description": "Two or three sentences describing the product.",
+    "price": "1200",
+    "images": ["your-photo.jpg"]
+  },
+```
+
+Three rules keep the file valid:
+
+1. Every `}` needs a comma after it — except the very last one.
+2. All text goes inside double quotes `"like this"`.
+3. Never delete the `[` on the first line or the `]` on the last line.
+
+Image entries may be a bare filename (`clock.jpg`) or a path
+(`/products/clock.jpg` — what Pages CMS writes). Either works.
+
+</details>
 
 ---
 
 ## For developers
 
-- Images are picked up automatically via `import.meta.glob` in
-  `src/components/sections/ProductsSection.astro` — **adding a product never
-  requires a code change.**
-- `npm run check` validates `products.json` and image references locally; the
-  same check runs in CI before the build, so a bad edit fails before deploying.
-- Filenames referenced in `products.json` must match files in
-  `src/assets/products/` exactly; a mismatch also throws at build time.
+- Product images are picked up automatically from `src/assets/products/` via
+  `import.meta.glob` in `src/components/sections/ProductsSection.astro`.
+  **Adding a product never requires a code change.**
+- `.pages.yml` defines the Pages CMS admin form. Editing it changes the fields
+  editors see; it has no effect on the built site.
+- `npm run check` validates `products.json` and its image references. The same
+  check runs in CI before the build, so a bad edit fails without deploying.
+- Image references are resolved by filename only, so a CMS-written
+  `/products/x.jpg` and a hand-typed `x.jpg` behave identically.
