@@ -16,19 +16,11 @@
     ]
   },
   {
-    "title": "Laser-Engraved Bookmark",
-    "description": "Custom engraved MDF bookmark — perfect for personalised text, quotes, or verses.",
-    "price": "250",
+    "title": "First Loved Boho Macramé Hanging",
+    "description": "Bring warmth, serenity, and faith into your space with this artisan-crafted boho wall hanging. It features an engraved round wooden plaque with the inspiring message of 1 John 4:19 in Nepali script, framed by delicate botanical motifs. Beneath it flows intricate, layered macramé in soft sage green and natural cream cords, highlighted by a central twist and a smooth wooden accent bead. \n\nA graceful, faith-filled statement piece for any room or a thoughtful gift for loved ones. ",
+    "price": "1250",
     "images": [
-      "/products/bookmark.png"
-    ]
-  },
-  {
-    "title": "Inspirational Wooden Macrame Hanging",
-    "description": "This cute, handmade ornament combines a natural wooden plate with a soft cotton macrame fringe. Each version comes in a different shape—like a circle, arch, or rectangle—and features a beautifully engraved message or scripture verse in English or Nepali. It includes a simple top loop, making it easy to hang as a lovely daily reminder in your car, bedroom, or any small space around the house.",
-    "price": "750",
-    "images": [
-      "/products/macrame-circle.png"
+      "/products/chatgpt-image-sep-2-2026-023642-pm.png"
     ]
   },
   {
@@ -53,6 +45,22 @@
     "price": "1250",
     "images": [
       "/products/tqrlp.jpg"
+    ]
+  },
+  {
+    "title": "Inspirational Wooden Macrame Hanging",
+    "description": "This cute, handmade ornament combines a natural wooden plate with a soft cotton macrame fringe. Each version comes in a different shape—like a circle, arch, or rectangle—and features a beautifully engraved message or scripture verse in English or Nepali. It includes a simple top loop, making it easy to hang as a lovely daily reminder in your car, bedroom, or any small space around the house.",
+    "price": "750",
+    "images": [
+      "/products/macrame-circle.png"
+    ]
+  },
+  {
+    "title": "Laser-Engraved Bookmark",
+    "description": "Custom engraved MDF bookmark — perfect for personalised text, quotes, or verses.",
+    "price": "250",
+    "images": [
+      "/products/bookmark.png"
     ]
   }
 ]
