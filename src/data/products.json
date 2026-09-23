@@ -1,5 +1,13 @@
 [
   {
+    "title": "Haven Macramé Cross Hanging",
+    "description": "Handcrafted from natural cream cotton cord and mounted on a smooth wooden dowel, this boho macramé tapestry features an intricately knotted central cross surrounded by elegant linear cords and a textured fringe finish. A serene, faith-inspired statement piece that brings warmth, peace, and timeless texture to any wall.",
+    "price": "2000",
+    "images": [
+      "/products/chatgpt-image-sep-2-2026-at-021850-pm-1.png"
+    ]
+  },
+  {
     "title": "Nepali Psalm 23 Multi-Tier Hanging Wall Plaque",
     "description": "A beautiful 5-panel hanging wall art piece featuring the complete biblical text of Psalm 23 (भजनसंग्रह २३) in elegant Nepali script. The panels are crafted with classic corner border accents and linked together by durable metal chains for easy wall mounting. It serves as a meaningful, faith-inspired decorative piece for home living spaces, prayer rooms, or as a thoughtful religious gift.",
     "price": "4500",
@@ -61,14 +69,6 @@
     "price": "250",
     "images": [
       "/products/bookmark.png"
-    ]
-  },
-  {
-    "title": "Haven Macramé Cross Hanging",
-    "description": "Handcrafted from natural cream cotton cord and mounted on a smooth wooden dowel, this boho macramé tapestry features an intricately knotted central cross surrounded by elegant linear cords and a textured fringe finish. A serene, faith-inspired statement piece that brings warmth, peace, and timeless texture to any wall.",
-    "price": "2000",
-    "images": [
-      "/products/chatgpt-image-sep-2-2026-at-021850-pm-1.png"
     ]
   }
 ]
