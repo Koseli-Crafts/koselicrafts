@@ -70,5 +70,41 @@
     "images": [
       "/products/psalm23-rustic.jpg"
     ]
+  },
+  {
+    "title": "Nepali “Maya” Macramé Ornament",
+    "description": "A round wooden ornament engraved with माया (“love” in Nepali) and a small snowflake, finished with a bright pink macramé fringe and a knotted loop with a tassel. Hang it on a Christmas tree, a window or a car mirror, or tuck it into a gift.",
+    "price": "750",
+    "images": [
+      "/products/macrame-ornament-maya-pink.webp",
+      "/products/macrame-ornaments-pink-green.webp"
+    ]
+  },
+  {
+    "title": "Green Macramé Frame Plaque",
+    "description": "A rectangular wooden plate framed by soft green and cream macramé on all four sides. The plate is left plain, so we can engrave a name, a verse or a short message of your choice. Message us with the words you’d like.",
+    "price": "750",
+    "images": [
+      "/products/macrame-frame-green.webp",
+      "/products/macrame-ornaments-pink-green.webp"
+    ]
+  },
+  {
+    "title": "“Love” Teal Macramé Ornament",
+    "description": "A round wooden ornament engraved with “love” in flowing script and a small snowflake, with a tightly woven teal macramé base. It has a hanging hole at the top, ready for a Christmas tree or a ribbon on a gift.",
+    "price": "750",
+    "images": [
+      "/products/macrame-ornament-love-teal.webp",
+      "/products/macrame-ornaments-teal-love-faith.webp"
+    ]
+  },
+  {
+    "title": "“Faith” Teal Macramé Ornament",
+    "description": "A wooden ornament engraved with “faith” in flowing script and a small snowflake, with a teal macramé arch and long knotted fringe. It has a hanging hole at the top, ready for a Christmas tree or a ribbon on a gift.",
+    "price": "750",
+    "images": [
+      "/products/macrame-ornament-faith-teal.webp",
+      "/products/macrame-ornaments-teal-love-faith.webp"
+    ]
   }
 ]
