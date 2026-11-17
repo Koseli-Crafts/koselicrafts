@@ -1,12 +1,24 @@
 ---
 import logo from "../../assets/KoseliCrafts_logo.png";
+
+const links = [
+  { href: "#products", label: "Collection" },
+  { href: "#faq", label: "Questions" },
+  { href: "#contact", label: "Order" }
+];
 ---
 
-<nav class="fixed top-0 inset-x-0 bg-snow z-50 px-4 md:px-6 backdrop-blur border-b border-spruce/30">
-  <div class="mx-auto flex h-16 max-w-6xl items-center justify-between">
-    <div class="logo">
-      <img src={logo.src} alt="Koseli Crafts" class="h-9 w-auto md:h-10" />
-    </div>
-    <p class="text-spruce text-sm">Made in Nepal with ❤️</p>
+<nav class="fixed top-0 inset-x-0 bg-snow z-50 px-4 md:px-6 border-b border-spruce/30" aria-label="Main">
+  <div class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4">
+    <a href="#featured" class="logo shrink-0">
+      <img src={logo.src} alt="Koseli Crafts, home" class="h-9 w-auto md:h-10" />
+    </a>
+    <ul class="flex items-center gap-4 text-[0.95rem] font-medium text-pine sm:gap-6">
+      {links.map((link) => (
+        <li>
+          <a href={link.href} class="underline-offset-4 transition hover:text-patrol hover:underline">{link.label}</a>
+        </li>
+      ))}
+    </ul>
   </div>
 </nav>

@@ -7,7 +7,9 @@ export default function initSiteMotion() {
 			duration: 1.15,
 			lerp: 0.085,
 			smoothWheel: true,
-			syncTouch: false
+			syncTouch: false,
+			// Smooth-scroll nav links; sections' scroll-margin-top clears the fixed navbar.
+			anchors: true
 		});
 
 		const raf = (time: number) => {

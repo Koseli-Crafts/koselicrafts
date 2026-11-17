@@ -37,7 +37,7 @@ const whatsappLink = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${
     type="button"
     class="product-card-trigger flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-sm bg-surface text-left shadow-[0_4px_14px_rgba(17,33,19,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(17,33,19,0.13)]"
     data-open-product={cardId}
-    aria-label={`Open ${title} gallery`}
+    aria-label={`${title}, ${priceLabel}. See details`}
   >
     <div
       class="relative w-full overflow-hidden bg-spruce/10 pb-[80%] lg:pb-[118%]"
@@ -79,7 +79,7 @@ const whatsappLink = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${
         type="button"
         class="product-viewer-close max-sm:fixed max-sm:top-3 max-sm:right-3 max-sm:z-50 max-sm:rounded-full max-sm:bg-white/90 max-sm:shadow-md max-sm:backdrop-blur-sm absolute cursor-pointer sm:top-5 sm:right-5 flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center text-2xl text-spruce/40 transition hover:text-spruce"
         data-close-product={cardId}
-        aria-label="Close">&times;</button
+        aria-label="Close details">&times;</button
       >
 
       <div class="grid grid-cols-1 gap-6 md:grid-cols-5 md:gap-8 max-md:pt-6">
@@ -121,14 +121,14 @@ const whatsappLink = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${
               class="absolute cursor-pointer top-1/2 left-2 z-30 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-spruce/20 bg-white text-lg text-spruce transition hover:border-white hover:bg-spruce/10 hover:text-white sm:flex"
               data-slide-dir="prev"
               data-product-nav={cardId}
-              aria-label="Previous">&lsaquo;</button
+              aria-label="Previous photo">&lsaquo;</button
             >
             <button
               type="button"
               class="absolute cursor-pointer top-1/2 right-2 z-30 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-spruce/20 bg-white text-lg text-spruce transition hover:border-white hover:bg-spruce/10 hover:text-white sm:flex"
               data-slide-dir="next"
               data-product-nav={cardId}
-              aria-label="Next">&rsaquo;</button
+              aria-label="Next photo">&rsaquo;</button
             >
 
             <div
@@ -154,7 +154,7 @@ const whatsappLink = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${
                   class="h-14 min-w-14 shrink-0 overflow-hidden rounded-lg border border-spruce/15 opacity-50 transition hover:opacity-100"
                   data-thumb-index={galleryIndex}
                   data-product-thumb={cardId}
-                  aria-label={`Image ${galleryIndex + 1}`}
+                  aria-label={`Show photo ${galleryIndex + 1}`}
                 >
                   <img
                     src={galleryImage.src}
@@ -174,14 +174,14 @@ const whatsappLink = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${
               class="flex h-10 w-10 items-center justify-center rounded-full border border-spruce/20 bg-spruce/8 text-lg text-spruce transition hover:bg-spruce/15"
               data-slide-dir="prev"
               data-product-nav={cardId}
-              aria-label="Previous">&lsaquo;</button
+              aria-label="Previous photo">&lsaquo;</button
             >
             <button
               type="button"
               class="flex h-10 w-10 items-center justify-center rounded-full border border-spruce/20 bg-spruce/8 text-lg text-spruce transition hover:bg-spruce/15"
               data-slide-dir="next"
               data-product-nav={cardId}
-              aria-label="Next">&rsaquo;</button
+              aria-label="Next photo">&rsaquo;</button
             >
           </div>
         </div>
@@ -210,7 +210,7 @@ const whatsappLink = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${
                   class="h-20 overflow-hidden rounded-lg border border-spruce/15 opacity-50 transition hover:opacity-100"
                   data-thumb-index={galleryIndex}
                   data-product-thumb={cardId}
-                  aria-label={`Image ${galleryIndex + 1}`}
+                  aria-label={`Show photo ${galleryIndex + 1}`}
                 >
                   <img
                     src={galleryImage.src}
@@ -230,7 +230,7 @@ const whatsappLink = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${
               rel="noopener noreferrer"
               class="rounded-lg bg-patrol px-8 py-3 font-semibold text-white transition hover:bg-pine inline-block"
             >
-              Place Order on WhatsApp
+              Order on WhatsApp
             </a>
           </div>
         </div>

@@ -11,6 +11,11 @@
     @apply mx-auto max-w-lg text-[0.95rem] leading-7 text-spruce md:text-base;
   }
 
+  /* Anchor targets land below the fixed navbar. */
+  section[id] {
+    scroll-margin-top: 5rem;
+  }
+
   .content-section {
     @apply mx-auto max-w-7xl px-4 py-10 md:px-6 md:py-14;
   }

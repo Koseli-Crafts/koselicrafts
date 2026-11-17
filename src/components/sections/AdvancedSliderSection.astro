@@ -4,20 +4,22 @@ import livingRoom from '../../assets/minimalist-scandinavian-living-room-decor.p
 
 const slides = [
   {
-    title: 'Handcrafted with Heart and Detail',
+    title: 'Gifts made by hand in Kathmandu',
     caption:
-      'Every piece is made by hand — from macramé knots to laser-engraved wood.',
+      'Koseli means “gift” in Nepali. We engrave wood with scripture, names and words of love, then finish each piece by hand with macramé.',
     image: artisanCraftingMacrame.src,
-    imageAlt: 'Artisan woman hand-knotting a blue macramé piece on a wooden dowel.'
+    imageAlt: 'Hands knotting a blue macramé hanging on a wooden dowel.'
   },
   {
-    title: 'Simple, Cozy, Beautiful',
+    title: 'A koseli for their walls',
     caption:
-      'Soft light, clean space, and a handmade macrame cross that feels like home.',
+      'A verse for a new home, a blessing for a wedding, a thank-you for your church. Tell us the words and we’ll engrave them.',
     image: livingRoom.src,
-    imageAlt: 'Personalized decorative design with handcrafted details.'
+    imageAlt: 'A cream macramé cross hanging on a pale wall above a black sofa.'
   }
 ];
+
+const whatsappLink = `https://wa.me/9779712095355?text=${encodeURIComponent('Hello Koseli Crafts, I’d like to ask about a gift.')}`;
 ---
 
 <section id="featured" class="mt-16 px-4 pt-4 md:px-6 md:pt-5" data-advanced-slider-section>
@@ -31,6 +33,7 @@ const slides = [
           ]}
           data-slide
           aria-hidden={index === 0 ? 'false' : 'true'}
+          inert={index === 0 ? undefined : true}
         >
           <img class="h-full w-full object-cover" src={slide.image} alt={slide.imageAlt} loading={index === 0 ? 'eager' : 'lazy'} />
           <div
@@ -38,9 +41,16 @@ const slides = [
             style="background: linear-gradient(90deg, rgba(30, 28, 24, 0.78) 0%, rgba(30, 28, 24, 0.3) 44%, rgba(30, 28, 24, 0.08) 100%), linear-gradient(180deg, rgba(30, 28, 24, 0.12) 0%, rgba(30, 28, 24, 0.4) 100%);"
           ></div>
           <div class="absolute inset-x-0 bottom-0 z-10 flex max-w-lg flex-col gap-3.5 px-5 pb-6 pt-16 text-white sm:left-0 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 sm:px-8 md:px-10">
-            <span class="w-fit rounded-md border border-white/30 bg-white/8 px-2.5 py-1 text-[0.76rem] font-semibold uppercase tracking-[0.18em] text-white/84 backdrop-blur-sm animate-fadeup" style="animation-delay: 0ms;">Koseli Crafts</span>
-            <h2 class="m-0 max-w-md text-[clamp(1.8rem,8vw,2.55rem)] leading-tight font-semibold text-white md:text-[3.3rem] animate-fadeup" style="animation-delay: 100ms;">{slide.title}</h2>
+            {index === 0 ? (
+              <h1 class="m-0 max-w-md text-balance text-[clamp(1.8rem,8vw,2.55rem)] leading-tight font-semibold text-white md:text-[3.3rem] animate-fadeup" style="animation-delay: 100ms;">{slide.title}</h1>
+            ) : (
+              <h2 class="m-0 max-w-md text-balance text-[clamp(1.8rem,8vw,2.55rem)] leading-tight font-semibold text-white md:text-[3.3rem] animate-fadeup" style="animation-delay: 100ms;">{slide.title}</h2>
+            )}
             <p class="m-0 max-w-md text-[1rem] leading-6.5 text-white/82 md:text-[1.02rem] animate-fadeup" style="animation-delay: 200ms;">{slide.caption}</p>
+            <div class="mt-2 flex flex-wrap items-center gap-2.5 animate-fadeup" style="animation-delay: 300ms;">
+              <a href="#products" class="inline-flex items-center rounded-md bg-patrol px-5 py-3 text-[0.95rem] font-semibold text-surface transition hover:bg-[#8e3428]">See the collection</a>
+              <a href={whatsappLink} target="_blank" rel="noopener noreferrer" class="inline-flex items-center rounded-md border border-white/55 px-5 py-3 text-[0.95rem] font-semibold text-white transition hover:border-white hover:bg-white/10">Message us on WhatsApp</a>
+            </div>
           </div>
         </article>
       ))}
@@ -52,7 +62,7 @@ const slides = [
         <span class="block h-full w-0 rounded-full bg-patrol" data-slider-progress></span>
       </div>
 
-      <div class="flex items-center gap-2 overflow-x-auto pb-1 sm:justify-end" role="tablist" aria-label="Slider pagination">
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 sm:justify-end" role="tablist" aria-label="Featured slides">
         {slides.map((slide, index) => (
           <button
             type="button"
@@ -97,6 +107,7 @@ const slides = [
         slide.classList.toggle('pointer-events-none', !isActive);
         slide.classList.toggle('opacity-0', !isActive);
         slide.setAttribute('aria-hidden', String(!isActive));
+        slide.inert = !isActive;
       });
 
       dots.forEach((dot, dotIndex) => {
