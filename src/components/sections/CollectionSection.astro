@@ -38,6 +38,7 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
         <img
           src={product.image.src}
           data-original-src={product.image.src}
+          draggable="false"
           width={product.image.width}
           height={product.image.height}
           alt=""
@@ -175,6 +176,39 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
       : { x: offset * 230, y: 0, scale: 1 - distance * 0.1, opacity: distance > 2 ? 0 : 1 - distance * 0.12, rotate: offset * 4, layer: 20 - distance, blur: distance > 1 ? 1 : 0 };
   }
 
+  const transformFor = (spot: Spot, dragX = 0) =>
+    `translateX(calc(-50% + ${spot.x + dragX}px)) translateY(${spot.y}px) scale(${spot.scale}) rotate(${spot.rotate}deg)`;
+
+  /** Where each visible piece was last placed, so a drag can move it from there. */
+  const spots = new Map<HTMLElement, Spot>();
+
+  const ENTER_EASE = 'cubic-bezier(0.23, 1, 0.32, 1)';
+  const ENTER_STAGGER_MS = 40;
+  const ENTER_MAX_DELAY_MS = 160;
+  let hasRendered = false;
+
+  /** A piece that was hidden by the last filter rises into its new spot. */
+  function enter(item: HTMLElement, order: number) {
+    const transform = item.style.transform;
+    const opacity = Number(item.style.opacity);
+    if (reduceMotion.matches) {
+      item.animate([{ opacity: 0 }, { opacity }], { duration: 200, easing: ENTER_EASE });
+      return;
+    }
+    item.animate(
+      [
+        { opacity: 0, transform: `${transform} translateY(16px) scale(0.96)` },
+        { opacity, transform }
+      ],
+      {
+        duration: 300,
+        easing: ENTER_EASE,
+        delay: Math.min(order * ENTER_STAGGER_MS, ENTER_MAX_DELAY_MS),
+        fill: 'backwards'
+      }
+    );
+  }
+
   function render() {
     const list = visibleItems();
     const selectedPosition = list.findIndex((item) => Number(item.dataset.item) === selected);
@@ -186,7 +220,9 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     panelBodies.forEach((body, index) => { body.hidden = index !== selected; });
     closeWrap.hidden = !focused;
 
+    const wasHidden = new Set(items.filter((item) => item.hidden));
     items.forEach((item) => { item.hidden = !list.includes(item); });
+    let entering = 0;
     list.forEach((item, k) => {
       const offset = k - center;
       const spot = !focused ? browsingSpot(offset) : offset === 0 ? openSpot(item) : hiddenSpot(offset);
@@ -194,8 +230,10 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
       item.style.opacity = String(spot.opacity);
       item.style.filter = `blur(${spot.blur}px)`;
       item.style.pointerEvents = spot.opacity > 0 ? 'auto' : 'none';
-      item.style.transform = `translateX(calc(-50% + ${spot.x}px)) translateY(${spot.y}px) scale(${spot.scale}) rotate(${spot.rotate}deg)`;
+      item.style.transform = transformFor(spot);
+      spots.set(item, spot);
       item.tabIndex = spot.opacity > 0 ? 0 : -1;
+      if (hasRendered && wasHidden.has(item) && spot.opacity > 0) enter(item, entering++);
     });
 
     pager.hidden = focused;
@@ -212,6 +250,7 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     tabs.forEach((t) => t.setAttribute('aria-pressed', String(t === tab)));
     ghost.textContent = tab.dataset.ghostWord!;
     countLabel.textContent = piecesLabel(list.length) + (filter === 'all' ? '' : ` · ${tab.textContent}`);
+    hasRendered = true;
   }
 
   function setFilter(id: string) {
@@ -233,20 +272,88 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     render();
   }
 
-  // Swipe the pieces left and right on touch screens.
+  // Swipe the pieces left and right. While the finger is down the pieces follow it;
+  // on release they settle on the next piece or spring back.
+  const FOLLOW = 0.6;
+  const RUBBER_BAND = 0.25;
+  const COMMIT_DISTANCE = 40;
+  const COMMIT_SPEED = 0.11; // px per ms
+  const TAP_TOLERANCE = 10;
+  const SETTLE_MS = 400;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
   let swipeStartX: number | null = null;
+  let swipePointer: number | null = null;
+  let swipeStartTime = 0;
   let justSwiped = false;
+
+  function dragOffset(dx: number) {
+    const last = visibleItems().length - 1;
+    const atStart = Math.min(centered, last) === 0 && dx > 0;
+    const atEnd = Math.min(centered, last) === last && dx < 0;
+    return dx * (atStart || atEnd ? RUBBER_BAND : FOLLOW);
+  }
+
+  function settle() {
+    cluster.classList.remove('is-dragging');
+    cluster.classList.add('is-settling');
+    window.setTimeout(() => cluster.classList.remove('is-settling'), SETTLE_MS);
+  }
+
   cluster.addEventListener('pointerdown', (event) => {
+    if (selected >= 0 || swipeStartX !== null) return;
+    swipePointer = event.pointerId;
     swipeStartX = event.clientX;
+    swipeStartTime = event.timeStamp;
     justSwiped = false;
   });
+
+  cluster.addEventListener('pointermove', (event) => {
+    if (event.pointerId !== swipePointer) return;
+    if (swipeStartX === null || reduceMotion.matches) return;
+    const dx = event.clientX - swipeStartX;
+    if (Math.abs(dx) < TAP_TOLERANCE) return;
+    if (!cluster.hasPointerCapture(event.pointerId)) cluster.setPointerCapture(event.pointerId);
+    cluster.classList.add('is-dragging');
+    const dragX = dragOffset(dx);
+    spots.forEach((spot, item) => {
+      if (!item.hidden) item.style.transform = transformFor(spot, dragX);
+    });
+  });
+
   cluster.addEventListener('pointerup', (event) => {
+    if (event.pointerId !== swipePointer) return;
     if (swipeStartX === null) return;
     const dx = event.clientX - swipeStartX;
+    const speed = Math.abs(dx) / Math.max(1, event.timeStamp - swipeStartTime);
     swipeStartX = null;
-    if (Math.abs(dx) < 40) return;
+    swipePointer = null;
+    if (Math.abs(dx) < TAP_TOLERANCE) {
+      cluster.classList.remove('is-dragging');
+      return;
+    }
     justSwiped = true;
-    if (selected < 0) step(dx < 0 ? 1 : -1);
+    settle();
+    if (Math.abs(dx) > COMMIT_DISTANCE || speed > COMMIT_SPEED) step(dx < 0 ? 1 : -1);
+    else render();
+  });
+
+  cluster.addEventListener('pointercancel', (event) => {
+    if (event.pointerId !== swipePointer) return;
+    if (swipeStartX === null) return;
+    swipeStartX = null;
+    swipePointer = null;
+    settle();
+    render();
+  });
+
+  // A press that leaves the pieces before becoming a drag (so no capture was
+  // taken) would never see its release; forget it so the next press works.
+  cluster.addEventListener('pointerleave', (event) => {
+    if (event.pointerId !== swipePointer || cluster.hasPointerCapture(event.pointerId)) return;
+    swipeStartX = null;
+    swipePointer = null;
+    cluster.classList.remove('is-dragging');
   });
 
   items.forEach((item) => {
@@ -275,6 +382,9 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
   const NEXT_KEYS = ['ArrowRight', 'ArrowDown'];
   const PREVIOUS_KEYS = ['ArrowLeft', 'ArrowUp'];
 
+  const RECOLOUR_DIM_AFTER_MS = 120;
+  const RECOLOUR_FADE_MS = 200;
+
   section.querySelectorAll<HTMLElement>('[data-swatch-group]').forEach((group) => {
     const image = items[Number(group.dataset.swatchGroup)].querySelector('img')!;
     const original = image.dataset.originalSrc!;
@@ -291,8 +401,23 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
       wanted = swatch.dataset.swatchColor!;
       state.textContent = wanted === sourceColor ? 'original' : 'recoloured';
       const target = wanted;
+
+      // Show the tap registered if the recolouring takes a moment. Only the
+      // latest choice may dim, so an older, slower one can't leave it dimmed.
+      const dim = window.setTimeout(() => {
+        if (wanted === target) image.style.opacity = '0.85';
+      }, RECOLOUR_DIM_AFTER_MS);
       const url = await recolorImage(original, sourceColor, target);
-      if (wanted === target) image.src = url;
+      window.clearTimeout(dim);
+      if (wanted !== target) return;
+
+      image.src = url;
+      await image.decode().catch(() => {});
+      image.style.opacity = '';
+      image.animate([{ opacity: 0.6 }, { opacity: 1 }], {
+        duration: RECOLOUR_FADE_MS,
+        easing: 'cubic-bezier(0.23, 1, 0.32, 1)'
+      });
     }
 
     swatches.forEach((swatch, index) => {
@@ -379,8 +504,19 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     transition: transform 0.45s cubic-bezier(0.3, 1.6, 0.5, 1), background 0.3s, color 0.3s;
   }
 
-  .tab:hover {
-    transform: rotate(-3deg);
+  .tab:active {
+    transform: scale(0.97);
+    transition: transform 160ms var(--motion-out), background 0.3s, color 0.3s;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .tab:hover {
+      transform: rotate(-3deg);
+    }
+
+    .tab:hover:active {
+      transform: rotate(-3deg) scale(0.97);
+    }
   }
 
   .tab:focus-visible {
@@ -423,6 +559,16 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     transition: transform 1s cubic-bezier(0.7, 0, 0.2, 1), opacity 0.8s ease, filter 0.8s ease;
   }
 
+  /* Following the finger: no lag at all. */
+  .cluster.is-dragging .item {
+    transition: none;
+  }
+
+  /* Letting go after a swipe: a quick drawer-like settle instead of the 1s slide. */
+  .cluster.is-settling .item {
+    transition: transform 400ms var(--motion-drawer), opacity 400ms var(--motion-out), filter 400ms var(--motion-out);
+  }
+
   .item:focus-visible {
     outline: 2px solid var(--color-ink);
     outline-offset: 4px;
@@ -435,7 +581,7 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     max-width: 380px;
     object-fit: contain;
     filter: drop-shadow(0 30px 30px rgb(43 33 24 / 0.18));
-    transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 150ms ease;
   }
 
   .item:hover img {
@@ -540,12 +686,20 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     border-radius: 4px;
     border: 2px solid #fff;
     box-shadow: 0 1px 4px rgb(0 0 0 / 0.35);
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 160ms var(--motion-out), box-shadow 0.2s;
   }
 
   .swatch[aria-checked='true'] span {
     transform: scale(1.15);
     box-shadow: 0 0 0 3px var(--color-ink);
+  }
+
+  .swatch:active span {
+    transform: scale(0.9);
+  }
+
+  .swatch[aria-checked='true']:active span {
+    transform: scale(1.05);
   }
 
   .panel-order {
@@ -568,6 +722,18 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     left: 50%;
     top: -6px;
     transform: translateX(-50%);
+  }
+
+  /* The ✕ arrives with the panel (same 250ms delay) instead of before it. */
+  .close-wrap {
+    transition: opacity 200ms var(--motion-out) 250ms, scale 200ms var(--motion-out) 250ms;
+  }
+
+  @starting-style {
+    .close-wrap {
+      opacity: 0;
+      scale: 0.9;
+    }
   }
 
   .collection-foot {
@@ -651,6 +817,14 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
 
     .panel.is-swapping .panel-body {
       animation: none;
+    }
+
+    .close-wrap {
+      transition: opacity 150ms ease 250ms;
+    }
+
+    .cluster.is-settling .item {
+      transition: none;
     }
   }
 

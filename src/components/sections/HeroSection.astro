@@ -352,8 +352,19 @@ const HERO_SHADOW = 'rgba(43,33,24,0.22)';
     background: rgb(43 33 24 / 0.55);
   }
 
-  .garland button:hover {
-    transform: rotate(7deg);
+  .garland button:active {
+    transform: scale(0.97);
+    transition: transform 160ms var(--motion-out), background 0.3s, color 0.3s;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .garland button:hover {
+      transform: rotate(7deg);
+    }
+
+    .garland button:hover:active {
+      transform: rotate(7deg) scale(0.97);
+    }
   }
 
   .garland button:focus-visible {

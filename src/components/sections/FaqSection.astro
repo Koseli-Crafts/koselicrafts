@@ -26,8 +26,10 @@ const { faqs } = Astro.props;
             <span class="faq-text">{faq.question}</span>
             <span class="faq-icon" aria-hidden="true">+</span>
           </button>
-          <div class="faq-answer" id={`faq-answer-${index}`} hidden={index !== 0}>
-            <p>{faq.answer}</p>
+          <div class="faq-answer" id={`faq-answer-${index}`} inert={index !== 0}>
+            <div class="faq-answer-inner">
+              <p>{faq.answer}</p>
+            </div>
           </div>
         </div>
       ))}
@@ -46,7 +48,7 @@ const { faqs } = Astro.props;
         const open = other === row && opening;
         other.dataset.open = String(open);
         other.querySelector('button')!.setAttribute('aria-expanded', String(open));
-        other.querySelector<HTMLElement>('.faq-answer')!.hidden = !open;
+        other.querySelector<HTMLElement>('.faq-answer')!.inert = !open;
       });
     });
   });
@@ -136,6 +138,15 @@ const { faqs } = Astro.props;
     outline-offset: 2px;
   }
 
+  .faq-question {
+    transition: transform 200ms var(--motion-out);
+  }
+
+  .faq-question:active {
+    transform: scale(0.98);
+    transition-duration: 120ms;
+  }
+
   .faq-no {
     flex: none;
     font-family: var(--font-display);
@@ -168,6 +179,32 @@ const { faqs } = Astro.props;
 
   .faq-row[data-open='true'] .faq-icon {
     transform: rotate(45deg);
+  }
+
+  /* Answers grow open instead of appearing: rows animate from 0fr to 1fr. */
+  .faq-answer {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition: grid-template-rows 200ms var(--motion-out), opacity 200ms var(--motion-out);
+  }
+
+  .faq-row[data-open='true'] .faq-answer {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transition: grid-template-rows 250ms var(--motion-out), opacity 250ms var(--motion-out);
+  }
+
+  .faq-answer-inner {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq-answer,
+    .faq-row[data-open='true'] .faq-answer {
+      transition: opacity 150ms ease;
+    }
   }
 
   .faq-answer p {
