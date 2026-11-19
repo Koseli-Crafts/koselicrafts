@@ -279,7 +279,6 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
   const COMMIT_DISTANCE = 40;
   const COMMIT_SPEED = 0.11; // px per ms
   const TAP_TOLERANCE = 10;
-  const SETTLE_MS = 400;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   let swipeStartX: number | null = null;
@@ -294,10 +293,9 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     return dx * (atStart || atEnd ? RUBBER_BAND : FOLLOW);
   }
 
+  // Letting go hands the pieces back to their normal transition, which settles them.
   function settle() {
     cluster.classList.remove('is-dragging');
-    cluster.classList.add('is-settling');
-    window.setTimeout(() => cluster.classList.remove('is-settling'), SETTLE_MS);
   }
 
   cluster.addEventListener('pointerdown', (event) => {
@@ -556,17 +554,13 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     background: none;
     cursor: pointer;
     transform-origin: 50% 100%;
-    transition: transform 1s cubic-bezier(0.7, 0, 0.2, 1), opacity 0.8s ease, filter 0.8s ease;
+    /* Arrows, filters, opening a piece and letting go of a swipe all settle the same way. */
+    transition: transform 350ms var(--motion-drawer), opacity 250ms var(--motion-out), filter 250ms var(--motion-out);
   }
 
   /* Following the finger: no lag at all. */
   .cluster.is-dragging .item {
     transition: none;
-  }
-
-  /* Letting go after a swipe: a quick drawer-like settle instead of the 1s slide. */
-  .cluster.is-settling .item {
-    transition: transform 400ms var(--motion-drawer), opacity 400ms var(--motion-out), filter 400ms var(--motion-out);
   }
 
   .item:focus-visible {
@@ -606,13 +600,16 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     opacity: 0;
     transform: translateX(60px);
     pointer-events: none;
-    transition: opacity 0.7s ease 0.25s, transform 0.9s cubic-bezier(0.7, 0, 0.2, 1);
+    /* Leaving: quick, no wait. */
+    transition: opacity 150ms var(--motion-out), transform 200ms var(--motion-out);
   }
 
   .panel.is-open {
     opacity: 1;
     transform: none;
     pointer-events: auto;
+    /* Arriving: a 100ms head start lets the piece move first. */
+    transition: opacity 250ms var(--motion-out) 100ms, transform 300ms var(--motion-out) 100ms;
   }
 
   @keyframes panel-swap {
@@ -621,7 +618,7 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
   }
 
   .panel.is-swapping .panel-body {
-    animation: panel-swap 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation: panel-swap 300ms var(--motion-out) both;
   }
 
   .panel-body {
@@ -724,9 +721,9 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     transform: translateX(-50%);
   }
 
-  /* The ✕ arrives with the panel (same 250ms delay) instead of before it. */
+  /* The ✕ arrives with the panel (same 100ms delay) instead of before it. */
   .close-wrap {
-    transition: opacity 200ms var(--motion-out) 250ms, scale 200ms var(--motion-out) 250ms;
+    transition: opacity 200ms var(--motion-out) 100ms, scale 200ms var(--motion-out) 100ms;
   }
 
   @starting-style {
@@ -810,7 +807,6 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
   @media (prefers-reduced-motion: reduce) {
     .item,
     .item img,
-    .panel,
     .dot {
       transition: none;
     }
@@ -820,11 +816,7 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     }
 
     .close-wrap {
-      transition: opacity 150ms ease 250ms;
-    }
-
-    .cluster.is-settling .item {
-      transition: none;
+      transition: opacity 150ms ease 100ms;
     }
   }
 
@@ -839,6 +831,12 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
       top: auto;
       bottom: 24px;
       width: auto;
+      transform: translateY(100%);
+    }
+
+    /* Anchored to the bottom, so it rises like a sheet. */
+    .panel.is-open {
+      transition: opacity 200ms var(--motion-out) 100ms, transform 400ms var(--motion-drawer) 100ms;
     }
   }
 
@@ -936,6 +934,15 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
       right: 16px;
       bottom: 24px;
       justify-content: center;
+    }
+  }
+
+  /* Less motion: the panel fades in place, without sliding. */
+  @media (prefers-reduced-motion: reduce) {
+    .panel,
+    .panel.is-open {
+      transform: none;
+      transition: opacity 150ms ease;
     }
   }
 </style>
