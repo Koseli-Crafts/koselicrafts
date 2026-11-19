@@ -65,6 +65,7 @@ const HERO_SHADOW = 'rgba(43,33,24,0.22)';
           <img
             class="hero-img"
             data-hero-image
+            draggable="false"
             src={FIRST_THEME.image}
             alt={FIRST_THEME.imageAlt}
             style={{ height: `min(${FIRST_THEME.imageHeight}px, 64vh)` }}
@@ -197,6 +198,43 @@ const HERO_SHADOW = 'rgba(43,33,24,0.22)';
     showThemeInCollection(themes[current].id);
   });
 
+  // Swipe left or right anywhere in the hero to change theme; the theme tabs keep
+  // their own sideways scroll. A quick flick counts as much as a long drag.
+  const SWIPE_DISTANCE = 40;
+  const SWIPE_SPEED = 0.11; // px per ms
+  const TAP_TOLERANCE = 10;
+  let swipe: { id: number; x: number; y: number; time: number } | null = null;
+  let swallowNextClick = false;
+
+  hero.addEventListener('pointerdown', (event) => {
+    swallowNextClick = false;
+    if (!event.isPrimary || (event.target as Element).closest('.garland')) return;
+    swipe = { id: event.pointerId, x: event.clientX, y: event.clientY, time: event.timeStamp };
+  });
+
+  hero.addEventListener('pointerup', (event) => {
+    if (!swipe || event.pointerId !== swipe.id) return;
+    const dx = event.clientX - swipe.x;
+    const dy = event.clientY - swipe.y;
+    const speed = Math.abs(dx) / Math.max(1, event.timeStamp - swipe.time);
+    swipe = null;
+    const sideways = Math.abs(dx) > TAP_TOLERANCE && Math.abs(dx) > Math.abs(dy);
+    if (!sideways || (Math.abs(dx) <= SWIPE_DISTANCE && speed <= SWIPE_SPEED)) return;
+    // A swipe that ends on the button or a link must not also press it.
+    swallowNextClick = true;
+    const step = dx < 0 ? 1 : -1;
+    show(current + step, step);
+  });
+
+  hero.addEventListener('pointercancel', () => { swipe = null; });
+
+  hero.addEventListener('click', (event) => {
+    if (!swallowNextClick) return;
+    swallowNextClick = false;
+    event.preventDefault();
+    event.stopPropagation();
+  }, true);
+
   // Only cycle while the hero is on screen, so the page below doesn't keep
   // changing colour while people read it.
   new IntersectionObserver(([entry]) => { heroInView = entry.isIntersecting; }, { threshold: 0.35 }).observe(hero);
@@ -211,6 +249,8 @@ const HERO_SHADOW = 'rgba(43,33,24,0.22)';
   .hero {
     --dir: 1;
     position: relative;
+    /* Sideways swipes come to the page script; vertical scrolling stays with the browser. */
+    touch-action: pan-y;
     height: max(100vh, 820px);
     overflow: hidden;
   }
