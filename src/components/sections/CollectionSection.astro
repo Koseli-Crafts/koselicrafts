@@ -92,6 +92,8 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     </div>
   </div>
 
+  <p class="caption eyebrow muted" data-caption>Tap a piece to look closer</p>
+
   <div class="collection-foot">
     <div class="step hide-below-760">
       <span class="step-no" data-step-no>01</span>
@@ -129,6 +131,7 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
   const stepLabel = section.querySelector<HTMLElement>('[data-step-label]')!;
   const stepHint = section.querySelector<HTMLElement>('[data-step-hint]')!;
   const phone = window.matchMedia('(max-width: 760px)');
+  const caption = section.querySelector<HTMLElement>('[data-caption]')!;
 
   let filter = 'all';
   let centered = 2;
@@ -216,6 +219,7 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     const center = focused ? selectedPosition : Math.min(centered, list.length - 1);
 
     // Show the panel text and close button first, so their sizes are known before placing the piece.
+    section.classList.toggle('is-open', focused);
     panel.classList.toggle('is-open', focused);
     panelBodies.forEach((body, index) => { body.hidden = index !== selected; });
     closeWrap.hidden = !focused;
@@ -237,6 +241,7 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     });
 
     pager.hidden = focused;
+    caption.hidden = focused;
     dots.forEach((dot, k) => {
       dot.hidden = k >= list.length;
       dot.classList.toggle('is-current', k === center);
@@ -733,6 +738,17 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     }
   }
 
+  /* On smaller screens the corner hint is hidden, so the hint sits under the pieces instead. */
+  .caption {
+    display: none;
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 112px;
+    z-index: 21;
+    text-align: center;
+  }
+
   .collection-foot {
     position: absolute;
     left: 48px;
@@ -825,6 +841,10 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
       display: none;
     }
 
+    .caption:not([hidden]) {
+      display: block;
+    }
+
     .panel {
       left: 6%;
       right: 6%;
@@ -845,7 +865,12 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
       display: none;
     }
 
+    /* Short while browsing; grows back when a piece opens, to fit the piece and its panel. */
     .collection {
+      height: 640px;
+    }
+
+    .collection.is-open {
       height: 860px;
     }
 
@@ -885,12 +910,16 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     }
 
     .item {
-      bottom: 30px;
+      bottom: 20px;
     }
 
     .item img {
       height: calc(var(--display-height) * 0.5px);
       max-width: 250px;
+    }
+
+    .caption {
+      bottom: 88px;
     }
 
     /* The arrows and dots below are hidden while a piece is open, so the
