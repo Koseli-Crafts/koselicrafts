@@ -1,30 +1,20 @@
 import sharp from 'sharp';
 import { join } from 'node:path';
+import { rgbDistance, rgbToHex, rgbToHsl, type RGB } from './color';
 
 // Picks a handful of representative colors from an image at build time, so the
 // "swatch squares" never need to be entered by hand in the CMS.
 const cache = new Map<string, Promise<string[]>>();
 
-const hex = (r: number, g: number, b: number) =>
-  '#' + [r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('');
-
 // Photos are cream/white backdrops with wooden plaques, so neither is a
-// "macramé color". Drop near-white, near-black and wood tones.
-function isBackdropOrWood([r, g, b]: number[]) {
-  const max = Math.max(r, g, b) / 255, min = Math.min(r, g, b) / 255;
-  const l = (max + min) / 2, d = max - min;
+// "macramé color". Drop near-white, near-black, greyish and wood tones.
+function isBackdropOrWood([r, g, b]: RGB) {
+  const [h, s, l] = rgbToHsl(r, g, b);
   if (l > 0.78 || l < 0.2) return true;
-  if (d === 0) return true;
-  const s = d / (1 - Math.abs(2 * l - 1));
-  let h = max === r / 255 ? ((g - b) / 255 / d) % 6 : max === g / 255 ? (b - r) / 255 / d + 2 : (r - g) / 255 / d + 4;
-  h = (h * 60 + 360) % 360;
-  // Pale or grayish colors are backdrop shadows, not yarn.
+  // Pale or greyish colors are backdrop shadows, not yarn.
   if (s < 0.4) return true;
   return h >= 15 && h <= 45 && s > 0.25 && s < 0.85 && l > 0.2 && l < 0.88;
 }
-
-const distance = (a: number[], b: number[]) =>
-  Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
 
 async function extract(file: string, count: number): Promise<string[]> {
   const { data } = await sharp(file)
@@ -47,19 +37,19 @@ async function extract(file: string, count: number): Promise<string[]> {
   // wall does not crowd out the product's accent colors.
   const ranked = [...buckets.values()]
     .map((c) => {
-      const rgb = [Math.round(c.r / c.n), Math.round(c.g / c.n), Math.round(c.b / c.n)];
+      const rgb: RGB = [Math.round(c.r / c.n), Math.round(c.g / c.n), Math.round(c.b / c.n)];
       const sat = Math.max(...rgb) - Math.min(...rgb);
       return { rgb, score: c.n * (1 + sat / 128) };
     })
     .sort((a, b) => b.score - a.score);
 
-  const picked: number[][] = [];
+  const picked: RGB[] = [];
   for (const { rgb } of ranked) {
     if (isBackdropOrWood(rgb)) continue;
-    if (picked.every((p) => distance(p, rgb) > 48)) picked.push(rgb);
+    if (picked.every((p) => rgbDistance(p, rgb) > 48)) picked.push(rgb);
     if (picked.length === count) break;
   }
-  return picked.map(([r, g, b]) => hex(r, g, b));
+  return picked.map(rgbToHex);
 }
 
 /** Returns up to `count` hex colors for an image file in src/assets. */

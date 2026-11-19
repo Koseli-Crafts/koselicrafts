@@ -1,76 +1,59 @@
 ---
-version: alpha
-name: Pendleton
-description: Nordic knit: charcoal wool, oat cream, lichen red.
+version: beta
+name: Unspooled
+description: Gift-shop warmth. Cream paper, dark bark ink, one bright theme colour that changes with the hero.
 colors:
-  primary: "#1E1C18"
-  secondary: "#7D776D"
-  tertiary: "#A23C2E"
-  neutral: "#E9DFC7"
-  surface: "#F2E9D2"
-  on-primary: "#F2E9D2"
+  ink: "#2B2118"
+  paper: "#F7F1E8"
+  oat: "#EFE6D8"
+  muted: "#6B5D4C"
+  wood: "#C99A69"
+  theme-christmas: "#F4ABC8"
+  theme-scripture: "#D9B48A"
+  theme-love: "#F3D07E"
+  theme-home: "#BED3AB"
+  theme-custom: "#93C9DA"
 typography:
   display:
-    fontFamily: Fraunces
-    fontSize: 4.5rem
-    fontWeight: 500
-    letterSpacing: "-0.015em"
-  h1:
-    fontFamily: Fraunces
-    fontSize: 2.3rem
-    fontWeight: 500
+    fontFamily: Bricolage Grotesque
+    fontWeight: 800
+    letterSpacing: "-0.035em"
   body:
-    fontFamily: Inter
-    fontSize: 1rem
-    lineHeight: 1.7
+    fontFamily: Bricolage Grotesque
+  devanagari-fallback:
+    fontFamily: Anek Devanagari
+  engraving:
+    fontFamily: Tiro Devanagari Hindi
   label:
-    fontFamily: Inter
-    fontSize: 0.72rem
+    fontSize: 12px
     fontWeight: 600
-    letterSpacing: "0.14em"
-rounded:
-  sm: 2px
-  md: 4px
-  lg: 8px
-spacing:
-  sm: 8px
-  md: 16px
-  lg: 32px
-components:
-  button-primary:
-    backgroundColor: "{colors.tertiary}"
-    textColor: "{colors.on-primary}"
-    rounded: "{rounded.md}"
-    padding: 12px 20px
-  card:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.primary}"
-    rounded: "{rounded.lg}"
-    padding: 24px
+    letterSpacing: "0.24em"
+    textTransform: uppercase
 ---
 ## Overview
 
-A Nordic-knit palette: charcoal wool, oat cream, lichen red accent, quiet serif.
+Real pieces, cut out from their photos, hang on cords and sway. The page is
+cream paper and dark ink; one bright theme colour runs through the hero, the
+workshop band, the engraving section, the open question and the footer, and it
+changes when the hero moves to the next theme.
 
-## Colors
+Source of truth for the look: the "Final design" page of the Koseli Crafts
+redesign canvas. Tokens live in `src/styles/base.css`; themes in
+`src/data/themes.ts`.
 
-The palette is built around high-contrast neutrals and a single accent that drives interaction.
+## Pieces of the kit
 
-- **Primary (`#1E1C18`):** Headlines and core text.
-- **Secondary (`#7D776D`):** Borders, captions, and metadata.
-- **Tertiary (`#A23C2E`):** The sole driver for interaction. Reserve it.
-- **Neutral (`#E9DFC7`):** The page foundation.
-
-## Typography
-
-- **display:** Fraunces 4.5rem
-- **h1:** Fraunces 2.3rem
-- **body:** Inter 1rem
-- **label:** Inter 0.72rem
+- **Tag button** (`TagButton.astro`): dark pill shaped like a gift tag, with a
+  knot and a tassel in the current theme's cord colour. The main action on any
+  screen, usually "Order on WhatsApp".
+- **Bead button** (`.bead`): a round wooden disc for arrows and close.
+- **Stitched chip** (`.stitch`): outlined pill with a dashed inner stitch.
+- **Floating pieces** (`FloatingPieces.astro`): tassels and laser-cut shapes
+  that bob and drift with the pointer.
 
 ## Do's and Don'ts
 
-- **Do** use Tertiary for exactly one action per screen.
-- **Do** let Neutral carry the composition — negative space is a feature.
-- **Don't** introduce gradients. This system is flat on purpose.
-- **Don't** mix Tertiary with alternate accents; the single-accent rule is load-bearing.
+- **Do** show pieces as cut-outs hanging from a cord, not as photos in boxes.
+- **Do** keep text in ink on paper or on the theme colour; check contrast.
+- **Don't** add a second accent colour; the theme colour is the only one.
+- **Don't** use emoji as icons.

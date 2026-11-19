@@ -1,0 +1,329 @@
+---
+import TagButton from '../ui/TagButton.astro';
+import FloatingPieces, { type FloatSlot } from '../ui/FloatingPieces.astro';
+import { FIRST_THEME } from '../../data/themes';
+import { engravingLink } from '../../lib/contact';
+
+const AROUND_PLATE: FloatSlot[] = [
+  { left: '14%', top: '470px', size: 140, depth: 0.7, kind: 'tassel', rotate: -16 },
+  { left: '76%', top: '300px', size: 100, depth: 0.8, kind: 'wood-0', rotate: 14 },
+  { left: '24%', top: '300px', size: 80, depth: 1, kind: 'wood-1', rotate: -10 },
+  { left: '72%', top: '560px', size: 120, depth: 0.6, kind: 'wood-2', rotate: 20 },
+  { left: '88%', top: '640px', size: 230, depth: -1.7, kind: 'tassel', rotate: 24, blur: 9, layer: 8 },
+  { left: '2%', top: '160px', size: 170, depth: -1.5, kind: 'wood-0', rotate: -22, blur: 7, layer: 8 }
+];
+
+const SAMPLE_WORDS = 'परमप्रभु\nमेरो गोठालो\nहुनुहुन्छ';
+---
+
+<section id="words" class="words" data-parallax data-engrave>
+  <div class="words-ghost" aria-hidden="true">
+    <p class="drift-left">Yours</p>
+  </div>
+
+  <FloatingPieces slots={AROUND_PLATE} />
+
+  <div class="words-intro">
+    <span class="eyebrow">Custom engraving</span>
+    <h2>Your words.<br />Our wood.</h2>
+    <p>A verse, a name or a blessing, in Nepali or English. Type it below and watch it appear on the plate.</p>
+  </div>
+
+  <div class="words-groups">
+    <p class="words-groups-title">For a church or group?</p>
+    <p>Tell us how many pieces you need and what they should say, and we’ll plan the order with you.</p>
+  </div>
+
+  <div class="plate-anchor follows-pointer" style={{ '--shift-x': '-10px', '--shift-y': '-6px' }}>
+    <div class="sway plate-hang">
+      <span class="plate-cord" aria-hidden="true"></span>
+      <div class="plate">
+        <p data-plate-text data-sample={SAMPLE_WORDS}>{SAMPLE_WORDS}</p>
+      </div>
+      <img class="plate-tassel" data-theme-tassel src={FIRST_THEME.floats.tassel} alt="" aria-hidden="true" />
+    </div>
+  </div>
+
+  <div class="words-form">
+    <label for="engrave-words">What should we engrave?</label>
+    <div class="words-pill">
+      <input id="engrave-words" type="text" placeholder="e.g. परमप्रभु मेरो गोठालो हुनुहुन्छ" data-engrave-input />
+      <TagButton href={engravingLink('')} label="Send on WhatsApp" flat data-engrave-send />
+    </div>
+  </div>
+</section>
+
+<script>
+  import { engravingLink } from '../../lib/contact';
+
+  const section = document.querySelector<HTMLElement>('[data-engrave]')!;
+  const input = section.querySelector<HTMLInputElement>('[data-engrave-input]')!;
+  const plate = section.querySelector<HTMLElement>('[data-plate-text]')!;
+  const send = section.querySelector<HTMLAnchorElement>('[data-engrave-send]')!;
+
+  input.addEventListener('input', () => {
+    const words = input.value.trim();
+    plate.textContent = words || plate.dataset.sample!;
+    send.href = engravingLink(words);
+  });
+</script>
+
+<style>
+  .words {
+    position: relative;
+    min-height: 1000px;
+    overflow: hidden;
+    background: var(--theme-bg);
+    transition: background 1s;
+  }
+
+  .words-ghost {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  .words-ghost p {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: min(30vw, 430px);
+    line-height: 1;
+    color: #fff;
+    white-space: nowrap;
+  }
+
+  .words-intro {
+    position: absolute;
+    z-index: 6;
+    left: 44px;
+    top: 70px;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .words-intro h2 {
+    font-size: 54px;
+    line-height: 0.95;
+  }
+
+  .words-intro p {
+    margin-top: 4px;
+    font-size: 17px;
+    line-height: 1.55;
+  }
+
+  .words-groups {
+    position: absolute;
+    z-index: 6;
+    right: 44px;
+    top: 70px;
+    max-width: 280px;
+    padding: 20px 22px;
+    border-radius: 20px;
+    background: rgb(255 255 255 / 0.6);
+    backdrop-filter: blur(6px);
+  }
+
+  .words-groups p {
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .words-groups .words-groups-title {
+    margin-bottom: 8px;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 1.05;
+  }
+
+  .plate-anchor {
+    position: absolute;
+    z-index: 5;
+    left: 50%;
+    top: 0;
+    width: 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .plate-hang {
+    position: absolute;
+    top: 0;
+    width: 520px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .plate-cord {
+    display: block;
+    width: 2px;
+    height: 150px;
+    background: rgb(43 33 24 / 0.6);
+  }
+
+  .plate {
+    width: 520px;
+    height: 520px;
+    box-sizing: border-box;
+    padding: 80px;
+    border-radius: 50%;
+    background: var(--color-wood);
+    box-shadow: inset 0 0 0 12px var(--color-wood-rim), inset 0 0 90px rgb(90 55 25 / 0.35), 0 70px 110px rgb(43 33 24 / 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .plate p {
+    font-family: var(--font-plate);
+    font-size: 40px;
+    line-height: 1.35;
+    color: var(--color-wood-ink);
+    text-shadow: 0 1px 0 rgb(255 225 180 / 0.45);
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+  }
+
+  .plate-tassel {
+    position: relative;
+    z-index: -1;
+    width: 190px;
+    margin-top: -40px;
+  }
+
+  .words-form {
+    position: absolute;
+    z-index: 10;
+    left: 50%;
+    bottom: 56px;
+    transform: translateX(-50%);
+    width: min(760px, calc(100% - 48px));
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .words-form label {
+    padding-left: 26px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .words-pill {
+    display: flex;
+    gap: 8px;
+    padding: 8px;
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: 0 30px 60px rgb(43 33 24 / 0.25);
+  }
+
+  .words-pill input {
+    flex: 1;
+    min-width: 0;
+    min-height: 56px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-ink);
+    font: 500 19px var(--font-body);
+    outline-offset: 2px;
+  }
+
+  .words-pill input::placeholder {
+    color: #757575;
+  }
+
+  .words-pill :global(.tag-btn) {
+    flex: none;
+  }
+
+  @media (max-width: 900px) {
+    .words-ghost p {
+      font-size: 120px;
+    }
+
+    .plate-hang {
+      width: 300px;
+    }
+
+    .plate {
+      width: 300px;
+      height: 300px;
+      padding: 44px;
+    }
+
+    .plate p {
+      font-size: 28px;
+    }
+  }
+
+  /* ---------- Phone: everything stacks in reading order ---------- */
+  @media (max-width: 760px) {
+    .words {
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+      padding: 70px 18px 50px;
+    }
+
+    .words-intro,
+    .words-groups,
+    .plate-anchor,
+    .words-form {
+      position: relative;
+      inset: auto;
+      transform: none;
+      max-width: none;
+      width: auto;
+    }
+
+    .words-intro h2 {
+      font-size: 44px;
+    }
+
+    .plate-anchor {
+      display: flex;
+      justify-content: center;
+    }
+
+    .plate-hang {
+      position: relative;
+    }
+
+    .plate-cord {
+      height: 50px;
+    }
+
+    .words-pill {
+      flex-wrap: wrap;
+      border-radius: 28px;
+    }
+
+    .words-pill input,
+    .words-pill :global(.tag-btn) {
+      flex: 1 0 100%;
+    }
+
+    .words-pill :global(.tag-btn) {
+      justify-content: center;
+    }
+
+    .words-form label {
+      padding-left: 8px;
+    }
+  }
+</style>

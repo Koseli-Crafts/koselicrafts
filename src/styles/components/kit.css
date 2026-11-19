@@ -1,0 +1,214 @@
+/* Koseli kit: gift-tag buttons, wooden-bead buttons, stitched chips. */
+@layer components {
+  .tag-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 56px;
+    padding: 0 64px 0 30px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font: 700 14px var(--font-body);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    box-shadow: 0 12px 24px rgb(43 33 24 / 0.28);
+    transition: transform 0.35s cubic-bezier(0.3, 1.5, 0.5, 1), box-shadow 0.3s;
+  }
+
+  .tag-btn--flat {
+    box-shadow: none;
+  }
+
+  .tag-btn--large {
+    min-height: 68px;
+    padding: 0 80px 0 34px;
+    font-size: 16px;
+  }
+
+  .tag-btn--large .tag-btn-knot {
+    right: 38px;
+    top: calc(50% - 6px);
+    width: 12px;
+    height: 12px;
+  }
+
+  .tag-btn--large .tag-btn-tassel {
+    right: 25px;
+    width: 38px;
+  }
+
+  .tag-btn:hover,
+  .tag-btn:focus-visible {
+    transform: translateY(-3px);
+  }
+
+  .tag-btn:hover {
+    box-shadow: 0 18px 30px rgb(43 33 24 / 0.32);
+  }
+
+  .tag-btn--flat:hover {
+    box-shadow: none;
+  }
+
+  .tag-btn:active {
+    transform: translateY(1px) scale(0.97);
+  }
+
+  .tag-btn:focus-visible {
+    outline: 3px solid var(--color-ink);
+    outline-offset: 5px;
+  }
+
+  .tag-btn-arrow {
+    display: inline-block;
+    transition: transform 0.4s;
+  }
+
+  .tag-btn:hover .tag-btn-arrow {
+    transform: translateX(5px);
+  }
+
+  .tag-btn:hover .tag-btn-arrow--down {
+    transform: translateY(4px);
+  }
+
+  .tag-btn-knot {
+    position: absolute;
+    right: 31px;
+    top: calc(50% - 5px);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--color-paper);
+  }
+
+  .tag-btn-tassel {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    width: 30px;
+    transform-origin: 50% 0;
+    pointer-events: none;
+  }
+
+  .tag-btn-tassel img {
+    display: block;
+    width: 100%;
+    filter: drop-shadow(0 6px 6px rgb(43 33 24 / 0.3));
+  }
+
+  .tag-btn:hover .tag-btn-tassel,
+  .tag-btn:focus-visible .tag-btn-tassel {
+    animation: tassel-swing 1.1s ease-in-out;
+  }
+
+  /* Touch screens have no hover, so the tassel swings now and then on its own. */
+  @media (hover: none) and (prefers-reduced-motion: no-preference) {
+    .tag-btn-tassel {
+      animation: tassel-swing 1.1s ease-in-out 1.5s infinite;
+    }
+  }
+
+  .bead {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--color-bead-ink);
+    font: 300 22px var(--font-body);
+    line-height: 1;
+    text-shadow: 0 0 1px rgb(58 31 13 / 0.9), 0 0 3px rgb(120 62 24 / 0.45);
+    background: var(--wood-disc) center / 100% 100% no-repeat;
+    filter: drop-shadow(0 8px 10px rgb(43 33 24 / 0.28));
+    transition: transform 0.45s cubic-bezier(0.3, 1.5, 0.5, 1);
+  }
+
+  .bead:hover {
+    transform: translateY(-2px) rotate(-8deg);
+  }
+
+  .bead:active {
+    transform: translateY(2px);
+    filter: drop-shadow(0 3px 4px rgb(43 33 24 / 0.3));
+  }
+
+  .bead:focus-visible {
+    outline: 3px solid var(--color-ink);
+    outline-offset: 4px;
+  }
+
+  .bead--small {
+    width: 48px;
+    height: 48px;
+    font-size: 18px;
+  }
+
+  .stitch {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 20px;
+    border-radius: 999px;
+    border: 2px solid currentColor;
+    outline: 1.5px dashed currentColor;
+    outline-offset: -7px;
+    font: 600 15px var(--font-body);
+  }
+
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+  }
+
+  .wavy-link {
+    text-decoration: none;
+    text-underline-offset: 7px;
+  }
+
+  .wavy-link:hover,
+  .wavy-link:focus-visible {
+    text-decoration: underline wavy 2px;
+  }
+
+  @media (max-width: 760px) {
+    .tag-btn {
+      font-size: 12px;
+      min-height: 50px;
+    }
+
+    .tag-btn--large {
+      font-size: 13px;
+      min-height: 58px;
+      padding: 0 56px 0 24px;
+      letter-spacing: 0.1em;
+    }
+
+    .tag-btn--large .tag-btn-knot {
+      right: 31px;
+    }
+
+    .tag-btn--large .tag-btn-tassel {
+      right: 19px;
+      width: 32px;
+    }
+
+    .bead {
+      width: 50px;
+      height: 50px;
+      font-size: 18px;
+    }
+  }
+}

@@ -1,9 +1,16 @@
 // Plain-English validator for src/data/products.json.
 // Run with: npm run check
 import { readFileSync, readdirSync } from 'node:fs';
+import { parse } from 'yaml';
 
 const DATA = 'src/data/products.json';
 const IMAGE_DIR = 'src/assets/products';
+
+// The allowed cord colours and themes are the choices in the Pages CMS form.
+const cmsFields = parse(readFileSync('.pages.yml', 'utf8')).content.find((c) => c.name === 'products').fields;
+const choicesOf = (fieldName) => cmsFields.find((f) => f.name === fieldName).options.values.map((v) => v.name);
+const CORDS = choicesOf('cord');
+const THEMES = choicesOf('themes');
 
 const errors = [];
 const warnings = [];
@@ -40,11 +47,24 @@ products.forEach((product, i) => {
       `   Pages CMS rejects a bare number with "Expected string, received number".`
     );
   }
+  if (product?.cord !== undefined && !CORDS.includes(product.cord)) {
+    errors.push(`${where}: "cord" must be one of ${CORDS.join(', ')} (it is "${product.cord}").`);
+  }
+  if (product?.themes !== undefined) {
+    const unknown = Array.isArray(product.themes) ? product.themes.filter((t) => !THEMES.includes(t)) : [product.themes];
+    if (unknown.length) errors.push(`${where}: "themes" may only use ${THEMES.join(', ')} (found ${unknown.join(', ')}).`);
+  }
+  if (product?.swatchColors !== undefined) {
+    const bad = Array.isArray(product.swatchColors)
+      ? product.swatchColors.filter((hex) => !/^#[0-9a-f]{6}$/i.test(String(hex).trim()))
+      : [product.swatchColors];
+    if (bad.length) errors.push(`${where}: "swatchColors" must be colour codes like "#d71369" (found ${bad.join(', ')}).`);
+  }
   if (!Array.isArray(product?.images) || product.images.length === 0) {
     errors.push(`${where}: "images" must list at least one image filename.`);
     return;
   }
-  for (const imageRef of product.images) {
+  for (const imageRef of [...product.images, ...(product.cutout ? [product.cutout] : [])]) {
     const filename = basename(imageRef);
     used.add(filename);
     if (!String(imageRef).startsWith(PREFIX)) {

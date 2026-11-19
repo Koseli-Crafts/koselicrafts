@@ -1,0 +1,28 @@
+---
+// A gift-tag shaped link with a knot and a tassel that follows the current theme.
+import type { HTMLAttributes } from 'astro/types';
+import { FIRST_THEME } from '../../data/themes';
+
+interface Props extends HTMLAttributes<'a'> {
+  href: string;
+  label: string;
+  arrow?: 'right' | 'down';
+  flat?: boolean;
+  size?: 'regular' | 'large';
+}
+
+const { label, arrow = 'right', flat = false, size = 'regular', class: className, ...attrs } = Astro.props;
+const isExternal = attrs.href.startsWith('http');
+---
+
+<a
+  class:list={['tag-btn', flat && 'tag-btn--flat', size === 'large' && 'tag-btn--large', className]}
+  target={isExternal ? '_blank' : undefined}
+  rel={isExternal ? 'noopener' : undefined}
+  {...attrs}
+>
+  <span data-tag-label>{label}</span>
+  <span class:list={['tag-btn-arrow', arrow === 'down' && 'tag-btn-arrow--down']} aria-hidden="true">{arrow === 'down' ? '↓' : '→'}</span>
+  <span class="tag-btn-knot" aria-hidden="true"></span>
+  <span class="tag-btn-tassel" aria-hidden="true"><img data-theme-tassel src={FIRST_THEME.floats.tassel} alt="" /></span>
+</a>

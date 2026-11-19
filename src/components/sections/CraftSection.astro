@@ -1,0 +1,492 @@
+---
+import workshopHands from '../../assets/workshop-hands.webp';
+import mayaOrnament from '../../assets/products/cutout-maya-pink.webp';
+import godsLove from '../../assets/products/cutout-gods-love.webp';
+import FloatingPieces, { type FloatSlot } from '../ui/FloatingPieces.astro';
+import { WOOD } from '../../data/decor';
+import { FIRST_THEME } from '../../data/themes';
+
+// Positions are relative to the workshop photo, so the pieces orbit it and never cover the text.
+const AROUND_PHOTO: FloatSlot[] = [
+  { left: '84%', top: '-40px', size: 110, depth: 0.6, kind: 'wood-0', rotate: 12, layer: 5 },
+  { left: '90%', top: '330px', size: 140, depth: 1, kind: 'tassel', rotate: 18, layer: 5 },
+  { left: '-12%', top: '470px', size: 96, depth: 0.9, kind: 'wood-1', rotate: -18, layer: 5 },
+  { left: '70%', top: '520px', size: 180, depth: -1.6, kind: 'wood-2', rotate: -24, blur: 6, layer: 7 },
+  { left: '96%', top: '90px', size: 120, depth: 0.8, kind: 'tassel', rotate: -14, layer: 3 }
+];
+
+const STEPS = [
+  { no: '01', title: 'Engraved on our laser', body: 'Wood and MDF, cut and engraved in our own Kathmandu workshop.', image: WOOD.ma, followsTheme: false, width: 110, tone: 'dark', tilt: -3, drop: 0 },
+  { no: '02', title: 'Knotted by hand', body: 'Macramé tied from cotton cord, knot by knot, at the bench.', image: FIRST_THEME.floats.tassel, followsTheme: true, width: 96, tone: 'paper', tilt: 2, drop: 40 },
+  { no: '03', title: 'Ready to give', body: 'A koseli, a gift, for a home, a tree, a church or someone you love.', image: mayaOrnament.src, followsTheme: false, width: 120, tone: 'white', tilt: -1.5, drop: 14 }
+];
+---
+
+<section id="made" class="made" data-parallax>
+  <div class="made-intro">
+    <div class="made-copy">
+      <span class="eyebrow themed-text">Our workshop</span>
+      <h2 class="rise">Hand-knotted<br /><span class="themed-text">in Kathmandu.</span></h2>
+      <p>Koseli Crafts is a small workshop in Kathmandu. Wood is cut and engraved on our own laser, and cord is knotted by hand at the bench.</p>
+      <div class="chips">
+        <span class="stitch">Laser-cut wood</span>
+        <span class="stitch">Cotton cord</span>
+        <span class="stitch">Finished by hand</span>
+      </div>
+    </div>
+    <div class="photo-wrap follows-pointer" style={{ '--shift-x': '-12px', '--shift-y': '-8px' }}>
+      <div class="photo rise">
+        <img src={workshopHands.src} width={workshopHands.width} height={workshopHands.height} alt="Hands knotting a blue macramé hanging on a wooden dowel" loading="lazy" />
+      </div>
+      <FloatingPieces slots={AROUND_PHOTO} />
+    </div>
+  </div>
+
+  <div class="steps-band">
+    <svg class="steps-line" aria-hidden="true" viewBox="0 0 1000 60" preserveAspectRatio="none">
+      <path d="M0 10 Q 500 70 1000 10" fill="none" stroke="currentColor" stroke-width="2.5" vector-effect="non-scaling-stroke"></path>
+    </svg>
+    <p class="swipe-hint" aria-hidden="true">Swipe the line →</p>
+    <ol class="steps">
+      {STEPS.map((step, index) => (
+        <li class="sway step" style={{ marginTop: `${step.drop}px`, animationDelay: `-${(index * 1.4).toFixed(1)}s`, animationDuration: `${5 + index}s` }}>
+          <span class="peg" aria-hidden="true"></span>
+          <div class:list={['step-card', `step-card--${step.tone}`]} style={{ transform: `rotate(${step.tilt}deg)` }}>
+            <div class="step-top">
+              <span class="step-no">{step.no}</span>
+              <img
+                src={step.image}
+                data-theme-tassel={step.followsTheme ? '' : undefined}
+                alt=""
+                aria-hidden="true"
+                style={{ width: `${step.width}px`, transform: `rotate(${step.tilt * -4}deg)` }}
+              />
+            </div>
+            <h3>{step.title}</h3>
+            <p>{step.body}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+
+  <div class="scripts-band">
+    <p class="scripts-ghost drift-right" aria-hidden="true">IN YOUR SCRIPT</p>
+    <div class="scripts-inner">
+      <div class="scripts-head">
+        <h2>Engraved in<br /><span class="themed-text">your script.</span></h2>
+        <p>Scripture and words in Nepali, Tibetan/Dolpo and English, cut by our laser.</p>
+      </div>
+      <p class="swipe-hint swipe-hint--light" aria-hidden="true">Swipe the plates →</p>
+      <ul class="scripts">
+        <li class="sway script" style={{ animationDelay: '-1s' }}>
+          <span class="script-cord" aria-hidden="true" style={{ height: '90px' }}></span>
+          <span class="plate" lang="ne">माया</span>
+          <span class="script-name">Nepali</span>
+          <span class="script-note">On Maya, both Psalm 23 pieces and the 1 John 4:19 hangings.</span>
+        </li>
+        <li class="sway script" style={{ animationDelay: '-2.6s' }}>
+          <span class="script-cord" aria-hidden="true" style={{ height: '40px' }}></span>
+          <div class="script-crop">
+            <img src={godsLove.src} alt="The God’s Love plaque, engraved in Tibetan/Dolpo script" loading="lazy" />
+          </div>
+          <span class="script-name">Tibetan · Dolpo</span>
+          <span class="script-note">On the God’s Love wall hanging.</span>
+        </li>
+        <li class="sway script" style={{ animationDelay: '-3.8s' }}>
+          <span class="script-cord" aria-hidden="true" style={{ height: '90px' }}></span>
+          <span class="plate plate--english">faith</span>
+          <span class="script-name">English</span>
+          <span class="script-note">On the Love and Faith ornaments, or your own words.</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .made {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  .themed-text {
+    color: var(--theme-bg);
+    transition: color 1s;
+  }
+
+  .made-intro {
+    position: relative;
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 150px 44px 140px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: 64px;
+    align-items: center;
+  }
+
+  .made-copy {
+    position: relative;
+    z-index: 6;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .made-copy .eyebrow {
+    font-size: 13px;
+  }
+
+  .made-copy h2 {
+    font-size: clamp(60px, 7.4vw, 112px);
+    line-height: 0.9;
+    letter-spacing: -0.035em;
+    color: var(--color-paper);
+  }
+
+  .made-copy p {
+    max-width: 470px;
+    font-size: 20px;
+    line-height: 1.6;
+    color: #e3d8c6;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .photo-wrap {
+    position: relative;
+    z-index: 4;
+    justify-self: center;
+    width: min(440px, 100%);
+  }
+
+  .photo {
+    overflow: hidden;
+    border: 10px solid var(--color-paper);
+    border-radius: 220px 220px 28px 28px;
+    box-shadow: 0 60px 120px rgb(0 0 0 / 0.55);
+  }
+
+  .photo img {
+    display: block;
+    width: 100%;
+    height: 580px;
+    object-fit: cover;
+  }
+
+  /* ---------- Three steps hanging from a line ---------- */
+  .steps-band {
+    position: relative;
+    padding: 0 0 120px;
+    background: var(--theme-bg);
+    color: var(--color-ink);
+    transition: background 1s;
+  }
+
+  .steps-line {
+    display: block;
+    width: 100%;
+    height: 60px;
+  }
+
+  .swipe-hint {
+    display: none;
+    margin: -6px 20px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-align: right;
+  }
+
+  .swipe-hint--light {
+    margin: -40px 0 0;
+    color: var(--color-sand);
+  }
+
+  .steps {
+    max-width: 1280px;
+    margin: -14px auto 0;
+    padding: 0 44px;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    align-items: start;
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .peg {
+    position: relative;
+    z-index: 2;
+    display: block;
+    width: 14px;
+    height: 30px;
+    margin: 0 auto -8px;
+    border-radius: 3px;
+    background: #9c6b3e;
+    box-shadow: 0 3px 6px rgb(0 0 0 / 0.25);
+  }
+
+  .step-card {
+    min-height: 360px;
+    box-sizing: border-box;
+    padding: 34px;
+    border-radius: 30px;
+    box-shadow: 0 40px 70px rgb(43 33 24 / 0.28);
+  }
+
+  .step-card--dark { background: var(--color-ink); color: var(--color-paper); }
+  .step-card--paper { background: var(--color-paper); color: var(--color-ink); }
+  .step-card--white { background: #fff; color: var(--color-ink); }
+
+  .step-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .step-top img {
+    height: auto;
+    filter: drop-shadow(0 16px 14px rgb(0 0 0 / 0.25));
+  }
+
+  .step-no {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 140px;
+    line-height: 0.8;
+  }
+
+  .step-card h3 {
+    margin-top: 26px;
+    font-size: 40px;
+    line-height: 1;
+    color: inherit;
+  }
+
+  .step-card p {
+    margin-top: 12px;
+    font-size: 17px;
+    line-height: 1.55;
+  }
+
+  /* ---------- Script plates ---------- */
+  .scripts-band {
+    position: relative;
+    padding: 130px 44px 150px;
+    overflow: hidden;
+  }
+
+  .scripts-ghost {
+    position: absolute;
+    inset: 40px 0 auto;
+    text-align: center;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 220px;
+    line-height: 1;
+    color: rgb(247 241 232 / 0.07);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .scripts-inner {
+    position: relative;
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+  }
+
+  .scripts-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .scripts-head h2 {
+    font-size: clamp(56px, 7vw, 112px);
+    line-height: 0.9;
+    color: var(--color-paper);
+  }
+
+  .scripts-head p {
+    max-width: 340px;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--color-sand);
+  }
+
+  .scripts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    align-items: start;
+  }
+
+  .script {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .script-cord {
+    width: 2px;
+    background: rgb(247 241 232 / 0.5);
+  }
+
+  .plate {
+    width: 300px;
+    max-width: 100%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--color-wood);
+    box-shadow: inset 0 0 0 10px var(--color-wood-rim), inset 0 0 60px rgb(90 55 25 / 0.35), 0 50px 80px rgb(0 0 0 / 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-plate);
+    font-size: 92px;
+    color: var(--color-wood-ink);
+  }
+
+  .plate--english {
+    font-style: italic;
+    font-size: 80px;
+  }
+
+  .script-crop {
+    width: 300px;
+    max-width: 100%;
+    height: 350px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+  }
+
+  .script-crop img {
+    height: 720px;
+    width: auto;
+    max-width: none;
+    filter: drop-shadow(0 40px 50px rgb(0 0 0 / 0.5));
+  }
+
+  .script-name {
+    margin-top: 28px;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 30px;
+  }
+
+  .script-note {
+    margin-top: 4px;
+    font-size: 15px;
+    color: var(--color-sand);
+    text-align: center;
+  }
+
+  @media (max-width: 900px) {
+    .made-intro,
+    .steps,
+    .scripts {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .scripts-ghost {
+      font-size: 120px;
+    }
+  }
+
+  /* ---------- Phone: steps and plates become swipeable rows ---------- */
+  @media (max-width: 760px) {
+    .made-intro {
+      padding: 80px 20px 90px;
+      gap: 44px;
+    }
+
+    .made-copy h2 {
+      font-size: 44px;
+    }
+
+    .photo img {
+      height: 420px;
+    }
+
+    .swipe-hint {
+      display: block;
+    }
+
+    .steps,
+    .scripts {
+      grid-template-columns: none;
+      grid-auto-flow: column;
+      grid-auto-columns: 80%;
+      gap: 16px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+
+    .steps::-webkit-scrollbar,
+    .scripts::-webkit-scrollbar {
+      display: none;
+    }
+
+    .steps > *,
+    .scripts > * {
+      scroll-snap-align: center;
+    }
+
+    .steps {
+      padding: 0 20px 50px;
+    }
+
+    .scripts {
+      padding-bottom: 30px;
+    }
+
+    .step-no {
+      font-size: 92px;
+    }
+
+    .step-card h3 {
+      font-size: 28px;
+    }
+
+    .plate,
+    .script-crop {
+      width: 250px;
+    }
+
+    .plate {
+      font-size: 72px;
+    }
+
+    .plate--english {
+      font-size: 62px;
+    }
+
+    .scripts-band {
+      padding: 80px 20px 90px;
+    }
+  }
+</style>

@@ -1,0 +1,101 @@
+---
+// Loose tassels and wooden shapes that bob around a section and drift with the
+// pointer. Their pictures follow the current theme (see scripts/theme.ts).
+import { FIRST_THEME, type FloatKind } from '../../data/themes';
+
+export interface FloatSlot {
+  left: string;
+  top: string;
+  size: number;
+  /** How far it drifts with the pointer; negative drifts the other way. */
+  depth: number;
+  kind: FloatKind;
+  rotate: number;
+  blur?: number;
+  layer?: number;
+}
+
+interface Props {
+  slots: FloatSlot[];
+  /** Pop in when the hero changes theme. */
+  pop?: boolean;
+  shadowColor?: string;
+  /** Seconds between neighbouring pieces' bobbing, so they never move in step. */
+  bobStagger?: number;
+  class?: string;
+}
+
+const { slots, pop = false, shadowColor = 'rgba(0,0,0,0.3)', bobStagger = 1.1, class: className } = Astro.props;
+---
+
+{
+  slots.map((slot, index) => (
+    <div
+      class:list={['float-piece follows-pointer', className]}
+      aria-hidden="true"
+      style={{
+        left: slot.left,
+        top: slot.top,
+        width: `${slot.size}px`,
+        zIndex: slot.layer ?? 3,
+        '--shift-x': `${Math.round(slot.depth * 34)}px`,
+        '--shift-y': `${Math.round(slot.depth * 22)}px`
+      }}
+    >
+      <div class:list={[pop && 'float-pop']} style={pop ? { animationDelay: `${(0.08 * index + 0.15).toFixed(2)}s` } : undefined}>
+        <div class="bob" style={{ animationDelay: `-${(index * bobStagger).toFixed(1)}s`, animationDuration: `${5 + (index % 3)}s` }}>
+          <img
+            data-float={slot.kind}
+            src={FIRST_THEME.floats[slot.kind]}
+            alt=""
+            style={{
+              transform: `rotate(${slot.rotate}deg)`,
+              filter: `blur(${slot.blur ?? 0}px) drop-shadow(0 26px 22px ${shadowColor})`
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  ))
+}
+
+<style>
+  .float-piece {
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .float-piece img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  @keyframes float-pop {
+    from {
+      opacity: 0;
+      transform: translate(calc(var(--dir, 1) * 40vw), 0) scale(0.4) rotate(-40deg);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* The hero adds .is-playing again on every theme change to replay this. */
+  :global(.is-playing) .float-pop {
+    animation: float-pop 1.1s cubic-bezier(0.2, 0.9, 0.25, 1.15) both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.is-playing) .float-pop {
+      animation-duration: 0.01s;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .float-piece {
+      zoom: 0.55;
+    }
+  }
+</style>

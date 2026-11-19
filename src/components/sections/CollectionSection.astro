@@ -1,0 +1,767 @@
+---
+import TagButton from '../ui/TagButton.astro';
+import { THEMES } from '../../data/themes';
+import { displayHeight, loadCatalog } from '../../lib/catalog';
+import { piecesLabel } from '../../lib/format';
+
+const products = await loadCatalog();
+const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
+---
+
+<section id="collection" class="collection" data-collection>
+  <div class="ghost" data-ghost aria-hidden="true">KOSELI</div>
+
+  <div class="collection-head">
+    <div class="collection-labels">
+      <span class="eyebrow">Shop the collection</span>
+      <span class="eyebrow muted" data-count-label>{piecesLabel(products.length)}</span>
+    </div>
+    <div role="group" aria-label="Filter by theme" class="tabs">
+      <button type="button" class="tab" data-filter="all" data-ghost-word="KOSELI" aria-pressed="true">All</button>
+      {THEMES.map((theme) => (
+        <button type="button" class="tab" data-filter={theme.id} data-ghost-word={theme.word.toUpperCase()} aria-pressed="false">{theme.nav}</button>
+      ))}
+    </div>
+  </div>
+
+  <p class="side-note hide-below-900">Made in Kathmandu, Nepal</p>
+
+  <div class="cluster" data-cluster>
+    {products.map((product, index) => (
+      <button
+        type="button"
+        class="item"
+        data-item={index}
+        data-themes={product.themes.join(' ')}
+        aria-label={`See ${product.title}, ${product.priceLabel}`}
+      >
+        <img
+          src={product.image.src}
+          data-original-src={product.image.src}
+          width={product.image.width}
+          height={product.image.height}
+          alt=""
+          loading={index < 5 ? 'eager' : 'lazy'}
+          style={{ '--display-height': displayHeight(product.image) }}
+        />
+        <span class="item-shadow" aria-hidden="true"></span>
+      </button>
+    ))}
+
+    <div class="panel" data-panel aria-live="polite">
+      {products.map((product, index) => (
+        <div class="panel-body" data-panel-for={index} hidden>
+          <span class="eyebrow muted">{product.kind} · {product.cordLabel}</span>
+          <h3>{product.title}</h3>
+          <p class="panel-text">{product.description}</p>
+          {product.swatches.length > 1 && (
+            <div class="swatches">
+              <span class="eyebrow muted">Macramé colour · <span data-swatch-state>original</span></span>
+              <div role="radiogroup" aria-label="Macramé colour" class="swatch-row" data-swatch-group={index} data-source-color={product.swatches[0].hex}>
+                {product.swatches.map((swatch, k) => {
+                  const label = k === 0 ? `Original colour, ${swatch.name}` : capitalize(swatch.name);
+                  return (
+                    <button
+                      type="button"
+                      role="radio"
+                      class="swatch"
+                      aria-checked={k === 0 ? 'true' : 'false'}
+                      tabindex={k === 0 ? 0 : -1}
+                      aria-label={label}
+                      title={label}
+                      data-swatch-color={swatch.hex}
+                    >
+                      <span style={{ background: swatch.hex }}></span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+          <div class="panel-order">
+            <span class="price">{product.priceLabel}</span>
+            <TagButton href={product.orderLink} label="Order on WhatsApp" />
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="close-wrap" data-close-wrap hidden>
+      <button type="button" class="bead bead--small" data-unselect aria-label="Back to the collection">✕</button>
+    </div>
+  </div>
+
+  <div class="collection-foot">
+    <div class="step hide-below-760">
+      <span class="step-no" data-step-no>01</span>
+      <span class="step-rule"></span>
+      <span class="step-label" data-step-label>The<br />collection</span>
+    </div>
+    <div class="pager" data-pager>
+      <button type="button" class="bead bead--small" data-cluster-step="-1" aria-label="Previous pieces">←</button>
+      <div class="dots" aria-hidden="true">
+        {products.map(() => <span class="dot"></span>)}
+      </div>
+      <button type="button" class="bead bead--small" data-cluster-step="1" aria-label="Next pieces">→</button>
+    </div>
+    <span class="eyebrow hide-below-900" data-step-hint>Tap a piece to look closer</span>
+  </div>
+</section>
+
+<script>
+  import { piecesLabel } from '../../lib/format';
+  import { recolorImage } from '../../lib/recolor';
+  import { SHOW_THEME_EVENT } from '../../scripts/theme';
+
+  const section = document.querySelector<HTMLElement>('[data-collection]')!;
+  const cluster = section.querySelector<HTMLElement>('[data-cluster]')!;
+  const items = [...section.querySelectorAll<HTMLButtonElement>('[data-item]')];
+  const panel = section.querySelector<HTMLElement>('[data-panel]')!;
+  const panelBodies = [...section.querySelectorAll<HTMLElement>('[data-panel-for]')];
+  const tabs = [...section.querySelectorAll<HTMLButtonElement>('[data-filter]')];
+  const dots = [...section.querySelectorAll<HTMLElement>('.dot')];
+  const ghost = section.querySelector<HTMLElement>('[data-ghost]')!;
+  const countLabel = section.querySelector<HTMLElement>('[data-count-label]')!;
+  const closeWrap = section.querySelector<HTMLElement>('[data-close-wrap]')!;
+  const pager = section.querySelector<HTMLElement>('[data-pager]')!;
+  const stepNo = section.querySelector<HTMLElement>('[data-step-no]')!;
+  const stepLabel = section.querySelector<HTMLElement>('[data-step-label]')!;
+  const stepHint = section.querySelector<HTMLElement>('[data-step-hint]')!;
+  const phone = window.matchMedia('(max-width: 760px)');
+
+  let filter = 'all';
+  let centered = 2;
+  let selected = -1;
+
+  const visibleItems = () =>
+    items.filter((item) => filter === 'all' || item.dataset.themes!.split(' ').includes(filter));
+
+  interface Spot { x: number; y: number; scale: number; opacity: number; rotate: number; layer: number; blur: number }
+
+  /**
+   * On phones the open piece sits between the filter buttons and the details
+   * panel. It is shown at the design's 80% size, or smaller when a tall panel
+   * leaves less room, so it never runs under either of them.
+   */
+  const PHONE_OPEN_SCALE = 0.8;
+  const BREATHING_ROOM = 8;
+  const filterRow = section.querySelector<HTMLElement>('.tabs')!;
+
+  function phoneOpenSpot(item: HTMLElement): Spot {
+    const roomTop = filterRow.getBoundingClientRect().bottom - cluster.getBoundingClientRect().top + BREATHING_ROOM;
+    const roomBottom = panel.offsetTop - BREATHING_ROOM;
+    const scale = Math.min(PHONE_OPEN_SCALE, (roomBottom - roomTop) / item.offsetHeight);
+    const restingBottom = item.offsetTop + item.offsetHeight;
+    return { x: 0, y: roomBottom - restingBottom, scale, opacity: 1, rotate: 0, layer: 20, blur: 0 };
+  }
+
+  /** The open piece: beside the panel on wide screens, between filters and panel on phones. */
+  function openSpot(item: HTMLElement): Spot {
+    return phone.matches
+      ? phoneOpenSpot(item)
+      : { x: -150, y: 0, scale: 1.12, opacity: 1, rotate: 0, layer: 20, blur: 0 };
+  }
+
+  /** The other pieces slide away to the sides while one is open. */
+  function hiddenSpot(offset: number): Spot {
+    return { x: Math.sign(offset) * (700 + Math.abs(offset) * 120), y: 0, scale: 0.7, opacity: 0, rotate: 0, layer: 1, blur: 8 };
+  }
+
+  /** Browsing: the centred piece in front, neighbours fanned out behind it. */
+  function browsingSpot(offset: number): Spot {
+    const distance = Math.abs(offset);
+    return phone.matches
+      ? { x: offset * 120, y: 0, scale: 1 - distance * 0.14, opacity: distance > 1 ? 0 : 1 - distance * 0.1, rotate: offset * 5, layer: 20 - distance, blur: 0 }
+      : { x: offset * 230, y: 0, scale: 1 - distance * 0.1, opacity: distance > 2 ? 0 : 1 - distance * 0.12, rotate: offset * 4, layer: 20 - distance, blur: distance > 1 ? 1 : 0 };
+  }
+
+  function render() {
+    const list = visibleItems();
+    const selectedPosition = list.findIndex((item) => Number(item.dataset.item) === selected);
+    const focused = selectedPosition >= 0;
+    const center = focused ? selectedPosition : Math.min(centered, list.length - 1);
+
+    // Show the panel text and close button first, so their sizes are known before placing the piece.
+    panel.classList.toggle('is-open', focused);
+    panelBodies.forEach((body, index) => { body.hidden = index !== selected; });
+    closeWrap.hidden = !focused;
+
+    items.forEach((item) => { item.hidden = !list.includes(item); });
+    list.forEach((item, k) => {
+      const offset = k - center;
+      const spot = !focused ? browsingSpot(offset) : offset === 0 ? openSpot(item) : hiddenSpot(offset);
+      item.style.zIndex = String(spot.layer);
+      item.style.opacity = String(spot.opacity);
+      item.style.filter = `blur(${spot.blur}px)`;
+      item.style.pointerEvents = spot.opacity > 0 ? 'auto' : 'none';
+      item.style.transform = `translateX(calc(-50% + ${spot.x}px)) translateY(${spot.y}px) scale(${spot.scale}) rotate(${spot.rotate}deg)`;
+      item.tabIndex = spot.opacity > 0 ? 0 : -1;
+    });
+
+    pager.hidden = focused;
+    dots.forEach((dot, k) => {
+      dot.hidden = k >= list.length;
+      dot.classList.toggle('is-current', k === center);
+    });
+
+    stepNo.textContent = focused ? '02' : '01';
+    stepLabel.innerHTML = focused ? 'Your<br>piece' : 'The<br>collection';
+    stepHint.textContent = focused ? 'Tap ✕ to see them all' : 'Tap a piece to look closer';
+
+    const tab = tabs.find((t) => t.dataset.filter === filter)!;
+    tabs.forEach((t) => t.setAttribute('aria-pressed', String(t === tab)));
+    ghost.textContent = tab.dataset.ghostWord!;
+    countLabel.textContent = piecesLabel(list.length) + (filter === 'all' ? '' : ` · ${tab.textContent}`);
+  }
+
+  function setFilter(id: string) {
+    filter = id;
+    selected = -1;
+    centered = Math.floor((visibleItems().length - 1) / 2);
+    render();
+  }
+
+  function replayPanelSwap() {
+    panel.classList.remove('is-swapping');
+    void panel.offsetWidth;
+    panel.classList.add('is-swapping');
+  }
+
+  function step(direction: number) {
+    const last = visibleItems().length - 1;
+    centered = Math.max(0, Math.min(last, Math.min(centered, last) + direction));
+    render();
+  }
+
+  // Swipe the pieces left and right on touch screens.
+  let swipeStartX: number | null = null;
+  let justSwiped = false;
+  cluster.addEventListener('pointerdown', (event) => {
+    swipeStartX = event.clientX;
+    justSwiped = false;
+  });
+  cluster.addEventListener('pointerup', (event) => {
+    if (swipeStartX === null) return;
+    const dx = event.clientX - swipeStartX;
+    swipeStartX = null;
+    if (Math.abs(dx) < 40) return;
+    justSwiped = true;
+    if (selected < 0) step(dx < 0 ? 1 : -1);
+  });
+
+  items.forEach((item) => {
+    item.addEventListener('click', () => {
+      if (justSwiped) { justSwiped = false; return; }
+      selected = Number(item.dataset.item);
+      centered = visibleItems().indexOf(item);
+      replayPanelSwap();
+      render();
+    });
+  });
+
+  section.querySelector('[data-unselect]')!.addEventListener('click', () => {
+    selected = -1;
+    render();
+  });
+  section.querySelectorAll<HTMLButtonElement>('[data-cluster-step]').forEach((button) => {
+    button.addEventListener('click', () => step(Number(button.dataset.clusterStep)));
+  });
+  tabs.forEach((tab) => tab.addEventListener('click', () => setFilter(tab.dataset.filter!)));
+  document.addEventListener(SHOW_THEME_EVENT, (event) => setFilter((event as CustomEvent<string>).detail));
+  phone.addEventListener('change', render);
+
+  // Macramé colours: exactly one swatch is chosen; the first is the piece's own.
+  // Works like a set of radio buttons: Tab reaches the chosen one, arrow keys move.
+  const NEXT_KEYS = ['ArrowRight', 'ArrowDown'];
+  const PREVIOUS_KEYS = ['ArrowLeft', 'ArrowUp'];
+
+  section.querySelectorAll<HTMLElement>('[data-swatch-group]').forEach((group) => {
+    const image = items[Number(group.dataset.swatchGroup)].querySelector('img')!;
+    const original = image.dataset.originalSrc!;
+    const sourceColor = group.dataset.sourceColor!;
+    const state = group.parentElement!.querySelector('[data-swatch-state]')!;
+    const swatches = [...group.querySelectorAll<HTMLButtonElement>('[data-swatch-color]')];
+    let wanted = sourceColor;
+
+    async function choose(swatch: HTMLButtonElement) {
+      swatches.forEach((other) => {
+        other.setAttribute('aria-checked', String(other === swatch));
+        other.tabIndex = other === swatch ? 0 : -1;
+      });
+      wanted = swatch.dataset.swatchColor!;
+      state.textContent = wanted === sourceColor ? 'original' : 'recoloured';
+      const target = wanted;
+      const url = await recolorImage(original, sourceColor, target);
+      if (wanted === target) image.src = url;
+    }
+
+    swatches.forEach((swatch, index) => {
+      swatch.addEventListener('click', () => choose(swatch));
+      swatch.addEventListener('keydown', (event) => {
+        const move =
+          NEXT_KEYS.includes(event.key) ? 1 :
+          PREVIOUS_KEYS.includes(event.key) ? -1 :
+          event.key === 'Home' ? -index :
+          event.key === 'End' ? swatches.length - 1 - index : 0;
+        if (!move) return;
+        event.preventDefault();
+        const target = swatches[(index + move + swatches.length) % swatches.length];
+        target.focus();
+        choose(target);
+      });
+    });
+  });
+
+  render();
+</script>
+
+<style>
+  .collection {
+    position: relative;
+    height: 960px;
+    overflow: hidden;
+    background: var(--color-paper);
+  }
+
+  .muted {
+    color: var(--color-muted);
+  }
+
+  .ghost {
+    position: absolute;
+    inset: 150px 0 auto;
+    text-align: center;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 300px;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--color-ghost);
+    pointer-events: none;
+  }
+
+  .collection-head {
+    position: absolute;
+    top: 40px;
+    left: 48px;
+    right: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .collection-labels {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .tab {
+    min-height: 44px;
+    padding: 0 22px;
+    border-radius: 999px;
+    border: 2px solid var(--color-ink);
+    outline: 1.5px dashed rgb(43 33 24 / 0.55);
+    outline-offset: -7px;
+    background: transparent;
+    color: var(--color-ink);
+    font: 600 15px var(--font-body);
+    cursor: pointer;
+    transition: transform 0.45s cubic-bezier(0.3, 1.6, 0.5, 1), background 0.3s, color 0.3s;
+  }
+
+  .tab:hover {
+    transform: rotate(-3deg);
+  }
+
+  .tab:focus-visible {
+    outline: 3px solid var(--color-ink);
+    outline-offset: 3px;
+  }
+
+  .tab[aria-pressed='true'] {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    outline-color: rgb(247 241 232 / 0.5);
+  }
+
+  .side-note {
+    position: absolute;
+    left: 22px;
+    top: 55%;
+    writing-mode: vertical-rl;
+    transform: translateY(-50%) rotate(180deg);
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .cluster {
+    position: absolute;
+    inset: 170px 0 120px;
+  }
+
+  .item {
+    position: absolute;
+    bottom: 90px;
+    left: 50%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    transform-origin: 50% 100%;
+    transition: transform 1s cubic-bezier(0.7, 0, 0.2, 1), opacity 0.8s ease, filter 0.8s ease;
+  }
+
+  .item:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 4px;
+  }
+
+  .item img {
+    display: block;
+    height: calc(var(--display-height) * 0.72px);
+    width: auto;
+    max-width: 380px;
+    object-fit: contain;
+    filter: drop-shadow(0 30px 30px rgb(43 33 24 / 0.18));
+    transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .item:hover img {
+    transform: translateY(-12px);
+  }
+
+  .item-shadow {
+    display: block;
+    width: 80%;
+    height: 26px;
+    margin: 10px auto 0;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgb(43 33 24 / 0.28), rgb(43 33 24 / 0));
+  }
+
+  .panel {
+    position: absolute;
+    z-index: 25;
+    left: 56%;
+    top: 90px;
+    width: min(400px, 36%);
+    opacity: 0;
+    transform: translateX(60px);
+    pointer-events: none;
+    transition: opacity 0.7s ease 0.25s, transform 0.9s cubic-bezier(0.7, 0, 0.2, 1);
+  }
+
+  .panel.is-open {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  @keyframes panel-swap {
+    from { opacity: 0; transform: scale(0.94) translateY(10px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .panel.is-swapping .panel-body {
+    animation: panel-swap 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  .panel-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .panel-body[hidden] {
+    display: none;
+  }
+
+  .panel-body h3 {
+    font-size: 40px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+
+  .panel-text {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--color-body);
+  }
+
+  .swatches {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .swatch-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    margin-left: -8px;
+  }
+
+  .swatch {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .swatch:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+
+  .swatch span {
+    display: block;
+    width: 28px;
+    height: 28px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 4px rgb(0 0 0 / 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .swatch[aria-checked='true'] span {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 3px var(--color-ink);
+  }
+
+  .panel-order {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  .price {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 24px;
+  }
+
+  .close-wrap {
+    position: absolute;
+    z-index: 30;
+    left: 50%;
+    top: -6px;
+    transform: translateX(-50%);
+  }
+
+  .collection-foot {
+    position: absolute;
+    left: 48px;
+    right: 48px;
+    bottom: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 20px;
+  }
+
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .step-no {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 56px;
+    line-height: 0.9;
+  }
+
+  .step-rule {
+    width: 1px;
+    height: 40px;
+    background: rgb(43 33 24 / 0.3);
+  }
+
+  .step-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    line-height: 1.7;
+    text-transform: uppercase;
+  }
+
+  .pager {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .pager[hidden] {
+    display: none;
+  }
+
+  .dots {
+    display: flex;
+    gap: 7px;
+  }
+
+  .dot {
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 3px;
+    background: rgb(43 33 24 / 0.25);
+    transition: all 0.4s;
+  }
+
+  .dot.is-current {
+    width: 22px;
+    background: var(--color-ink);
+  }
+
+  .dot[hidden] {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .item,
+    .item img,
+    .panel,
+    .dot {
+      transition: none;
+    }
+
+    .panel.is-swapping .panel-body {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .hide-below-900 {
+      display: none;
+    }
+
+    .panel {
+      left: 6%;
+      right: 6%;
+      top: auto;
+      bottom: 24px;
+      width: auto;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .hide-below-760 {
+      display: none;
+    }
+
+    .collection {
+      height: 860px;
+    }
+
+    .ghost {
+      font-size: 118px;
+      top: 220px;
+    }
+
+    .collection-head {
+      left: 16px;
+      right: 0;
+      top: 28px;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .tabs {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      justify-content: flex-start;
+      max-width: 100%;
+      padding: 6px 16px 8px 2px;
+      scrollbar-width: none;
+    }
+
+    .tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab {
+      flex: none;
+    }
+
+    .cluster {
+      inset: 190px 0 100px;
+      touch-action: pan-y;
+    }
+
+    .item {
+      bottom: 30px;
+    }
+
+    .item img {
+      height: calc(var(--display-height) * 0.5px);
+      max-width: 250px;
+    }
+
+    /* The arrows and dots below are hidden while a piece is open, so the
+       panel can reach down into their space and never needs to scroll. */
+    .panel {
+      left: 12px;
+      right: 12px;
+      bottom: -84px;
+      padding: 20px 20px 22px;
+      border-radius: 24px;
+      background: #fff;
+      box-shadow: 0 -10px 40px rgb(43 33 24 / 0.18);
+    }
+
+    .panel-body h3 {
+      font-size: 26px;
+    }
+
+    /* Up to eight colours on one row, so the panel leaves room for the piece. */
+    .swatch-row {
+      gap: 0;
+    }
+
+    .swatch {
+      width: 41px;
+    }
+
+    /* The open piece fills the middle on phones, so the close button sits beside it. */
+    .close-wrap {
+      left: auto;
+      right: 16px;
+      transform: none;
+    }
+
+    .panel-text {
+      font-size: 15px;
+    }
+
+    .collection-foot {
+      left: 16px;
+      right: 16px;
+      bottom: 24px;
+      justify-content: center;
+    }
+  }
+</style>

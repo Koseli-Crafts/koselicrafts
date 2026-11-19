@@ -1,6 +1,7 @@
 ---
-import FAQAccordion from '../ui/FAQAccordion.astro';
-import SectionHeader from '../ui/SectionHeader.astro';
+import TagButton from '../ui/TagButton.astro';
+import { QUESTION_LINK } from '../../lib/contact';
+import { padNumber } from '../../lib/format';
 
 interface Props {
   faqs: { question: string; answer: string }[];
@@ -9,9 +10,212 @@ interface Props {
 const { faqs } = Astro.props;
 ---
 
-<section id="faq" class="surface-section" data-aos="fade-up">
-  <div class="mx-auto max-w-6xl">
-    <SectionHeader title="Questions" subtitle="Not answered here? Message us on WhatsApp." />
-    <FAQAccordion faqs={faqs} />
+<section id="questions" class="questions">
+  <div class="questions-grid">
+    <div class="questions-intro">
+      <span class="question-mark rise" aria-hidden="true">?</span>
+      <h2>Questions,<br />answered.</h2>
+      <p>Not answered here? Message us on WhatsApp and we’ll help.</p>
+      <TagButton href={QUESTION_LINK} label="Message us" class="self-start" />
+    </div>
+    <div class="faq-list" data-faq>
+      {faqs.map((faq, index) => (
+        <div class="faq-row" data-open={index === 0 ? 'true' : 'false'}>
+          <button type="button" class="faq-question" aria-expanded={index === 0 ? 'true' : 'false'} aria-controls={`faq-answer-${index}`}>
+            <span class="faq-no">{padNumber(index + 1)}</span>
+            <span class="faq-text">{faq.question}</span>
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-answer" id={`faq-answer-${index}`} hidden={index !== 0}>
+            <p>{faq.answer}</p>
+          </div>
+        </div>
+      ))}
+    </div>
   </div>
 </section>
+
+<script>
+  // One answer open at a time; opening another closes the rest.
+  const rows = [...document.querySelectorAll<HTMLElement>('[data-faq] .faq-row')];
+
+  rows.forEach((row) => {
+    row.querySelector('button')!.addEventListener('click', () => {
+      const opening = row.dataset.open !== 'true';
+      rows.forEach((other) => {
+        const open = other === row && opening;
+        other.dataset.open = String(open);
+        other.querySelector('button')!.setAttribute('aria-expanded', String(open));
+        other.querySelector<HTMLElement>('.faq-answer')!.hidden = !open;
+      });
+    });
+  });
+</script>
+
+<style>
+  .questions {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-paper);
+  }
+
+  .questions-grid {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 130px 44px 140px;
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: 72px;
+    align-items: start;
+  }
+
+  .questions-intro {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .question-mark {
+    margin-left: -12px;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 440px;
+    line-height: 0.75;
+    color: var(--theme-bg);
+    transition: color 1s;
+  }
+
+  .questions-intro h2 {
+    font-size: 72px;
+    line-height: 0.9;
+  }
+
+  .questions-intro p {
+    max-width: 340px;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--color-body);
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 30px;
+  }
+
+  .faq-row {
+    border-radius: 28px;
+    background: var(--color-oat);
+    transition: background 0.5s, transform 0.5s;
+  }
+
+  .faq-row[data-open='true'] {
+    background: var(--theme-bg);
+    transform: rotate(-0.6deg) scale(1.01);
+  }
+
+  .faq-question {
+    width: 100%;
+    min-height: 96px;
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    padding: 22px 28px;
+    border: 0;
+    border-radius: 28px;
+    background: none;
+    color: var(--color-ink);
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .faq-question:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+
+  .faq-no {
+    flex: none;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 22px;
+    opacity: 0.55;
+  }
+
+  .faq-text {
+    flex: 1;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 34px;
+    line-height: 1.05;
+  }
+
+  .faq-icon {
+    flex: none;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font-size: 30px;
+    transition: transform 0.5s, background 0.3s;
+  }
+
+  .faq-row[data-open='true'] .faq-icon {
+    transform: rotate(45deg);
+  }
+
+  .faq-answer p {
+    max-width: 640px;
+    padding: 0 28px 28px 74px;
+    font-size: 18px;
+    line-height: 1.65;
+  }
+
+  @media (max-width: 900px) {
+    .questions-grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 36px;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .questions-grid {
+      padding: 80px 18px 90px;
+    }
+
+    .question-mark {
+      font-size: 200px;
+    }
+
+    .questions-intro h2 {
+      font-size: 46px;
+    }
+
+    .faq-question {
+      min-height: 72px;
+      padding: 16px;
+      gap: 12px;
+    }
+
+    .faq-text {
+      font-size: 21px;
+    }
+
+    .faq-icon {
+      width: 40px;
+      height: 40px;
+      font-size: 24px;
+    }
+
+    .faq-answer p {
+      padding: 0 18px 22px;
+      font-size: 16px;
+    }
+  }
+</style>

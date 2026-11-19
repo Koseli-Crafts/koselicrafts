@@ -40,7 +40,7 @@ What a neighbouring decor shop can't truthfully copy:
 ## Capabilities and Constraints
 
 - **Stack:** Astro and Tailwind, deployed as a static site at koselicrafts.com. Pages CMS commits trigger a rebuild in about 2 minutes.
-- **Product fields today:** title, description (plain text), price in Rs. (a number, a range like `750-1500`, or empty for "Price on request"), and photos (the first photo is the card image).
+- **Product fields today:** title, description (plain text), price in Rs. (a number, a range like `750-1500`, or empty for "Price on request"), photos, a cut-out photo (background removed, shown in the collection), a kind label, a cord colour, themes (collection filters), and an optional colour-swatch switch.
 - **Contact:** WhatsApp, phone +977 971-2095355, email info@koselicrafts.com.
 - **Payment and delivery: deliberately vague.** The site must not promise payment methods, delivery areas, costs or timelines. Copy says to contact the shop for details.
 - **Undecided:** whether the shop ships outside Nepal, and whether it states a WhatsApp reply time.
@@ -53,10 +53,10 @@ What a neighbouring decor shop can't truthfully copy:
 
 ## Evidence on Hand
 
-- **Catalogue:** 9 products in `src/data/products.json`, mostly scripture macramé and engraved plaques, plus a bookmark. More are coming.
+- **Catalogue:** 13 products in `src/data/products.json`, mostly scripture macramé and engraved plaques, plus a bookmark. More are coming.
 - **Photos:** `src/assets/products/`. A mix of real phone photos (such as `psalm23-plaque.jpeg`, `psalm23-rustic.jpg` and `whatsapp-image-*`) and AI-generated lifestyle renders (`chatgpt-image-*`, `grok-image-*`).
 - **Workshop and product photos outside the repo:** `../raw/` (for example `IMG_20261017_*.jpg` and the macramé shots).
-- **No testimonials exist.** `TestimonialsSection.astro` is an empty template with no data. Do not invent customers, quotes, ratings, order counts, press or delivery claims.
+- **No testimonials exist.** The site has no testimonials section. Do not invent customers, quotes, ratings, order counts, press or delivery claims.
 
 ## Product Principles
 

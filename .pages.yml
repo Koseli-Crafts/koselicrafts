@@ -20,7 +20,12 @@ content:
         label: Product name
         type: string
         required: true
-        description: Shown on the product card, e.g. "Laser-Engraved Bookmark".
+        description: Shown when someone taps the piece, e.g. "Laser-Engraved Bookmark". Keep it short.
+
+      - name: kind
+        label: Kind
+        type: string
+        description: A short label shown above the name, e.g. "Ornament", "Scripture" or "Wall hanging".
 
       - name: description
         label: Description
@@ -39,9 +44,59 @@ content:
         list:
           min: 1
         required: true
-        description: The first photo is the one shown on the product card. Drag to reorder.
+        description: Photos of the piece. If there is no cut-out photo below, the first one is shown in the collection instead. Drag to reorder.
+
+      - name: cutout
+        label: Cut-out photo
+        type: image
+        description: The piece on its own with the background removed (a .png or .webp with a see-through background). This is what floats in the collection. If empty, the first photo is used.
+
+      - name: cord
+        label: Cord colour
+        type: select
+        description: The colour of the macramé cord. Shown in the details as "Pink cord". Pick "Wood" for pieces with no cord.
+        options:
+          values:
+            - name: pink
+              label: Pink
+            - name: teal
+              label: Teal
+            - name: gold
+              label: Gold
+            - name: lavender
+              label: Lavender
+            - name: sage
+              label: Sage
+            - name: cream
+              label: Cream
+            - name: wood
+              label: Wood (no cord)
+
+      - name: themes
+        label: Themes
+        type: select
+        description: Which filters in the collection show this piece. Pick one or more.
+        options:
+          multiple: true
+          values:
+            - name: christmas
+              label: Christmas
+            - name: scripture
+              label: Scripture
+            - name: love
+              label: Someone you love
+            - name: home
+              label: New home
+            - name: custom
+              label: Custom
 
       - name: swatches
         label: Show color swatches
         type: boolean
-        description: Shows small squares of the photo's main colors on the images. Used for the macramé ornaments.
+        description: Lets visitors try other macramé colours on the piece. Used for the macramé ornaments.
+
+      - name: swatchColors
+        label: Swatch colours
+        type: string
+        list: true
+        description: 'Optional. The cord''s own colours as codes like #d71369, the first being the main one. Leave empty and they are picked from the first photo.'

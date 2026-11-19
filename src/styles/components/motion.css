@@ -1,0 +1,85 @@
+/* Shared motion: hanging pieces sway, loose pieces bob, big words drift with the scroll. */
+@keyframes sway {
+  0%, 100% { transform: rotate(-1.2deg); }
+  50% { transform: rotate(1.2deg); }
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-16px) rotate(5deg); }
+}
+
+@keyframes tassel-swing {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(14deg); }
+  55% { transform: rotate(-9deg); }
+  80% { transform: rotate(4deg); }
+}
+
+@keyframes drift-left {
+  from { transform: translateX(16%); }
+  to { transform: translateX(-16%); }
+}
+
+@keyframes drift-right {
+  from { transform: translateX(-16%); }
+  to { transform: translateX(16%); }
+}
+
+@keyframes rise {
+  from { transform: translateY(90px) scale(0.9); opacity: 0.2; }
+  to { transform: none; opacity: 1; }
+}
+
+@layer components {
+  .sway {
+    transform-origin: 50% 0;
+    animation: sway 5s ease-in-out infinite;
+  }
+
+  .bob {
+    animation: bob 6s ease-in-out infinite;
+  }
+
+  /* Moves with the pointer; the section sets --px and --py (see scripts/parallax.ts). */
+  .follows-pointer {
+    transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transform: translate(calc(var(--px, 0) * var(--shift-x, 0px)), calc(var(--py, 0) * var(--shift-y, 0px)));
+  }
+
+  /* Scroll-linked motion, only for people who haven't asked for less motion. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .drift-left {
+        animation: drift-left linear both;
+        animation-timeline: view();
+        animation-range: entry 0% exit 100%;
+      }
+
+      .drift-right {
+        animation: drift-right linear both;
+        animation-timeline: view();
+        animation-range: entry 0% exit 100%;
+      }
+
+      .rise {
+        animation: rise linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 35%;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sway,
+    .bob,
+    .tag-btn-tassel {
+      animation: none !important;
+    }
+
+    .follows-pointer {
+      transform: none;
+      transition: none;
+    }
+  }
+}

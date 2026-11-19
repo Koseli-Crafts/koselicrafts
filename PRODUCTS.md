@@ -39,17 +39,35 @@ Pages CMS is 100% free and open source (MIT).
 
    | Field | What to put |
    | :--- | :--- |
-   | **Product name** | The name shown on the card, e.g. `Wooden Wall Clock`. |
-   | **Description** | Two or three sentences shown when someone taps the product. |
+   | **Product name** | The name shown when someone taps the piece, e.g. `Wooden Wall Clock`. Keep it short. |
+   | **Kind** | A short label above the name, e.g. `Ornament`, `Scripture`, `Wall hanging`. |
+   | **Description** | One or two sentences shown when someone taps the piece. |
    | **Price (Rs.)** | Just the number: `1200`. For a range: `750-1500`. Leave it **empty** and the site shows "Price on request". |
    | **Photos** | Click to upload from your phone or computer. Add as many as you like. |
+   | **Cut-out photo** | The piece on its own with the background removed (see *Photo tips*). This is the picture that floats in the collection. |
+   | **Cord colour** | The macramé colour. Pick **Wood** if there is no cord. |
+   | **Themes** | Which collection filters show the piece: Christmas, Scripture, Someone you love, New home, Custom. |
+   | **Show color swatches** | Tick it for macramé pieces whose cord colour visitors may want to change, like the ornaments. Shows a row of colour squares; tapping one recolours the cord in the picture. |
+   | **Swatch colours** | Leave it **empty**. The site then picks the cord's colours from the first photo by itself. Only fill it in if those picked colours look wrong (see below). |
 
 4. Click **Save**.
 
-The **first photo** is the one shown on the product card, so put the best one
-first. Drag the photos to reorder them.
+The collection shows the **cut-out photo**. If you leave it empty, the first
+photo is used instead, background and all, which looks out of place. So add a
+cut-out whenever you can.
 
 Done. Wait about 2 minutes, then refresh [koselicrafts.com](https://www.koselicrafts.com/).
+
+### If the colour squares look wrong
+
+When **Show color swatches** is ticked, the first square is the cord's own
+colour and the next few are other shades of it, picked from the first photo.
+If the photo's lighting fools it (for example the first square is brown instead
+of pink), type the colours yourself in **Swatch colours**, one per line, as
+colour codes like `#d71369`, main colour first. To find a code, open the photo
+in any colour-picker tool such as
+[imagecolorpicker.com](https://imagecolorpicker.com) and click the cord. The
+bright extra colours (green, blue, red, pink, purple) are added automatically.
 
 ---
 
@@ -103,7 +121,9 @@ broken page.
 
 ## Photo tips
 
-- Square-ish photos look best on the cards.
+- **Cut-out photos** need a see-through background, saved as `.png` or `.webp`.
+  A free background remover such as [remove.bg](https://www.remove.bg) does this
+  in one click. Crop close around the piece.
 - Keep each photo under about 1 MB so the site stays fast — use
   [tinypng.com](https://tinypng.com) to shrink a large photo before uploading.
 - Any filename is fine; the editor cleans it up automatically.
@@ -127,8 +147,12 @@ Each product is one block in `src/data/products.json`:
   {
     "title": "Your Product Name",
     "description": "Two or three sentences describing the product.",
+    "kind": "Wall hanging",
     "price": "1200",
-    "images": ["your-photo.jpg"]
+    "images": ["/products/your-photo.jpg"],
+    "cutout": "/products/your-photo-cutout.webp",
+    "cord": "cream",
+    "themes": ["home"]
   },
 ```
 
@@ -154,7 +178,7 @@ Two things must match what Pages CMS expects, or the editor breaks:
 ## For developers
 
 - Product images are picked up automatically from `src/assets/products/` via
-  `import.meta.glob` in `src/components/sections/ProductsSection.astro`.
+  `import.meta.glob` in `src/lib/catalog.ts`.
   **Adding a product never requires a code change.**
 - `.pages.yml` defines the Pages CMS admin form. Editing it changes the fields
   editors see; it has no effect on the built site.
@@ -163,4 +187,10 @@ Two things must match what Pages CMS expects, or the editor breaks:
 - The site resolves image references by filename, so the `/products/` prefix is
   cosmetic to the build — but Pages CMS needs it to map a value back to
   `src/assets/products/`, and it needs `price` as a string (ranges like
-  `750-1500` are not numbers). `check-products.mjs` enforces both.
+  `750-1500` are not numbers). `check-products.mjs` enforces both, and checks
+  that `cord` and `themes` only use the choices listed in `.pages.yml`, and that
+  `swatchColors` are colour codes.
+- The themes (hero slides and collection filters) live in `src/data/themes.ts`;
+  cord colours and their tassel pictures in `src/data/decor.ts`. Adding a theme
+  or cord colour means updating that file and the matching choices in
+  `.pages.yml`. The build stops with a plain message if the two disagree.

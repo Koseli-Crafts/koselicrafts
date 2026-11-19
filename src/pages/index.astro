@@ -1,11 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Navbar from '../components/sections/Navbar.astro';
-import AdvancedSliderSection from '../components/sections/AdvancedSliderSection.astro';
-import ProductsSection from '../components/sections/ProductsSection.astro';
+import HeroSection from '../components/sections/HeroSection.astro';
+import CollectionSection from '../components/sections/CollectionSection.astro';
+import CraftSection from '../components/sections/CraftSection.astro';
+import EngraveSection from '../components/sections/EngraveSection.astro';
 import FaqSection from '../components/sections/FaqSection.astro';
 import SiteFooter from '../components/sections/SiteFooter.astro';
-import CTASection from '../components/sections/CTASection.astro';
 
 const faqs = [
 {
@@ -32,12 +32,12 @@ answer: "We engrave wood or MDF on our own laser in Kathmandu. Macramé pieces a
 ---
 
 <Layout>
-<div class="site-shell">
-	<Navbar />
-	<AdvancedSliderSection />
-	<ProductsSection />
+<main class="overflow-x-clip">
+	<HeroSection />
+	<CollectionSection />
+	<CraftSection />
+	<EngraveSection />
 	<FaqSection faqs={faqs} />
-	<CTASection />
-	<SiteFooter />
-</div>
+</main>
+<SiteFooter />
 </Layout>

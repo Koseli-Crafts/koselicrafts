@@ -1,11 +1,12 @@
 ---
 import '../styles/global.css';
-import 'aos/dist/aos.css';
 import 'lenis/dist/lenis.css';
+import { WOOD } from '../data/decor';
+import { FIRST_THEME } from '../data/themes';
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" style={{ '--theme-bg': FIRST_THEME.background, '--wood-disc': `url(${WOOD.disc})` }}>
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
@@ -15,13 +16,13 @@ import 'lenis/dist/lenis.css';
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
-			href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600;700&display=swap"
+			href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Anek+Devanagari:wght@500;800&family=Tiro+Devanagari+Hindi&display=swap"
 			rel="stylesheet"
 		/>
 		<title>Koseli Crafts · Handmade gifts from Kathmandu</title>
 		<meta name="description" content="Engraved wooden gifts and macramé wall hangings, made by hand in Kathmandu, Nepal. Scripture in Nepali and English, and custom engraving. Order on WhatsApp." />
 	</head>
-	<body class="bg-snow text-pine antialiased">
+	<body>
 		<slot />
 		<script>
 			import initSiteMotion from '../scripts/site-motion';

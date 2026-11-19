@@ -1,113 +1,213 @@
 [
   {
-    "title": "Haven Macramé Cross Hanging",
-    "description": "Handcrafted from natural cream cotton cord and mounted on a smooth wooden dowel, this boho macramé tapestry features an intricately knotted central cross surrounded by elegant linear cords and a textured fringe finish. A serene, faith-inspired statement piece that brings warmth, peace, and timeless texture to any wall.",
-    "price": "2500",
-    "images": [
-      "/products/chatgpt-image-sep-2-2026-at-021850-pm-1.png"
-    ]
-  },
-  {
-    "title": "Nepali Psalm 23 Multi-Tier Hanging Wall Plaque",
-    "description": "A beautiful 5-panel hanging wall art piece featuring the complete biblical text of Psalm 23 (भजनसंग्रह २३) in elegant Nepali script. The panels are crafted with classic corner border accents and linked together by durable metal chains for easy wall mounting. It serves as a meaningful, faith-inspired decorative piece for home living spaces, prayer rooms, or as a thoughtful religious gift.",
-    "price": "4500",
-    "images": [
-      "/products/psalm23-plaque.jpeg"
-    ]
-  },
-  {
-    "title": "First Loved Boho Macramé Hanging",
-    "description": "Bring warmth, serenity, and faith into your space with this artisan-crafted boho wall hanging. It features an engraved round wooden plaque with the inspiring message of 1 John 4:19 in Nepali script, framed by delicate botanical motifs. Beneath it flows intricate, layered macramé in soft sage green and natural cream cords, highlighted by a central twist and a smooth wooden accent bead. \n\nA graceful, faith-filled statement piece for any room or a thoughtful gift for loved ones. ",
-    "price": "1250",
-    "images": [
-      "/products/chatgpt-image-sep-2-2026-023642-pm.png"
-    ]
-  },
-  {
-    "title": "You Are So Loved Macrame",
-    "description": "Bring warmth and heartfelt charm to any space with this handmade macrame wall hanging.\n\nA natural wood semi-circle plaque is engraved with the sweet message “you are so loved” in elegant cursive script. Soft mustard-yellow cotton cords cascade below in a beautiful knotted pattern, finished with long flowing fringe that adds texture and movement.\n\nPerfect for bedrooms, nurseries, living rooms, or as a thoughtful gift, this boho-inspired piece creates a cozy, loving atmosphere wherever it’s hung. Easy to display with the included white hanging cord.",
-    "price": "1250",
-    "images": [
-      "/products/grok-image-5a1d636f-7521-4867-a7ec-9268975259f6.jpg"
-    ]
-  },
-  {
-    "title": "God’s First Love Macrame",
-    "description": "A heartfelt handmade Christian wall hanging featuring a beautifully engraved wooden plaque with the powerful Nepali scripture from 1 John 4:19 (“We love because He first loved us”), crowned with a cross rising over the mountains. \n\nBelow the plaque, soft mustard-golden cotton macrame flows in classic knotted patterns and long fringe, creating a warm, earthy, and spiritual presence.\n\nPerfect for homes, prayer corners, churches, or as a meaningful gift of faith. This piece combines authentic Nepali Christian heritage with natural handmade craftsmanship, bringing both beauty and the message of God’s love into any space.\n\nKey Features:\n* Engraved wooden plaque with original Nepali Bible verse (1 John 4:19)\n* Mustard-golden cotton macrame with traditional knots and fringe\n* Cross and mountain design symbolizing faith\n* Natural wood bead hanging loop\n* Ideal for Christian homes, prayer rooms, or gifting",
-    "price": "1250",
-    "images": [
-      "/products/riiu2-1.jpg"
-    ]
-  },
-  {
-    "title": "God’s Love Macrame",
-    "description": "A beautiful handmade Christian wall hanging featuring a wooden plaque engraved with the powerful verse from 1John 3:16 in traditional Tibetan/Dolpo script.\n\nSoft lavender-purple cotton macrame flows beneath the plaque in elegant knotted patterns and long fringe, creating a gentle and spiritual presence.\n\nThis piece combines authentic Himalayan Christian heritage with natural craftsmanship, making it perfect for homes, prayer corners, or as a meaningful gift of faith.\n\nKey Features:\n* Engraved wooden plaque with original Tibetan/Dolpo Bible verse (John 3:16)\n* Soft lavender-purple cotton macrame with classic knots and fringe\n* Simple and elegant hanging loop\n* Ideal for Christian homes, prayer rooms, or gifting",
-    "price": "1250",
-    "images": [
-      "/products/tqrlp.jpg"
-    ]
-  },
-  {
-    "title": "Inspirational Wooden Macrame Hanging",
-    "description": "This cute, handmade ornament combines a natural wooden plate with a soft cotton macrame fringe. Each version comes in a different shape—like a circle, arch, or rectangle—and features a beautifully engraved message or scripture verse in English or Nepali. It includes a simple top loop, making it easy to hang as a lovely daily reminder in your car, bedroom, or any small space around the house.",
-    "price": "750",
-    "images": [
-      "/products/macrame-circle.png"
-    ]
-  },
-  {
-    "title": "Laser-Engraved Bookmark",
-    "description": "Custom engraved MDF bookmark — perfect for personalised text, quotes, or verses.",
-    "price": "300",
-    "images": [
-      "/products/bookmark.png"
-    ]
-  },
-  {
-    "title": "Rustic Nepali Psalm 23 Multi-Tier Hanging Wall Art",
-    "description": "Bring a touch of faith and serenity into your home with this beautifully crafted multi-tiered hanging wall decor. Featuring the complete and beloved biblical scripture of Psalm 23 (भजनसंग्रह २३) written in elegant Nepali script, this piece serves as a meaningful daily reminder of spiritual guidance, comfort, and protection.",
-    "price": "3500",
-    "images": [
-      "/products/psalm23-rustic.jpg"
-    ]
-  },
-  {
-    "title": "Nepali “Maya” Macramé Ornament",
-    "description": "A round wooden ornament engraved with माया (“love” in Nepali) and a small snowflake, finished with a bright pink macramé fringe and a knotted loop with a tassel. Hang it on a Christmas tree, a window or a car mirror, or tuck it into a gift.",
+    "title": "Nepali “Maya” Ornament",
+    "kind": "Ornament",
+    "description": "A round ornament engraved with माया (“love” in Nepali) and a snowflake, finished with bright pink macramé and a tasselled loop.",
     "price": "750",
     "images": [
       "/products/macrame-ornament-maya-pink.webp",
       "/products/macrame-ornaments-pink-green.webp"
     ],
-    "swatches": true
-  },
-  {
-    "title": "Green Macramé Frame Plaque",
-    "description": "A rectangular wooden plate framed by soft green and cream macramé on all four sides. The plate is left plain, so we can engrave a name, a verse or a short message of your choice. Message us with the words you’d like.",
-    "price": "750",
-    "images": [
-      "/products/macrame-frame-green.webp",
-      "/products/macrame-ornaments-pink-green.webp"
+    "cutout": "/products/cutout-maya-pink.webp",
+    "cord": "pink",
+    "themes": [
+      "christmas"
+    ],
+    "swatches": true,
+    "swatchColors": [
+      "#d71369",
+      "#ab0a46",
+      "#ea3786",
+      "#e968a6"
     ]
   },
   {
-    "title": "“Love” Teal Macramé Ornament",
-    "description": "A round wooden ornament engraved with “love” in flowing script and a small snowflake, with a tightly woven teal macramé base. It has a hanging hole at the top, ready for a Christmas tree or a ribbon on a gift.",
+    "title": "“Love” Teal Ornament",
+    "kind": "Ornament",
+    "description": "Engraved “love” in flowing script with a snowflake, over a tightly woven teal macramé base. Ready for a tree or a gift ribbon.",
     "price": "750",
     "images": [
       "/products/macrame-ornament-love-teal.webp",
       "/products/macrame-ornaments-teal-love-faith.webp"
     ],
-    "swatches": true
+    "cutout": "/products/cutout-love-teal.webp",
+    "cord": "teal",
+    "themes": [
+      "christmas",
+      "love"
+    ],
+    "swatches": true,
+    "swatchColors": [
+      "#0875a9",
+      "#054a76",
+      "#4e94b6",
+      "#88c9e0"
+    ]
   },
   {
-    "title": "“Faith” Teal Macramé Ornament",
-    "description": "A wooden ornament engraved with “faith” in flowing script and a small snowflake, with a teal macramé arch and long knotted fringe. It has a hanging hole at the top, ready for a Christmas tree or a ribbon on a gift.",
+    "title": "“Faith” Teal Ornament",
+    "kind": "Ornament",
+    "description": "Engraved “faith” in flowing script with a snowflake, with a teal macramé arch and long knotted fringe.",
     "price": "750",
     "images": [
       "/products/macrame-ornament-faith-teal.webp",
       "/products/macrame-ornaments-teal-love-faith.webp"
     ],
-    "swatches": true
+    "cutout": "/products/cutout-faith-teal.webp",
+    "cord": "teal",
+    "themes": [
+      "christmas"
+    ],
+    "swatches": true,
+    "swatchColors": [
+      "#084868",
+      "#296785",
+      "#fbc28d"
+    ]
+  },
+  {
+    "title": "Nepali Psalm 23 Plaque",
+    "kind": "Scripture",
+    "description": "Five engraved panels carrying the complete Psalm 23 (भजनसंग्रह २३) in Nepali script, linked by metal chains for hanging.",
+    "price": "4500",
+    "images": [
+      "/products/psalm23-plaque.jpeg"
+    ],
+    "cutout": "/products/cutout-psalm23-plaque.webp",
+    "cord": "wood",
+    "themes": [
+      "scripture",
+      "home"
+    ]
+  },
+  {
+    "title": "Rustic Psalm 23 Wall Art",
+    "kind": "Scripture",
+    "description": "The complete Psalm 23 (भजनसंग्रह २३) in Nepali script across rustic hanging tiers.",
+    "price": "3500",
+    "images": [
+      "/products/psalm23-rustic.jpg"
+    ],
+    "cutout": "/products/cutout-psalm23-rustic.webp",
+    "cord": "wood",
+    "themes": [
+      "scripture",
+      "home"
+    ]
+  },
+  {
+    "title": "God’s First Love",
+    "kind": "Scripture",
+    "description": "An engraved plaque with 1 John 4:19 in Nepali, crowned with a cross over the mountains, above mustard-golden macramé.",
+    "price": "1250",
+    "images": [
+      "/products/riiu2-1.jpg"
+    ],
+    "cutout": "/products/cutout-gods-first-love.webp",
+    "cord": "gold",
+    "themes": [
+      "scripture"
+    ]
+  },
+  {
+    "title": "God’s Love",
+    "kind": "Scripture",
+    "description": "A plaque engraved with scripture in Tibetan/Dolpo script, above soft lavender macramé in classic knots and long fringe.",
+    "price": "1250",
+    "images": [
+      "/products/tqrlp.jpg"
+    ],
+    "cutout": "/products/cutout-gods-love.webp",
+    "cord": "lavender",
+    "themes": [
+      "scripture"
+    ]
+  },
+  {
+    "title": "You Are So Loved",
+    "kind": "Wall hanging",
+    "description": "A semi-circle plaque engraved “you are so loved”, with mustard cotton cords cascading into a long fringe.",
+    "price": "1250",
+    "images": [
+      "/products/grok-image-5a1d636f-7521-4867-a7ec-9268975259f6.jpg"
+    ],
+    "cutout": "/products/cutout-you-are-so-loved.webp",
+    "cord": "gold",
+    "themes": [
+      "love"
+    ]
+  },
+  {
+    "title": "First Loved Boho Macramé",
+    "kind": "Wall hanging",
+    "description": "A round plaque engraved with 1 John 4:19 in Nepali script and botanical motifs, over layered sage and cream macramé.",
+    "price": "1250",
+    "images": [
+      "/products/chatgpt-image-sep-2-2026-023642-pm.png"
+    ],
+    "cutout": "/products/cutout-first-loved.webp",
+    "cord": "sage",
+    "themes": [
+      "love",
+      "home"
+    ]
+  },
+  {
+    "title": "Inspirational Wooden Hanging",
+    "kind": "Small hanging",
+    "description": "A natural wooden plate with a cotton fringe, engraved with a message or verse in English or Nepali.",
+    "price": "750",
+    "images": [
+      "/products/macrame-circle.png"
+    ],
+    "cutout": "/products/cutout-inspirational.webp",
+    "cord": "cream",
+    "themes": [
+      "love",
+      "custom"
+    ]
+  },
+  {
+    "title": "Haven Macramé Cross Hanging",
+    "kind": "Wall hanging",
+    "description": "Natural cream cotton cord on a wooden dowel, knotted around a central cross and finished with a textured fringe.",
+    "price": "2500",
+    "images": [
+      "/products/chatgpt-image-sep-2-2026-at-021850-pm-1.png"
+    ],
+    "cutout": "/products/cutout-haven-cross.webp",
+    "cord": "cream",
+    "themes": [
+      "home"
+    ]
+  },
+  {
+    "title": "Green Macramé Frame Plaque",
+    "kind": "Custom",
+    "description": "A plate framed in green and cream macramé, left plain so we can engrave a name, a verse or a message of your choice.",
+    "price": "750",
+    "images": [
+      "/products/macrame-frame-green.webp",
+      "/products/macrame-ornaments-pink-green.webp"
+    ],
+    "cutout": "/products/cutout-frame-green.webp",
+    "cord": "sage",
+    "themes": [
+      "custom"
+    ]
+  },
+  {
+    "title": "Laser-Engraved Bookmark",
+    "kind": "Custom",
+    "description": "A custom engraved MDF bookmark for your own text, quote or verse.",
+    "price": "300",
+    "images": [
+      "/products/bookmark.png"
+    ],
+    "cutout": "/products/cutout-bookmark.webp",
+    "cord": "wood",
+    "themes": [
+      "custom"
+    ]
   }
 ]
