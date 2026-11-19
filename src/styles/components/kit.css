@@ -1,4 +1,4 @@
-/* Koseli kit: gift-tag buttons, wooden-bead buttons, stitched chips. */
+/* Koseli kit: gift-tag buttons, wooden-bead buttons, a list of facts with bead markers. */
 @layer components {
   .tag-btn {
     position: relative;
@@ -154,16 +154,31 @@
     font-size: 18px;
   }
 
-  .stitch {
+  /* Plain facts, not buttons: text with a small bead in the theme colour. */
+  .bead-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 26px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font: 600 16px var(--font-body);
+  }
+
+  .bead-list li {
     display: inline-flex;
     align-items: center;
-    min-height: 44px;
-    padding: 0 20px;
-    border-radius: 999px;
-    border: 2px solid currentColor;
-    outline: 1.5px dashed currentColor;
-    outline-offset: -7px;
-    font: 600 15px var(--font-body);
+    gap: 10px;
+  }
+
+  .bead-list li::before {
+    content: '';
+    flex: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--theme-bg);
+    transition: background 1s;
   }
 
   .eyebrow {

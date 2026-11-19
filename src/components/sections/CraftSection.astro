@@ -28,11 +28,11 @@ const STEPS = [
       <span class="eyebrow themed-text">Our workshop</span>
       <h2 class="rise">Hand-knotted<br /><span class="themed-text">in Kathmandu.</span></h2>
       <p>Koseli Crafts is a small workshop in Kathmandu. Wood is cut and engraved on our own laser, and cord is knotted by hand at the bench.</p>
-      <div class="chips">
-        <span class="stitch">Laser-cut wood</span>
-        <span class="stitch">Cotton cord</span>
-        <span class="stitch">Finished by hand</span>
-      </div>
+      <ul class="bead-list">
+        <li>Laser-cut wood</li>
+        <li>Cotton cord</li>
+        <li>Finished by hand</li>
+      </ul>
     </div>
     <div class="photo-wrap follows-pointer" style={{ '--shift-x': '-12px', '--shift-y': '-8px' }}>
       <div class="photo rise">
@@ -152,12 +152,6 @@ const STEPS = [
     font-size: 20px;
     line-height: 1.6;
     color: #e3d8c6;
-  }
-
-  .chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
   }
 
   .photo-wrap {

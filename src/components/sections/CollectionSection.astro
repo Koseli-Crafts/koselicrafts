@@ -964,6 +964,12 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
       bottom: 24px;
       justify-content: center;
     }
+
+    /* Arrows at the screen edges, like the hero's, with the dots between them. */
+    .pager {
+      flex: 1;
+      justify-content: space-between;
+    }
   }
 
   /* Less motion: the panel fades in place, without sliding. */

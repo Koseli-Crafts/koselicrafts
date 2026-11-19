@@ -13,6 +13,8 @@ export interface FloatSlot {
   rotate: number;
   blur?: number;
   layer?: number;
+  /** Sits where the text goes on narrow screens, so it is left out there. */
+  hideWhenNarrow?: boolean;
 }
 
 interface Props {
@@ -31,7 +33,7 @@ const { slots, pop = false, shadowColor = 'rgba(0,0,0,0.3)', bobStagger = 1.1, c
 {
   slots.map((slot, index) => (
     <div
-      class:list={['float-piece follows-pointer', className]}
+      class:list={['float-piece follows-pointer', slot.hideWhenNarrow && 'hide-when-narrow', className]}
       aria-hidden="true"
       style={{
         left: slot.left,
@@ -90,6 +92,12 @@ const { slots, pop = false, shadowColor = 'rgba(0,0,0,0.3)', bobStagger = 1.1, c
   @media (prefers-reduced-motion: reduce) {
     :global(.is-playing) .float-pop {
       animation-duration: 0.01s;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .hide-when-narrow {
+      display: none;
     }
   }
 

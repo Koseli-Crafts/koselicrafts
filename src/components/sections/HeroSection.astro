@@ -10,10 +10,10 @@ import { heroWordSize, padNumber } from '../../lib/format';
 const LOOSE_PIECES: FloatSlot[] = [
   { left: '12%', top: '18%', size: 120, depth: 0.5, kind: 'tassel', rotate: -18 },
   { left: '74%', top: '14%', size: 96, depth: 0.7, kind: 'wood-0', rotate: 14 },
-  { left: '27%', top: '66%', size: 84, depth: 0.9, kind: 'wood-1', rotate: -10 },
-  { left: '70%', top: '60%', size: 130, depth: 0.6, kind: 'tassel', rotate: 22 },
+  { left: '27%', top: '66%', size: 84, depth: 0.9, kind: 'wood-1', rotate: -10, hideWhenNarrow: true },
+  { left: '70%', top: '60%', size: 130, depth: 0.6, kind: 'tassel', rotate: 22, hideWhenNarrow: true },
   { left: '44%', top: '8%', size: 56, depth: 1.2, kind: 'wood-2', rotate: 30, blur: 1.5 },
-  { left: '2%', top: '64%', size: 230, depth: -1.8, kind: 'tassel', rotate: 28, blur: 9, layer: 8 },
+  { left: '2%', top: '64%', size: 230, depth: -1.8, kind: 'tassel', rotate: 28, blur: 9, layer: 8, hideWhenNarrow: true },
   { left: '84%', top: '6%', size: 170, depth: -1.5, kind: 'wood-0', rotate: -20, blur: 8, layer: 8 },
   { left: '88%', top: '46%', size: 90, depth: -1, kind: 'wood-2', rotate: 8, layer: 8 }
 ];
@@ -670,12 +670,51 @@ const HERO_SHADOW = 'rgba(43,33,24,0.22)';
     .order-badge { width: 78px; height: 78px; }
     .hide-below-900 { display: none; }
     .hero-foot { flex-wrap: wrap; }
-    .hero-copy { left: 24px; right: 24px; max-width: none; }
+
+    /*
+     * Narrow screens stack the hero instead of overlapping it, so the text stays readable:
+     * the space between the theme tabs and the button is split 30% big word, 50% piece,
+     * 20% text. The text never gets less than three lines' room; the piece gives way.
+     * Overrides the per-theme sizes the script sets inline.
+     */
+    .hero {
+      --zone-top: 160px;
+      --zone-bottom: 150px;
+      --zone: calc(max(100vh, 820px) - var(--zone-top) - var(--zone-bottom));
+      --text-h: max(calc(var(--zone) * 0.2), 112px);
+      --piece-h: calc(var(--zone) * 0.7 - var(--text-h));
+    }
+
+    .hero-word-wrap {
+      inset: var(--zone-top) 0 auto;
+      height: calc(var(--zone) * 0.3);
+    }
+
+    .hero-piece-hook { top: 0 !important; }
+    .hero-hang { margin-top: 0; }
+    .hero-cord { height: calc(var(--zone-top) + var(--zone) * 0.3) !important; }
+    .hero-img { height: var(--piece-h) !important; max-width: 80vw; }
+    .hero-shadow { display: none; }
+
+    .hero-copy {
+      top: calc(var(--zone-top) + var(--zone) * 0.3 + var(--piece-h));
+      height: var(--text-h);
+      left: 24px;
+      right: 24px;
+      max-width: none;
+      transform: none;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
   }
 
   /* ---------- Phone: every feature kept, reshaped for a small screen ---------- */
   @media (max-width: 760px) {
-    .hero { height: max(100svh, 760px); }
+    .hero {
+      height: max(100svh, 760px);
+      --zone: calc(max(100svh, 760px) - var(--zone-top) - var(--zone-bottom));
+    }
     .hero-head { padding: 0 14px; }
     .plaque-card { padding: 12px 14px 10px; }
     .plaque-card img { height: 26px; }
@@ -708,17 +747,9 @@ const HERO_SHADOW = 'rgba(43,33,24,0.22)';
       scroll-snap-align: start;
     }
 
-    .hero-hang { margin-top: 150px; }
-    .hero-img { max-width: 72vw; height: min(44vh, 390px) !important; }
-
     .hero-copy {
-      top: auto;
-      bottom: 150px;
-      transform: none;
       left: 18px;
       right: 18px;
-      text-align: center;
-      align-items: center;
     }
 
     .hero-copy h1 { font-size: 19px; }
