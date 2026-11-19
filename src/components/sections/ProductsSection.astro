@@ -1,6 +1,7 @@
 ---
 import ProductCard from '../ui/ProductCard.astro';
 import SectionHeader from '../ui/SectionHeader.astro';
+import { getPalette } from '../../lib/palette';
 import productsData from '../../data/products.json';
 
 interface ProductEntry {
@@ -8,6 +9,7 @@ interface ProductEntry {
   description: string;
   price?: number | string;
   images: string[];
+  swatches?: boolean;
 }
 
 // Every file in src/assets/products/ is picked up automatically — drop an image
@@ -27,6 +29,23 @@ const basename = (imageRef: string) => imageRef.split('/').pop()!;
 
 const products = productsData as ProductEntry[];
 
+// Bright colors offered on top of each photo's own macramé colors.
+const PRESET_COLORS = ['#22c55e', '#1e88e5', '#e53935', '#ec4899', '#8b5cf6'];
+
+const rgbOf = (hex: string) => [1, 3, 5].map((i) => Number.parseInt(hex.slice(i, i + 2), 16));
+const farFrom = (hex: string, others: string[]) =>
+  others.every((o) => Math.hypot(...rgbOf(hex).map((v, i) => v - rgbOf(o)[i])) > 90);
+
+const withPresets = (own: string[]) =>
+  own.length ? [...own, ...PRESET_COLORS.filter((c) => farFrom(c, own))] : own;
+
+const paletteByFilename: Record<string, string[]> = {};
+await Promise.all(
+  Object.keys(imagesByFilename).map(async (name) => {
+    paletteByFilename[name] = await getPalette(`products/${name}`);
+  })
+);
+
 for (const product of products) {
   for (const imageRef of product.images) {
     if (!imagesByFilename[basename(imageRef)]) {
@@ -45,7 +64,8 @@ for (const product of products) {
     {products.map((product, index) => {
       const galleryImages = product.images.map((imageRef) => ({
         src: imagesByFilename[basename(imageRef)],
-        alt: product.title
+        alt: product.title,
+        colors: product.swatches ? withPresets(paletteByFilename[basename(imageRef)]) : []
       }));
 
       if (!galleryImages.length) return null;

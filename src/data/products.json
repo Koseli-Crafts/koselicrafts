@@ -78,7 +78,8 @@
     "images": [
       "/products/macrame-ornament-maya-pink.webp",
       "/products/macrame-ornaments-pink-green.webp"
-    ]
+    ],
+    "swatches": true
   },
   {
     "title": "Green Macramé Frame Plaque",
@@ -96,7 +97,8 @@
     "images": [
       "/products/macrame-ornament-love-teal.webp",
       "/products/macrame-ornaments-teal-love-faith.webp"
-    ]
+    ],
+    "swatches": true
   },
   {
     "title": "“Faith” Teal Macramé Ornament",
@@ -105,6 +107,7 @@
     "images": [
       "/products/macrame-ornament-faith-teal.webp",
       "/products/macrame-ornaments-teal-love-faith.webp"
-    ]
+    ],
+    "swatches": true
   }
 ]

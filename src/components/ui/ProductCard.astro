@@ -1,11 +1,13 @@
 ---
+import Swatches from './Swatches.astro';
+
 interface Props {
   title: string;
   description: string;
   price?: number | string;
   image: string;
   imageAlt: string;
-  galleryImages: { src: string; alt: string }[];
+  galleryImages: { src: string; alt: string; colors: string[] }[];
   delay?: number;
 }
 
@@ -32,7 +34,7 @@ const whatsappMessage = `Hello, I like ${title} and want to place an order.`;
 const whatsappLink = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(whatsappMessage)}`;
 ---
 
-<article class="group h-full" data-aos="fade-up" data-aos-delay={String(delay)}>
+<article class="group relative h-full" data-aos="fade-up" data-aos-delay={String(delay)}>
   <button
     type="button"
     class="product-card-trigger flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-sm bg-surface text-left shadow-[0_4px_14px_rgba(17,33,19,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(17,33,19,0.13)]"
@@ -46,6 +48,7 @@ const whatsappLink = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${
         src={image}
         alt={imageAlt}
         loading="lazy"
+        data-recolor-key={`${cardId}:0`}
         class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
       />
       <div
@@ -67,6 +70,12 @@ const whatsappLink = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${
       <h4 class="text-patrol mt-auto font-body font-semibold">{priceLabel}</h4>
     </div>
   </button>
+
+  <Swatches
+    colors={galleryImages[0].colors}
+    groupKey={`${cardId}:0`}
+    class="absolute top-3 left-3 transition-transform duration-300 group-hover:-translate-y-1"
+  />
 
   <dialog
     class="product-viewer backdrop:bg-black/60 max-sm:inset-0 max-sm:m-0 max-sm:h-dvh max-sm:max-h-dvh max-sm:w-screen max-sm:max-w-none max-sm:overflow-y-auto max-sm:bg-transparent max-sm:p-0 sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:max-h-[92dvh] sm:max-w-5xl sm:rounded-2xl"
@@ -95,7 +104,7 @@ const whatsappLink = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${
               {
                 galleryImages.map((galleryImage, galleryIndex) => (
                   <figure
-                    class="flex min-w-full snap-center items-center justify-center"
+                    class="relative flex min-w-full snap-center items-center justify-center"
                     data-viewer-slide={galleryIndex}
                   >
                     <div
@@ -107,10 +116,12 @@ const whatsappLink = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${
                         src={galleryImage.src}
                         alt={galleryImage.alt}
                         loading="lazy"
+                        data-recolor-key={`${cardId}:${galleryIndex}`}
                         class="h-full w-full object-contain select-none"
                         draggable="false"
                       />
                     </div>
+                    <Swatches colors={galleryImage.colors} groupKey={`${cardId}:${galleryIndex}`} class="absolute right-3 bottom-3" />
                   </figure>
                 ))
               }
@@ -241,6 +252,123 @@ const whatsappLink = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${
 
 <script>
   import Panzoom from "@panzoom/panzoom";
+
+  // ---- Macramé recoloring --------------------------------------------------
+  type HSL = [number, number, number];
+
+  function hexToHsl(hex: string): HSL {
+    const n = Number.parseInt(hex.slice(1), 16);
+    return rgbToHsl((n >> 16) & 255, (n >> 8) & 255, n & 255);
+  }
+
+  function rgbToHsl(r: number, g: number, b: number): HSL {
+    r /= 255; g /= 255; b /= 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    const l = (max + min) / 2, d = max - min;
+    if (d === 0) return [0, 0, l];
+    const s = d / (1 - Math.abs(2 * l - 1));
+    const h =
+      max === r ? ((g - b) / d) % 6 : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
+    return [(h * 60 + 360) % 360, s, l];
+  }
+
+  function hslToRgb(h: number, s: number, l: number): [number, number, number] {
+    const c = (1 - Math.abs(2 * l - 1)) * s;
+    const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+    const m = l - c / 2;
+    const [r, g, b] =
+      h < 60 ? [c, x, 0] : h < 120 ? [x, c, 0] : h < 180 ? [0, c, x] :
+      h < 240 ? [0, x, c] : h < 300 ? [x, 0, c] : [c, 0, x];
+    return [(r + m) * 255, (g + m) * 255, (b + m) * 255];
+  }
+
+  function smooth(a: number, b: number, x: number) {
+    const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
+    return t * t * (3 - 2 * t);
+  }
+
+  const originals = new Map<string, { src: string; data: ImageData }>();
+  const recolored = new Map<string, string>();
+
+  async function loadOriginal(key: string, img: HTMLImageElement) {
+    const cached = originals.get(key);
+    if (cached) return cached;
+    const src = img.dataset.originalSrc || img.currentSrc || img.src;
+    img.dataset.originalSrc = src;
+    // Draw the element that is already on the page; it is loaded and same-origin.
+    if (!img.complete || img.naturalWidth === 0) await img.decode();
+    const source = img;
+    const scale = Math.min(1, 1000 / Math.max(source.naturalWidth, source.naturalHeight));
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.round(source.naturalWidth * scale);
+    canvas.height = Math.round(source.naturalHeight * scale);
+    const ctx = canvas.getContext("2d", { willReadFrequently: true })!;
+    ctx.drawImage(source, 0, 0, canvas.width, canvas.height);
+    const entry = { src, data: ctx.getImageData(0, 0, canvas.width, canvas.height) };
+    originals.set(key, entry);
+    return entry;
+  }
+
+  async function recolor(key: string, sourceHex: string, targetHex: string) {
+    const images = document.querySelectorAll<HTMLImageElement>(`[data-recolor-key="${key}"]`);
+    if (!images.length) return;
+    const original = await loadOriginal(key, images[0]);
+
+    let url = original.src;
+    if (targetHex !== sourceHex) {
+      const cacheKey = `${key}:${targetHex}`;
+      let cachedUrl = recolored.get(cacheKey);
+      if (!cachedUrl) {
+        const [h0, s0, l0] = hexToHsl(sourceHex);
+        const [h1, s1, l1] = hexToHsl(targetHex);
+        const { width, height, data } = original.data;
+        const out = new ImageData(new Uint8ClampedArray(data), width, height);
+        const px = out.data;
+        for (let i = 0; i < px.length; i += 4) {
+          const [h, s, l] = rgbToHsl(px[i], px[i + 1], px[i + 2]);
+          // Soft mask: weight 1 for saturated pixels near the yarn's hue, fading to
+          // 0 for pale, grayish or off-hue pixels (backdrop shadows, wood).
+          const diff = Math.abs(((h - h0 + 540) % 360) - 180);
+          const hueW = 1 - smooth(18, 34, diff);
+          const satW = smooth(0.22, 0.42, s);
+          const w = hueW * satW;
+          if (w <= 0) continue;
+          const nh = (h + (h1 - h0) + 360) % 360;
+          const ns = Math.min(1, s0 > 0.01 ? s * (s1 / s0) : s1);
+          const nl = Math.min(1, Math.max(0, l + (l1 - l0)));
+          const [nr, ng, nb] = hslToRgb(nh, ns, nl);
+          const r = px[i] + (nr - px[i]) * w;
+          const g = px[i + 1] + (ng - px[i + 1]) * w;
+          const b = px[i + 2] + (nb - px[i + 2]) * w;
+          px[i] = r; px[i + 1] = g; px[i + 2] = b;
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext("2d")!.putImageData(out, 0, 0);
+        const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/png"));
+        if (!blob) return;
+        cachedUrl = URL.createObjectURL(blob);
+        recolored.set(cacheKey, cachedUrl);
+      }
+      url = cachedUrl;
+    }
+    images.forEach((img) => { img.src = url; });
+  }
+
+  document.querySelectorAll<HTMLButtonElement>("[data-swatch-color]").forEach((swatch) => {
+    swatch.addEventListener("click", () => {
+      const group = swatch.closest<HTMLElement>("[data-swatch-group]");
+      if (!group) return;
+      const key = group.dataset.swatchGroup!;
+      const target = swatch.dataset.swatchColor!;
+      // Only one swatch is selected at a time, in the card and the pop-up alike.
+      document.querySelectorAll(`[data-swatch-group="${key}"] [data-swatch-color]`).forEach((other) => {
+        other.setAttribute("aria-checked", String(other.getAttribute("data-swatch-color") === target));
+      });
+      recolor(key, group.dataset.sourceColor!, target);
+    });
+  });
 
   const panzoomInstances = new Map();
   const openButtons = document.querySelectorAll("[data-open-product]");

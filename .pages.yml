@@ -40,3 +40,8 @@ content:
           min: 1
         required: true
         description: The first photo is the one shown on the product card. Drag to reorder.
+
+      - name: swatches
+        label: Show color swatches
+        type: boolean
+        description: Shows small squares of the photo's main colors on the images. Used for the macramé ornaments.
