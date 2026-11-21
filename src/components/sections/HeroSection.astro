@@ -1,6 +1,7 @@
 ---
 import logo from '../../assets/KoseliCrafts_logo.png';
 import TagButton from '../ui/TagButton.astro';
+import PhoneMenu from '../ui/PhoneMenu.astro';
 import FloatingPieces, { type FloatSlot } from '../ui/FloatingPieces.astro';
 import { FIRST_THEME, THEMES } from '../../data/themes';
 import { ORDER_LINK } from '../../lib/contact';
@@ -17,6 +18,13 @@ const LOOSE_PIECES: FloatSlot[] = [
   { left: '2%', top: '64%', size: 230, depth: -1.8, kind: 'tassel', rotate: 28, blur: 9, layer: 8, hideWhenNarrow: true },
   { left: '84%', top: '6%', size: 170, depth: -1.5, kind: 'wood-0', rotate: -20, blur: 8, layer: 8 },
   { left: '88%', top: '46%', size: 90, depth: -1, kind: 'wood-2', rotate: 8, layer: 8 }
+];
+
+const MENU_LINKS = [
+  { href: '#collection', label: 'Shop' },
+  { href: '#made', label: 'Our craft' },
+  { href: '#questions', label: 'Questions' },
+  { href: RESOURCES_PAGE, label: 'Resources' }
 ];
 
 // Softer and warmer than elsewhere, so pieces sit on the bright theme colour.
@@ -43,6 +51,7 @@ const HERO_SHADOW = 'rgba(43,33,24,0.22)';
       <a href="#made" class="wavy-link main-nav-link hide-below-900">Our craft</a>
       <a href="#questions" class="wavy-link main-nav-link hide-below-900">Questions</a>
       <a href={RESOURCES_PAGE} class="wavy-link main-nav-link hide-below-900">Resources</a>
+      <PhoneMenu links={MENU_LINKS} />
       <a href={ORDER_LINK} target="_blank" rel="noopener" class="order-badge" aria-label="Order on WhatsApp">
         <svg viewBox="0 0 100 100" aria-hidden="true">
           <defs><path id="order-badge-ring" d="M50,50 m-37,0 a37,37 0 1,1 74,0 a37,37 0 1,1 -74,0"></path></defs>
@@ -285,6 +294,11 @@ const HERO_SHADOW = 'rgba(43,33,24,0.22)';
     align-items: flex-start;
     justify-content: space-between;
     gap: 24px;
+  }
+
+  /* An open menu dims the page, so it has to sit above the hero text and buttons. */
+  .hero-head:has([data-phone-menu][data-open='true']) {
+    z-index: 30;
   }
 
   .plaque {

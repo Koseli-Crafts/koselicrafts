@@ -1,0 +1,209 @@
+---
+// Narrow screens hide the header links, so a wooden bead opens them instead:
+// a cord drops from the bead and each link swings down on it as a gift tag.
+interface Props {
+  links: { href: string; label: string }[];
+}
+
+const { links } = Astro.props;
+---
+
+<div class="phone-menu" data-phone-menu>
+  <button type="button" class="bead bead--small phone-menu-bead" aria-expanded="false" aria-controls="phone-menu-tags" aria-label="Menu" data-phone-menu-toggle>
+    <span class="phone-menu-lines" aria-hidden="true"><i></i><i></i><i></i></span>
+  </button>
+  <div class="phone-menu-dim" aria-hidden="true" data-phone-menu-close></div>
+  <nav id="phone-menu-tags" class="phone-menu-tags" aria-label="Menu" inert>
+    {links.map((link) => <a href={link.href} data-phone-menu-close>{link.label}</a>)}
+  </nav>
+</div>
+
+<script>
+  const menu = document.querySelector<HTMLElement>('[data-phone-menu]');
+
+  if (menu) {
+    const toggle = menu.querySelector<HTMLButtonElement>('[data-phone-menu-toggle]')!;
+    const tags = menu.querySelector<HTMLElement>('nav')!;
+
+    const setOpen = (open: boolean) => {
+      menu.dataset.open = String(open);
+      toggle.setAttribute('aria-expanded', String(open));
+      tags.inert = !open;
+    };
+
+    toggle.addEventListener('click', () => setOpen(menu.dataset.open !== 'true'));
+    menu.querySelectorAll('[data-phone-menu-close]').forEach((element) =>
+      element.addEventListener('click', () => setOpen(false))
+    );
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && menu.dataset.open === 'true') {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+    // Widening the window past the phone layout hides the bead; don't leave the menu open behind it.
+    window.matchMedia('(min-width: 901px)').addEventListener('change', (query) => query.matches && setOpen(false));
+  }
+</script>
+
+<style>
+  .phone-menu {
+    display: none;
+    position: relative;
+  }
+
+  @media (max-width: 900px) {
+    .phone-menu {
+      display: block;
+    }
+  }
+
+  .phone-menu-bead {
+    position: relative;
+    z-index: 3;
+  }
+
+  .phone-menu-lines {
+    position: relative;
+    width: 18px;
+    height: 12px;
+  }
+
+  .phone-menu-lines i {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--color-bead-ink);
+    transition: transform 0.3s var(--motion-out), opacity 0.2s;
+  }
+
+  .phone-menu-lines i:nth-child(1) { top: 0; }
+  .phone-menu-lines i:nth-child(2) { top: 5px; }
+  .phone-menu-lines i:nth-child(3) { top: 10px; }
+
+  [data-open='true'] .phone-menu-lines i:nth-child(1) { transform: translateY(5px) rotate(45deg); }
+  [data-open='true'] .phone-menu-lines i:nth-child(2) { opacity: 0; }
+  [data-open='true'] .phone-menu-lines i:nth-child(3) { transform: translateY(-5px) rotate(-45deg); }
+
+  .phone-menu-dim {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    background: rgb(247 241 232 / 0.55);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s, visibility 0s 0.25s;
+  }
+
+  [data-open='true'] .phone-menu-dim {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.25s;
+  }
+
+  /* The tags hang from a cord that drops out of the bead's centre. */
+  .phone-menu-tags {
+    position: absolute;
+    z-index: 2;
+    top: 100%;
+    right: calc(50% - 109px);
+    width: 210px;
+    padding-top: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .phone-menu-tags::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    top: -6px;
+    right: 108px;
+    width: 2px;
+    height: 0;
+    background: var(--color-ink);
+    transition: height 0.2s var(--motion-out);
+  }
+
+  [data-open='true'] .phone-menu-tags::before {
+    height: calc(100% - 10px);
+    transition-duration: 0.35s;
+  }
+
+  .phone-menu-tags a {
+    position: relative;
+    margin-top: 10px;
+    padding: 14px 20px 14px 34px;
+    border-radius: 8px 999px 999px 8px;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font: 800 20px var(--font-display);
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: 0 12px 22px rgb(43 33 24 / 0.25);
+    transform-origin: 100% 0;
+    transform: translateY(-30px) rotate(-6deg);
+    opacity: 0;
+    transition: transform 0.2s var(--motion-out), opacity 0.15s;
+  }
+
+  /* The tag's punched hole shows the current theme colour. */
+  .phone-menu-tags a::before {
+    content: '';
+    position: absolute;
+    left: 13px;
+    top: calc(50% - 5px);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--theme-bg);
+    box-shadow: inset 0 0 0 2px rgb(43 33 24 / 0.25);
+    transition: background 1s;
+  }
+
+  .phone-menu-tags a:nth-child(even) {
+    margin-right: 18px;
+  }
+
+  .phone-menu-tags a:last-child {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  .phone-menu-tags a:focus-visible {
+    outline: 3px solid var(--color-ink);
+    outline-offset: 3px;
+  }
+
+  .phone-menu-tags a:active {
+    scale: 0.97;
+  }
+
+  [data-open='true'] .phone-menu-tags a {
+    opacity: 1;
+    transform: rotate(var(--tilt));
+    transition: transform 0.55s cubic-bezier(0.3, 1.5, 0.5, 1), opacity 0.2s;
+  }
+
+  [data-open='true'] .phone-menu-tags a:nth-child(1) { --tilt: -2deg; }
+  [data-open='true'] .phone-menu-tags a:nth-child(2) { --tilt: 2deg; transition-delay: 0.05s; }
+  [data-open='true'] .phone-menu-tags a:nth-child(3) { --tilt: -1.5deg; transition-delay: 0.1s; }
+  [data-open='true'] .phone-menu-tags a:nth-child(4) { --tilt: 2.5deg; transition-delay: 0.15s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .phone-menu-tags a,
+    [data-open='true'] .phone-menu-tags a {
+      transform: none;
+      transition: opacity 0.15s;
+      transition-delay: 0s;
+    }
+
+    .phone-menu-tags::before,
+    .phone-menu-lines i {
+      transition-duration: 0.01s;
+    }
+  }
+</style>
