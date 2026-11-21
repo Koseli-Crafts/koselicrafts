@@ -29,6 +29,20 @@ const languageOf = (text: string) => (/[\u0900-\u097F]/.test(text) ? 'ne' : unde
       <span class="eyebrow">Resources</span>
       <h1>Files to<br />download.</h1>
       <p>Catalogues, guides and anything else we share. Each one is a PDF you can keep, print or send on.</p>
+
+      <aside class="advent-note" aria-labelledby="advent-note-title">
+        <span class="eyebrow" id="advent-note-title">About the 25 Names of Jesus</span>
+        <p>
+          Advent comes from the Latin <em>adventus</em>, meaning “coming.” Since around the 4th to 6th
+          centuries, Christians have kept it as a season to prepare for Christ, much as Lent prepares
+          for Easter. One well-loved way to keep it is the Jesse Tree, named for Isaiah 11:1: “A shoot
+          will come up from the stump of Jesse.” Each day, a family hangs an ornament for a Bible story
+          that leads to Jesus. Our set follows the same rhythm, one ornament a day from December 1 to
+          Christmas, but each one carries a name of Jesus with the verse behind it. Together the 25 names
+          tell the whole story: the promise of the prophets, His arrival as Immanuel, His mission as
+          Savior, and His victory as King of Kings and Lord of Lords.
+        </p>
+      </aside>
     </div>
 
     {resources.length > 0 ? (
@@ -120,6 +134,26 @@ const languageOf = (text: string) => (/[\u0900-\u097F]/.test(text) ? 'ne' : unde
     font-size: 17px;
     line-height: 1.6;
     color: var(--color-body);
+  }
+
+  .advent-note {
+    margin-top: 18px;
+    padding: 26px 28px;
+    border-radius: 28px;
+    background: var(--color-oat);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .advent-note .eyebrow {
+    color: var(--color-muted);
+  }
+
+  .resources-intro .advent-note p {
+    max-width: none;
+    font-size: 16px;
+    line-height: 1.65;
   }
 
   .resource-list {
