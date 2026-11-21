@@ -141,8 +141,9 @@ sidebar.
 Leave the three **(advanced)** fields empty unless the photo looks too big, too
 small or hits the menu.
 
-**Keep it to about five or six themes with short names.** They all sit in one
-row at the top of the page, and long or many names get squeezed onto two lines.
+**Keep theme names short.** They are the filter buttons above the shop, and the
+slideshow at the top shows every theme in turn, so a long list takes a while to
+cycle through.
 
 **Remove a theme**: first untick it on every product that uses it, then delete
 it under **Themes**. If a product still uses a deleted theme, the site stops

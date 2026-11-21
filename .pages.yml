@@ -253,7 +253,7 @@ content:
       - name: cordLength
         label: Cord length (advanced)
         type: number
-        description: How long the string above the photo is, in pixels. Usually 30. Use 0 for no string.
+        description: How long the string above the photo is, in pixels, measured from the top of the page. Usually 120, so the photo hangs below the wood shapes at the top. Use 0 for no string.
 
       - name: top
         label: Space above (advanced)

@@ -91,7 +91,7 @@ function toTheme(id: string, entry: ThemeEntry): Theme {
     image: image.src,
     imageAlt: entry.imageAlt?.trim() || entry.word.trim(),
     imageHeight: entry.imageHeight || 620,
-    cordLength: entry.cordLength ?? 30,
+    cordLength: entry.cordLength ?? 120,
     top: `${entry.top ?? 0}px`,
     floats: {
       tassel: CORDS[entry.cord].tassel,
