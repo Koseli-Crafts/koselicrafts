@@ -4,6 +4,7 @@ import TagButton from '../ui/TagButton.astro';
 import FloatingPieces, { type FloatSlot } from '../ui/FloatingPieces.astro';
 import { FIRST_THEME, THEMES } from '../../data/themes';
 import { ORDER_LINK } from '../../lib/contact';
+import { RESOURCES_PAGE } from '../../lib/resources';
 import { heroWordSize, padNumber } from '../../lib/format';
 
 // Layer 3 sits behind the hanging piece (layer 5), layer 8 in front of it.
@@ -41,6 +42,7 @@ const HERO_SHADOW = 'rgba(43,33,24,0.22)';
       <a href="#collection" class="wavy-link main-nav-link">Shop</a>
       <a href="#made" class="wavy-link main-nav-link hide-below-900">Our craft</a>
       <a href="#questions" class="wavy-link main-nav-link hide-below-900">Questions</a>
+      <a href={RESOURCES_PAGE} class="wavy-link main-nav-link hide-below-900">Resources</a>
       <a href={ORDER_LINK} target="_blank" rel="noopener" class="order-badge" aria-label="Order on WhatsApp">
         <svg viewBox="0 0 100 100" aria-hidden="true">
           <defs><path id="order-badge-ring" d="M50,50 m-37,0 a37,37 0 1,1 74,0 a37,37 0 1,1 -74,0"></path></defs>

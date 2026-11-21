@@ -1,0 +1,281 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteFooter from '../components/sections/SiteFooter.astro';
+import TagButton from '../components/ui/TagButton.astro';
+import logo from '../assets/KoseliCrafts_logo.png';
+import { loadResources } from '../lib/resources';
+import { QUESTION_LINK } from '../lib/contact';
+import { padNumber } from '../lib/format';
+
+const resources = loadResources();
+const home = import.meta.env.BASE_URL;
+const languageOf = (text: string) => (/[\u0900-\u097F]/.test(text) ? 'ne' : undefined);
+---
+
+<Layout
+  title="Resources · Koseli Crafts"
+  description="Catalogues, guides and other files from Koseli Crafts to download as PDFs."
+>
+<main class="resources">
+  <header class="resources-head">
+    <a href={home} class="resources-logo" aria-label="Koseli Crafts, back to the home page">
+      <img src={logo.src} alt="Koseli Crafts" />
+    </a>
+    <a href={home} class="wavy-link resources-back">← Back to the shop</a>
+  </header>
+
+  <section class="resources-body">
+    <div class="resources-intro">
+      <span class="eyebrow">Resources</span>
+      <h1>Files to<br />download.</h1>
+      <p>Catalogues, guides and anything else we share. Each one is a PDF you can keep, print or send on.</p>
+    </div>
+
+    {resources.length > 0 ? (
+      <ul class="resource-list">
+        {resources.map((resource, index) => (
+          <li class:list={['resource-row', !resource.download && 'resource-row--soon']}>
+            <span class="resource-no">{padNumber(index + 1)}</span>
+            <div class="resource-text">
+              <h2 lang={languageOf(resource.title)}>{resource.title}</h2>
+              {resource.description && <p>{resource.description}</p>}
+              {resource.download && <span class="resource-size">{resource.download.sizeLabel}</span>}
+            </div>
+            {resource.download ? (
+              <TagButton
+                href={resource.download.href}
+                label="Download"
+                arrow="down"
+                flat
+                download={resource.download.filename}
+                aria-label={`Download ${resource.title} (${resource.download.sizeLabel})`}
+                class="resource-button"
+              />
+            ) : (
+              <span class="resource-soon">Coming soon</span>
+            )}
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <div class="resource-empty">
+        <p>Nothing to download yet. Looking for something? Ask us and we’ll send it over.</p>
+        <TagButton href={QUESTION_LINK} label="Message us" />
+      </div>
+    )}
+  </section>
+</main>
+<SiteFooter />
+</Layout>
+
+<style>
+  .resources {
+    background: var(--color-paper);
+  }
+
+  .resources-head {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 28px 44px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .resources-logo img {
+    display: block;
+    height: 42px;
+    width: auto;
+  }
+
+  .resources-back {
+    font-weight: 600;
+    font-size: 17px;
+  }
+
+  .resources-body {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 90px 44px 140px;
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: 72px;
+    align-items: start;
+  }
+
+  .resources-intro {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .resources-intro h1 {
+    font-size: 72px;
+    line-height: 0.9;
+  }
+
+  .resources-intro p {
+    max-width: 360px;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--color-body);
+  }
+
+  .resource-list {
+    margin: 0;
+    padding: 30px 0 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .resource-row {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    padding: 24px 28px;
+    border-radius: 28px;
+    background: var(--color-oat);
+    transition: background 0.4s, transform 0.4s var(--motion-out);
+  }
+
+  .resource-row:hover {
+    background: var(--theme-bg);
+    transform: rotate(-0.6deg) scale(1.01);
+  }
+
+  .resource-no {
+    flex: none;
+    align-self: flex-start;
+    width: 2ch;
+    padding-top: 4px;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 22px;
+    opacity: 0.55;
+  }
+
+  .resource-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .resource-text h2 {
+    font-size: 30px;
+    line-height: 1.05;
+    overflow-wrap: anywhere;
+  }
+
+  .resource-text p {
+    font-size: 16px;
+    line-height: 1.55;
+  }
+
+  .resource-size {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--color-muted);
+  }
+
+  .resource-row :global(.resource-button) {
+    flex: none;
+  }
+
+  .resource-row--soon {
+    background: none;
+    border: 2px dashed var(--color-sand);
+  }
+
+  .resource-row--soon:hover {
+    background: none;
+    transform: none;
+  }
+
+  .resource-row--soon .resource-text {
+    color: var(--color-muted);
+  }
+
+  .resource-soon {
+    flex: none;
+    padding: 12px 22px;
+    border-radius: 999px;
+    background: var(--color-oat);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .resource-empty {
+    padding-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+  }
+
+  .resource-empty p {
+    max-width: 460px;
+    font-size: 20px;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 900px) {
+    .resources-body {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 36px;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .resources-head {
+      padding: 20px 16px 0;
+    }
+
+    .resources-logo img {
+      height: 34px;
+    }
+
+    .resources-back {
+      font-size: 15px;
+    }
+
+    .resources-body {
+      padding: 56px 16px 90px;
+    }
+
+    .resources-intro h1 {
+      font-size: 46px;
+    }
+
+    .resource-row {
+      flex-wrap: wrap;
+      gap: 12px 14px;
+      padding: 18px;
+    }
+
+    .resource-text h2 {
+      font-size: 22px;
+    }
+
+    .resource-row :global(.resource-button),
+    .resource-soon {
+      width: 100%;
+      justify-content: center;
+      text-align: center;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .resource-row:hover {
+      transform: none;
+    }
+  }
+</style>

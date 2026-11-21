@@ -3,6 +3,16 @@ import '../styles/global.css';
 import 'lenis/dist/lenis.css';
 import { WOOD } from '../data/decor';
 import { FIRST_THEME } from '../data/themes';
+
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const {
+	title = 'Koseli Crafts · Handmade gifts from Kathmandu',
+	description = 'Engraved wooden gifts and macramé wall hangings, made by hand in Kathmandu, Nepal. Scripture in Nepali and English, and custom engraving. Order on WhatsApp.'
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -19,8 +29,8 @@ import { FIRST_THEME } from '../data/themes';
 			href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Anek+Devanagari:wght@500;800&family=Tiro+Devanagari+Hindi&display=swap"
 			rel="stylesheet"
 		/>
-		<title>Koseli Crafts · Handmade gifts from Kathmandu</title>
-		<meta name="description" content="Engraved wooden gifts and macramé wall hangings, made by hand in Kathmandu, Nepal. Scripture in Nepali and English, and custom engraving. Order on WhatsApp." />
+		<title>{title}</title>
+		<meta name="description" content={description} />
 	</head>
 	<body>
 		<slot />

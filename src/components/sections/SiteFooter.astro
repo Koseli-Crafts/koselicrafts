@@ -2,6 +2,7 @@
 import TagButton from '../ui/TagButton.astro';
 import { CORDS, type CordId } from '../../data/decor';
 import { EMAIL, ORDER_LINK, PHONE } from '../../lib/contact';
+import { RESOURCES_PAGE } from '../../lib/resources';
 
 // A fringe of tassels hanging from the top edge, each on its own length of cord.
 const FRINGE: CordId[] = ['pink', 'gold', 'teal', 'cream', 'lavender', 'sage', 'pink', 'gold', 'teal'];
@@ -34,6 +35,7 @@ const tassels = FRINGE.map((cord, index) => ({
       <a href={PHONE.href}>{PHONE.display}</a>
       <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
       <span>Kathmandu, Nepal</span>
+      <a href={RESOURCES_PAGE}>Resources &amp; downloads</a>
     </address>
   </div>
 

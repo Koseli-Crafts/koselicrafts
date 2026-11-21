@@ -119,6 +119,21 @@ broken page.
 
 ---
 
+## Add a PDF people can download
+
+PDFs appear on the **Resources** page (koselicrafts.com/resources), each with a
+download button. The page is linked from the top menu and the footer.
+
+1. In Pages CMS, click **Resources** in the left sidebar.
+2. Click **Add an entry**.
+3. Fill in **Name** (e.g. `Christmas gift catalogue 2026`), an optional
+   **Description**, and upload the file under **PDF file**.
+4. Click **Save**. The page updates in about 2 minutes.
+
+To remove one, delete its entry. To change the order, drag the entries.
+
+---
+
 ## Photo tips
 
 - **Cut-out photos** need a see-through background, saved as `.png` or `.webp`.
@@ -140,6 +155,8 @@ can still edit them by hand if you prefer:
 | :--- | :--- |
 | Product photos | `src/assets/products/` |
 | Product text & prices | `src/data/products.json` |
+| Downloadable PDFs | `public/resources/` |
+| PDF names & descriptions | `src/data/resources.json` |
 
 Each product is one block in `src/data/products.json`:
 

@@ -1,12 +1,20 @@
 # Configuration for Pages CMS (https://pagescms.org) — the visual editor for
 # products at https://app.pagescms.org. Editing this file changes the admin
-# form; the website itself reads src/data/products.json.
+# form; the website itself reads src/data/products.json and src/data/resources.json.
 
 media:
-  input: src/assets/products
-  output: /products
-  categories: [image]
-  rename: safe
+  - name: images
+    label: Product photos
+    input: src/assets/products
+    output: /products
+    categories: [image]
+    rename: safe
+  - name: files
+    label: Downloads
+    input: public/resources
+    output: /resources
+    extensions: [pdf]
+    rename: safe
 
 content:
   - name: products
@@ -41,6 +49,8 @@ content:
       - name: images
         label: Photos
         type: image
+        options:
+          media: images
         list:
           min: 1
         required: true
@@ -49,6 +59,8 @@ content:
       - name: cutout
         label: Cut-out photo
         type: image
+        options:
+          media: images
         description: The piece on its own with the background removed (a .png or .webp with a see-through background). This is what floats in the collection. If empty, the first photo is used.
 
       - name: cord
@@ -100,3 +112,29 @@ content:
         type: string
         list: true
         description: 'Optional. The cord''s own colours as codes like #d71369, the first being the main one. Leave empty and they are picked from the first photo.'
+
+  - name: resources
+    label: Resources
+    type: file
+    path: src/data/resources.json
+    format: json
+    list: true
+    fields:
+      - name: title
+        label: Name
+        type: string
+        required: true
+        description: What people will download, e.g. "Christmas gift catalogue 2026".
+
+      - name: description
+        label: Description
+        type: text
+        description: Optional. One or two sentences about what is inside.
+
+      - name: file
+        label: PDF file
+        type: file
+        options:
+          media: files
+          extensions: [pdf]
+        description: 'Upload the PDF and it gets a download button. Leave it empty and the page shows "Coming soon" until you add it.'
