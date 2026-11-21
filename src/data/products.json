@@ -11,8 +11,7 @@
     "cutout": "/products/cutout-maya-pink.webp",
     "cord": "pink",
     "themes": [
-      "src/data/themes/christmas.json",
-      "src/data/themes/test-theme.json"
+      "src/data/themes/christmas.json"
     ],
     "swatches": true,
     "swatchColors": [
@@ -79,8 +78,7 @@
     "themes": [
       "src/data/themes/scripture.json",
       "src/data/themes/home.json"
-    ],
-    "swatches": false
+    ]
   },
   {
     "title": "Rustic Psalm 23 Wall Art",
@@ -95,8 +93,7 @@
     "themes": [
       "src/data/themes/scripture.json",
       "src/data/themes/home.json"
-    ],
-    "swatches": false
+    ]
   },
   {
     "title": "God’s First Love",
@@ -110,8 +107,7 @@
     "cord": "gold",
     "themes": [
       "src/data/themes/scripture.json"
-    ],
-    "swatches": false
+    ]
   },
   {
     "title": "God’s Love",
@@ -125,8 +121,7 @@
     "cord": "lavender",
     "themes": [
       "src/data/themes/scripture.json"
-    ],
-    "swatches": false
+    ]
   },
   {
     "title": "You Are So Loved",
@@ -140,8 +135,7 @@
     "cord": "gold",
     "themes": [
       "src/data/themes/love.json"
-    ],
-    "swatches": false
+    ]
   },
   {
     "title": "First Loved Boho Macramé",
@@ -156,8 +150,7 @@
     "themes": [
       "src/data/themes/love.json",
       "src/data/themes/home.json"
-    ],
-    "swatches": false
+    ]
   },
   {
     "title": "Inspirational Wooden Hanging",
@@ -172,8 +165,7 @@
     "themes": [
       "src/data/themes/love.json",
       "src/data/themes/custom.json"
-    ],
-    "swatches": false
+    ]
   },
   {
     "title": "Haven Macramé Cross Hanging",
@@ -187,8 +179,7 @@
     "cord": "cream",
     "themes": [
       "src/data/themes/home.json"
-    ],
-    "swatches": false
+    ]
   },
   {
     "title": "Green Macramé Frame Plaque",
@@ -203,8 +194,7 @@
     "cord": "sage",
     "themes": [
       "src/data/themes/custom.json"
-    ],
-    "swatches": false
+    ]
   },
   {
     "title": "Laser-Engraved Bookmark",
@@ -218,7 +208,6 @@
     "cord": "wood",
     "themes": [
       "src/data/themes/custom.json"
-    ],
-    "swatches": false
+    ]
   }
 ]
