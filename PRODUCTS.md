@@ -46,7 +46,7 @@ Pages CMS is 100% free and open source (MIT).
    | **Photos** | Click to upload from your phone or computer. Add as many as you like. |
    | **Cut-out photo** | The piece on its own with the background removed (see *Photo tips*). This is the picture that floats in the collection. |
    | **Cord colour** | The macramé colour. Pick **Wood** if there is no cord. |
-   | **Themes** | Which collection filters show the piece. Pick one or more from the current themes (see "Themes" below to add one). |
+   | **Themes** | Which collection filters show the piece. Click the box and start typing a theme's name to see the choices. Pick one or more (see "Themes" below to add one). |
    | **Show color swatches** | Tick it for macramé pieces whose cord colour visitors may want to change, like the ornaments. Shows a row of colour squares; tapping one recolours the cord in the picture. |
    | **Swatch colours** | Leave it **empty**. The site then picks the cord's colours from the first photo by itself. Only fill it in if those picked colours look wrong (see below). |
 

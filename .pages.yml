@@ -142,7 +142,10 @@ content:
     view:
       primary: nav
       fields: [nav, order]
-      sort: [order]
+      sort: [order, nav]
+      default:
+        sort: order
+        order: asc
     fields:
       - name: nav
         label: Name
