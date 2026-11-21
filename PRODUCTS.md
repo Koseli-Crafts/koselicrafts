@@ -122,7 +122,11 @@ broken page.
 ## Add a PDF people can download
 
 PDFs appear on the **Resources** page (koselicrafts.com/resources), each with a
-download button. The page is linked from the top menu and the footer.
+download button. The page is linked from the top menu.
+
+The printed card in the 25 Names of Jesus Advent set sends people to this page,
+so keep the Advent scripture PDFs listed here. The "About the 25 Names of Jesus"
+box beside the list is not in Pages CMS; ask the developer to change its words.
 
 1. In Pages CMS, click **Resources** in the left sidebar.
 2. Click **Add an entry**.

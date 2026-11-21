@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # Claude Code temporary worktrees
 .claude/worktrees/
+
+# Playwright MCP screenshots and snapshots
+.playwright-mcp/

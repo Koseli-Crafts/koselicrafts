@@ -20,7 +20,7 @@ There are no tests and no linter. CI (`.github/workflows/deploy-pages.yml`) runs
 `.pages.yml` defines the Pages CMS forms. Staff edit through it, and each save commits to `main`. That makes `.pages.yml` and the data files a contract with the people editing them:
 
 - **Products**: `src/data/products.json`, with photos in `src/assets/products/`. The CMS writes image paths as `/products/<file>`. The site looks images up by filename only (`import.meta.glob` in `src/lib/catalog.ts`), but the CMS needs the prefix. `price` must be a string.
-- **Resources**: `src/data/resources.json`, with PDFs in `public/resources/` (served as-is, at `/resources/<file>`). An entry with no `file` shows as "Coming soon". `src/lib/resources.ts` fails the build if a listed PDF is missing.
+- **Resources**: `src/data/resources.json`, with PDFs in `public/resources/` (served as-is, at `/resources/<file>`). An entry with no `file` shows as "Coming soon". `src/lib/resources.ts` fails the build if a listed PDF is missing. The printed card in the 25 Names of Jesus Advent set links to `/resources/`, so that URL is fixed. The Advent explainer box on that page is hard-coded in `resources.astro`, not CMS data.
 - `media` in `.pages.yml` is a list of named upload folders (`images`, `files`). Every image or file field must name one with `options.media`.
 - A new data field must also be added to `.pages.yml`, and kept simple for non-technical editors. Update the staff guide in `PRODUCTS.md` when the editing steps change.
 - The `cord` and `themes` choices in `.pages.yml` must match `CORDS` in `src/data/decor.ts` and `THEME_IDS` in `src/data/themes.ts`. Both `catalog.ts` (at build) and `check-products.mjs` stop with a plain message if they differ.
