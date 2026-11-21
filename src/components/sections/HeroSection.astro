@@ -186,6 +186,9 @@ const HERO_SHADOW = 'rgba(43,33,24,0.22)';
   // and it never moves on while keyboard focus is inside it.
   hero.addEventListener('pointerdown', markTouched);
   hero.addEventListener('keydown', markTouched);
+  // Scrolling the page counts as use too, so the hero holds still while
+  // people scroll past or back up to it.
+  window.addEventListener('scroll', markTouched, { passive: true });
   hero.addEventListener('focusin', () => { focusInside = true; });
   hero.addEventListener('focusout', (event) => {
     focusInside = hero.contains(event.relatedTarget as Node | null);
