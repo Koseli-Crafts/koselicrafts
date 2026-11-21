@@ -11,7 +11,7 @@
     "cutout": "/products/cutout-maya-pink.webp",
     "cord": "pink",
     "themes": [
-      "christmas"
+      "src/data/themes/christmas.json"
     ],
     "swatches": true,
     "swatchColors": [
@@ -33,8 +33,8 @@
     "cutout": "/products/cutout-love-teal.webp",
     "cord": "teal",
     "themes": [
-      "christmas",
-      "love"
+      "src/data/themes/christmas.json",
+      "src/data/themes/love.json"
     ],
     "swatches": true,
     "swatchColors": [
@@ -56,7 +56,7 @@
     "cutout": "/products/cutout-faith-teal.webp",
     "cord": "teal",
     "themes": [
-      "christmas"
+      "src/data/themes/christmas.json"
     ],
     "swatches": true,
     "swatchColors": [
@@ -76,8 +76,8 @@
     "cutout": "/products/cutout-psalm23-plaque.webp",
     "cord": "wood",
     "themes": [
-      "scripture",
-      "home"
+      "src/data/themes/scripture.json",
+      "src/data/themes/home.json"
     ]
   },
   {
@@ -91,8 +91,8 @@
     "cutout": "/products/cutout-psalm23-rustic.webp",
     "cord": "wood",
     "themes": [
-      "scripture",
-      "home"
+      "src/data/themes/scripture.json",
+      "src/data/themes/home.json"
     ]
   },
   {
@@ -106,7 +106,7 @@
     "cutout": "/products/cutout-gods-first-love.webp",
     "cord": "gold",
     "themes": [
-      "scripture"
+      "src/data/themes/scripture.json"
     ]
   },
   {
@@ -120,7 +120,7 @@
     "cutout": "/products/cutout-gods-love.webp",
     "cord": "lavender",
     "themes": [
-      "scripture"
+      "src/data/themes/scripture.json"
     ]
   },
   {
@@ -134,7 +134,7 @@
     "cutout": "/products/cutout-you-are-so-loved.webp",
     "cord": "gold",
     "themes": [
-      "love"
+      "src/data/themes/love.json"
     ]
   },
   {
@@ -148,8 +148,8 @@
     "cutout": "/products/cutout-first-loved.webp",
     "cord": "sage",
     "themes": [
-      "love",
-      "home"
+      "src/data/themes/love.json",
+      "src/data/themes/home.json"
     ]
   },
   {
@@ -163,8 +163,8 @@
     "cutout": "/products/cutout-inspirational.webp",
     "cord": "cream",
     "themes": [
-      "love",
-      "custom"
+      "src/data/themes/love.json",
+      "src/data/themes/custom.json"
     ]
   },
   {
@@ -178,7 +178,7 @@
     "cutout": "/products/cutout-haven-cross.webp",
     "cord": "cream",
     "themes": [
-      "home"
+      "src/data/themes/home.json"
     ]
   },
   {
@@ -193,7 +193,7 @@
     "cutout": "/products/cutout-frame-green.webp",
     "cord": "sage",
     "themes": [
-      "custom"
+      "src/data/themes/custom.json"
     ]
   },
   {
@@ -207,7 +207,7 @@
     "cutout": "/products/cutout-bookmark.webp",
     "cord": "wood",
     "themes": [
-      "custom"
+      "src/data/themes/custom.json"
     ]
   }
 ]

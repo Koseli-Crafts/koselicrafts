@@ -1,0 +1,20 @@
+{
+  "order": 2,
+  "nav": "Scripture",
+  "word": "Psalm",
+  "kicker": "Scripture in Nepali",
+  "line": "Psalm 23 and 1 John 4:19, engraved in Nepali and Tibetan/Dolpo script.",
+  "cta": "See the scripture pieces",
+  "background": "#D9B48A",
+  "cord": "cream",
+  "wood": [
+    "cross",
+    "ka",
+    "disc"
+  ],
+  "image": "/products/cutout-psalm23-plaque.webp",
+  "imageAlt": "Nepali Psalm 23 multi-tier plaque",
+  "imageHeight": 620,
+  "cordLength": 30,
+  "top": 0
+}

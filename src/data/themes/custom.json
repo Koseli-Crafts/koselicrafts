@@ -1,0 +1,20 @@
+{
+  "order": 5,
+  "nav": "Custom",
+  "word": "Yours",
+  "kicker": "Your own words",
+  "line": "Send us a name, a verse or a message, and we’ll engrave it.",
+  "cta": "See custom pieces",
+  "background": "#93C9DA",
+  "cord": "sage",
+  "wood": [
+    "ka",
+    "ma",
+    "ya"
+  ],
+  "image": "/products/cutout-frame-green.webp",
+  "imageAlt": "Green macramé frame plaque, left plain for engraving",
+  "imageHeight": 400,
+  "cordLength": 0,
+  "top": 200
+}

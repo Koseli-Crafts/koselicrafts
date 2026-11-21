@@ -39,7 +39,7 @@ changes when the hero moves to the next theme.
 
 Source of truth for the look: the "Final design" page of the Koseli Crafts
 redesign canvas. Tokens live in `src/styles/base.css`; themes in
-`src/data/themes.ts`.
+`src/data/themes/` (one file per theme, edited in Pages CMS).
 
 ## Pieces of the kit
 

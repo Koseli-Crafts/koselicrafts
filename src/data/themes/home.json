@@ -1,0 +1,20 @@
+{
+  "order": 4,
+  "nav": "New home",
+  "word": "Haven",
+  "kicker": "A blessing for a new home",
+  "line": "Wall hangings for a home, a prayer corner or a church.",
+  "cta": "See pieces for the home",
+  "background": "#BED3AB",
+  "cord": "cream",
+  "wood": [
+    "cross",
+    "disc",
+    "heart"
+  ],
+  "image": "/products/cutout-haven-cross.webp",
+  "imageAlt": "Haven macramé cross hanging",
+  "imageHeight": 620,
+  "cordLength": 30,
+  "top": 0
+}
