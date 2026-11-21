@@ -1,0 +1,20 @@
+{
+  "order": 3,
+  "nav": "Someone you love",
+  "word": "Loved",
+  "kicker": "For someone you love",
+  "line": "Words of love in wood, finished with hand-knotted cotton cord.",
+  "cta": "See gifts of love",
+  "background": "#F3D07E",
+  "cord": "gold",
+  "wood": [
+    "heart",
+    "ya",
+    "heart"
+  ],
+  "image": "/products/cutout-you-are-so-loved.webp",
+  "imageAlt": "You Are So Loved macramé hanging",
+  "imageHeight": 620,
+  "cordLength": 30,
+  "top": 0
+}

@@ -1,8 +1,9 @@
 import { parse } from 'yaml';
 import productsData from '../data/products.json';
 import pagesCmsConfig from '../../.pages.yml?raw';
-import { CORDS, isCordId, type CordId } from '../data/decor';
-import { THEME_IDS, type ThemeId } from '../data/themes';
+import { CORDS, WOOD, isCordId, type CordId } from '../data/decor';
+import { basename, productImage, productImageNames } from './product-images';
+import { THEMES, isThemeId, themeIdOf } from './themes';
 import { colorName, hexToRgb, rgbDistance } from './color';
 import { productOrderLink } from './contact';
 import { getPalette } from './palette';
@@ -31,7 +32,8 @@ export interface Product {
   image: { src: string; width: number; height: number };
   cord: CordId;
   cordLabel: string;
-  themes: ThemeId[];
+  /** Theme ids, e.g. "christmas". */
+  themes: string[];
   /** Macramé colours a visitor can try; the first is the piece's own colour. */
   swatches: Swatch[];
 }
@@ -41,26 +43,12 @@ export interface Swatch {
   name: string;
 }
 
-// Every file in src/assets/products/ is picked up automatically. Entries may be a
-// bare filename ("clock.jpg") or a path ("/products/clock.jpg", which is what
-// Pages CMS writes); only the filename is used to look the image up.
-const imageModules = import.meta.glob<{ default: ImageMetadata }>(
-  '../assets/products/*.{jpg,jpeg,png,webp,avif,gif}',
-  { eager: true }
-);
-
-const imagesByFilename = Object.fromEntries(
-  Object.entries(imageModules).map(([path, mod]) => [path.split('/').pop()!, mod.default])
-);
-
-const basename = (imageRef: string) => imageRef.split('/').pop()!;
-
 function findImage(product: ProductEntry, imageRef: string) {
-  const image = imagesByFilename[basename(imageRef)];
+  const image = productImage(imageRef);
   if (!image) {
     throw new Error(
       `Product "${product.title}" refers to the image "${imageRef}", but that file is not in src/assets/products/.\n` +
-      `Available images: ${Object.keys(imagesByFilename).join(', ')}`
+      `Available images: ${productImageNames().join(', ')}`
     );
   }
   return image;
@@ -92,22 +80,36 @@ async function ownColors(entry: ProductEntry) {
   return typed.length ? typed : getPalette(`products/${basename(entry.images[0])}`);
 }
 
-// The cord colours and themes staff can pick in Pages CMS must be the ones this
-// code knows about, or a product would silently lose its colour or filter.
+// The cord colours and wood pieces staff can pick in Pages CMS must be the ones
+// this code knows about, or a product or theme would silently lose its colour.
 function checkCmsChoices() {
-  const fields = parse(pagesCmsConfig).content.find((c: { name: string }) => c.name === 'products').fields;
-  const choicesOf = (name: string): string[] =>
-    fields.find((f: { name: string }) => f.name === name).options.values.map((v: { name: string }) => v.name);
+  const content = parse(pagesCmsConfig).content as { name: string; fields: { name: string; options: { values: { name: string }[] } }[] }[];
+  const choicesOf = (collection: string, field: string): string[] =>
+    content.find((c) => c.name === collection)!.fields.find((f) => f.name === field)!.options.values.map((v) => v.name);
   const same = (a: readonly string[], b: readonly string[]) => [...a].sort().join() === [...b].sort().join();
-  if (!same(choicesOf('cord'), Object.keys(CORDS))) {
-    throw new Error(`The cord colours in .pages.yml (${choicesOf('cord')}) differ from src/data/decor.ts (${Object.keys(CORDS)}).`);
+  for (const collection of ['products', 'themes']) {
+    if (!same(choicesOf(collection, 'cord'), Object.keys(CORDS))) {
+      throw new Error(`The cord colours for ${collection} in .pages.yml (${choicesOf(collection, 'cord')}) differ from src/data/decor.ts (${Object.keys(CORDS)}).`);
+    }
   }
-  if (!same(choicesOf('themes'), THEME_IDS)) {
-    throw new Error(`The themes in .pages.yml (${choicesOf('themes')}) differ from src/data/themes.ts (${THEME_IDS}).`);
+  if (!same(choicesOf('themes', 'wood'), Object.keys(WOOD))) {
+    throw new Error(`The wood pieces in .pages.yml (${choicesOf('themes', 'wood')}) differ from src/data/decor.ts (${Object.keys(WOOD)}).`);
   }
 }
 
-const isThemeId = (value: string): value is ThemeId => (THEME_IDS as readonly string[]).includes(value);
+// Pages CMS saves each theme as its file path ("src/data/themes/home.json").
+function productThemes(entry: ProductEntry) {
+  return (entry.themes ?? []).map((ref) => {
+    const id = themeIdOf(ref);
+    if (!isThemeId(id)) {
+      throw new Error(
+        `Product "${entry.title}" is in the theme "${id}", but there is no such theme any more.\n` +
+        `Pick one of its current themes in Pages CMS: ${THEMES.map((theme) => theme.nav).join(', ')}.`
+      );
+    }
+    return id;
+  });
+}
 
 const slug = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
@@ -137,7 +139,7 @@ export async function loadCatalog(): Promise<Product[]> {
         image: { src: image.src, width: image.width, height: image.height },
         cord,
         cordLabel: cord === 'wood' ? CORDS.wood.label : `${CORDS[cord].label} cord`,
-        themes: (entry.themes ?? []).filter(isThemeId),
+        themes: productThemes(entry),
         swatches
       };
     })

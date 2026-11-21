@@ -1,4 +1,4 @@
-import type { FloatKind, Theme, ThemeId } from '../data/themes';
+import type { FloatKind, Theme } from '../lib/themes';
 
 /** Sent by the hero's call-to-action so the collection shows that theme's pieces. */
 export const SHOW_THEME_EVENT = 'koseli:show-theme';
@@ -8,8 +8,8 @@ export function readThemes(): Theme[] {
   return json ? JSON.parse(json) : [];
 }
 
-export function showThemeInCollection(id: ThemeId) {
-  document.dispatchEvent(new CustomEvent<ThemeId>(SHOW_THEME_EVENT, { detail: id }));
+export function showThemeInCollection(id: string) {
+  document.dispatchEvent(new CustomEvent<string>(SHOW_THEME_EVENT, { detail: id }));
 }
 
 /** Recolours everything on the page that follows the current theme. */

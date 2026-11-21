@@ -46,7 +46,7 @@ Pages CMS is 100% free and open source (MIT).
    | **Photos** | Click to upload from your phone or computer. Add as many as you like. |
    | **Cut-out photo** | The piece on its own with the background removed (see *Photo tips*). This is the picture that floats in the collection. |
    | **Cord colour** | The macramé colour. Pick **Wood** if there is no cord. |
-   | **Themes** | Which collection filters show the piece: Christmas, Scripture, Someone you love, New home, Custom. |
+   | **Themes** | Which collection filters show the piece. Click the box and start typing a theme's name to see the choices. Pick one or more (see "Themes" below to add one). |
    | **Show color swatches** | Tick it for macramé pieces whose cord colour visitors may want to change, like the ornaments. Shows a row of colour squares; tapping one recolours the cord in the picture. |
    | **Swatch colours** | Leave it **empty**. The site then picks the cord's colours from the first photo by itself. Only fill it in if those picked colours look wrong (see below). |
 
@@ -119,6 +119,38 @@ broken page.
 
 ---
 
+## Themes (the slideshow at the top and the shop filters)
+
+Each theme is one slide at the top of the page (its colour, big word, sentence
+and hanging photo) and one filter in the shop. Click **Themes** in the left
+sidebar.
+
+**Add a theme**
+
+1. Click **Add an entry** and fill in the form. Each field says what it is for.
+2. **Photo** must be a cut-out with a see-through background, like the product
+   cut-outs (see *Photo tips* below). Upload it under **Photo**.
+3. **Background colour** is a code like `#BED3AB`. Pick a soft, light colour so
+   the dark text stays readable. Sites like
+   [htmlcolorcodes.com](https://htmlcolorcodes.com) show the code for a colour.
+4. **Position** sets the order: 1 comes first. The first theme is the colour the
+   page opens with.
+5. Click **Save**. Then open the products that belong to it and tick the new
+   theme under **Themes**.
+
+Leave the three **(advanced)** fields empty unless the photo looks too big, too
+small or hits the menu.
+
+**Keep it to about five or six themes with short names.** They all sit in one
+row at the top of the page, and long or many names get squeezed onto two lines.
+
+**Remove a theme**: first untick it on every product that uses it, then delete
+it under **Themes**. If a product still uses a deleted theme, the site stops
+updating and the Actions page names the product (see *Did it work?*). The live
+site keeps showing the old version until that is fixed.
+
+---
+
 ## Add a PDF people can download
 
 PDFs appear on the **Resources** page (koselicrafts.com/resources), each with a
@@ -173,7 +205,7 @@ Each product is one block in `src/data/products.json`:
     "images": ["/products/your-photo.jpg"],
     "cutout": "/products/your-photo-cutout.webp",
     "cord": "cream",
-    "themes": ["home"]
+    "themes": ["src/data/themes/home.json"]
   },
 ```
 
@@ -199,7 +231,7 @@ Two things must match what Pages CMS expects, or the editor breaks:
 ## For developers
 
 - Product images are picked up automatically from `src/assets/products/` via
-  `import.meta.glob` in `src/lib/catalog.ts`.
+  `import.meta.glob` in `src/lib/product-images.ts`.
   **Adding a product never requires a code change.**
 - `.pages.yml` defines the Pages CMS admin form. Editing it changes the fields
   editors see; it has no effect on the built site.
@@ -209,9 +241,15 @@ Two things must match what Pages CMS expects, or the editor breaks:
   cosmetic to the build — but Pages CMS needs it to map a value back to
   `src/assets/products/`, and it needs `price` as a string (ranges like
   `750-1500` are not numbers). `check-products.mjs` enforces both, and checks
-  that `cord` and `themes` only use the choices listed in `.pages.yml`, and that
-  `swatchColors` are colour codes.
-- The themes (hero slides and collection filters) live in `src/data/themes.ts`;
-  cord colours and their tassel pictures in `src/data/decor.ts`. Adding a theme
-  or cord colour means updating that file and the matching choices in
-  `.pages.yml`. The build stops with a plain message if the two disagree.
+  that `cord` only uses the choices listed in `.pages.yml`, that every theme a
+  product names exists, and that `swatchColors` are colour codes.
+- The themes (hero slides and collection filters) are one JSON file each in
+  `src/data/themes/`, edited as the "Themes" collection in Pages CMS. The file
+  name without `.json` is the theme's id. Products point to themes with a
+  Pages CMS `reference` field, which saves the file path
+  (`src/data/themes/home.json`); `src/lib/themes.ts` reads the files and checks
+  them. **Adding a theme never requires a code change.**
+- Cord colours and their tassel pictures, and the wood pieces, live in
+  `src/data/decor.ts`. Adding a cord colour or wood piece means updating that
+  file and the matching choices in `.pages.yml`. The build stops with a plain
+  message if the two disagree.

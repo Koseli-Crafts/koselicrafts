@@ -1,0 +1,20 @@
+{
+  "order": 1,
+  "nav": "Christmas",
+  "word": "Maya",
+  "kicker": "Christmas ornaments",
+  "line": "Engraved wood and bright macramé for the tree, a window or a gift.",
+  "cta": "See the ornaments",
+  "background": "#F4ABC8",
+  "cord": "pink",
+  "wood": [
+    "snow",
+    "ma",
+    "heart"
+  ],
+  "image": "/products/cutout-maya-pink.webp",
+  "imageAlt": "Nepali Maya ornament in pink macramé",
+  "imageHeight": 520,
+  "cordLength": 150,
+  "top": 0
+}

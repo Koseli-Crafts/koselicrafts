@@ -1,6 +1,7 @@
-# Configuration for Pages CMS (https://pagescms.org) — the visual editor for
-# products at https://app.pagescms.org. Editing this file changes the admin
-# form; the website itself reads src/data/products.json and src/data/resources.json.
+# Configuration for Pages CMS (https://pagescms.org) — the visual editor at
+# https://app.pagescms.org. Editing this file changes the admin forms; the
+# website itself reads src/data/products.json, src/data/resources.json and the
+# theme files in src/data/themes/.
 
 media:
   - name: images
@@ -86,21 +87,14 @@ content:
 
       - name: themes
         label: Themes
-        type: select
-        description: Which filters in the collection show this piece. Pick one or more.
+        type: reference
+        description: Which filters in the collection show this piece. Pick one or more. To add a new theme, use "Themes" in the menu first.
         options:
+          collection: themes
           multiple: true
-          values:
-            - name: christmas
-              label: Christmas
-            - name: scripture
-              label: Scripture
-            - name: love
-              label: Someone you love
-            - name: home
-              label: New home
-            - name: custom
-              label: Custom
+          search: nav
+          label: "{nav}"
+          value: "{path}"
 
       - name: swatches
         label: Show color swatches
@@ -138,3 +132,130 @@ content:
           media: files
           extensions: [pdf]
         description: 'Upload the PDF and it gets a download button. Leave it empty and the page shows "Coming soon" until you add it.'
+
+  - name: themes
+    label: Themes
+    type: collection
+    path: src/data/themes
+    format: json
+    filename: "{fields.nav}.json"
+    view:
+      primary: nav
+      fields: [nav, order]
+      sort: [order, nav]
+      default:
+        sort: order
+        order: asc
+    fields:
+      - name: nav
+        label: Name
+        type: string
+        required: true
+        description: The name on the theme's tag at the top of the page and on the shop filter, e.g. "New home". Keep it short.
+
+      - name: order
+        label: Position
+        type: number
+        description: Where it comes in the slideshow and the filters. 1 is first. The first theme is also the colour the page opens with.
+
+      - name: word
+        label: Big word
+        type: string
+        required: true
+        description: The large word behind the photo, e.g. "Haven". One short word fits best.
+
+      - name: kicker
+        label: Small heading
+        type: string
+        required: true
+        description: The small line in capitals above the sentence, e.g. "A blessing for a new home".
+
+      - name: line
+        label: Sentence
+        type: text
+        required: true
+        description: One sentence about this kind of gift. Shown beside the photo.
+
+      - name: cta
+        label: Button text
+        type: string
+        required: true
+        description: The button that jumps to this theme's pieces in the shop, e.g. "See pieces for the home".
+
+      - name: background
+        label: Background colour
+        type: string
+        required: true
+        description: 'The page colour for this theme, as a colour code like #BED3AB. Pick a soft, light colour so the dark text stays easy to read.'
+
+      - name: cord
+        label: Tassel colour
+        type: select
+        required: true
+        description: The colour of the tassels on the buttons and floating pieces while this theme shows.
+        options:
+          values:
+            - name: pink
+              label: Pink
+            - name: teal
+              label: Teal
+            - name: gold
+              label: Gold
+            - name: lavender
+              label: Lavender
+            - name: sage
+              label: Sage
+            - name: cream
+              label: Cream
+            - name: wood
+              label: Wood (no cord)
+
+      - name: wood
+        label: Floating wood pieces
+        type: select
+        description: Pick up to three wood shapes that float around the photo. Leave empty for a disc, a heart and क.
+        options:
+          multiple: true
+          values:
+            - name: cross
+              label: Cross
+            - name: disc
+              label: Round disc
+            - name: heart
+              label: Heart
+            - name: ka
+              label: क (ka)
+            - name: ma
+              label: म (ma)
+            - name: ya
+              label: य (ya)
+            - name: snow
+              label: Snowflake
+
+      - name: image
+        label: Photo
+        type: image
+        required: true
+        options:
+          media: images
+        description: The piece that hangs in the middle of the page. It must have the background removed (a .png or .webp with a see-through background), or it will show as a rectangle.
+
+      - name: imageAlt
+        label: Photo description
+        type: string
+        description: What the photo shows, for people who can't see it, e.g. "Haven macramé cross hanging".
+
+      - name: imageHeight
+        label: Photo height (advanced)
+        type: number
+        description: How tall the photo is, in pixels. Usually 620. Make it smaller for wide pieces. Phones size it on their own.
+
+      - name: cordLength
+        label: Cord length (advanced)
+        type: number
+        description: How long the string above the photo is, in pixels. Usually 30. Use 0 for no string.
+
+      - name: top
+        label: Space above (advanced)
+        type: number
+        description: Pushes the photo down from the top, in pixels. Usually 0.
