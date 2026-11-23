@@ -40,7 +40,10 @@ const tassels = FRINGE.map((cord, index) => ({
   <p class="footer-name" aria-hidden="true" lang="ne">कोसेली</p>
 
   <div class="footer-bar">
-    <span>&copy; 2026 Koseli Crafts. Designed and handcrafted in Nepal.</span>
+    <div class="footer-legal">
+      <span>&copy; 2026 Koseli Crafts. Designed and handcrafted in Nepal.</span>
+      <span>Musickotha Life Skills Pvt. Ltd. · Registration No: 152410/073/074</span>
+    </div>
     <span>Koseli · <span lang="ne">कोसेली</span> · a gift</span>
   </div>
 </footer>
@@ -142,6 +145,16 @@ const tassels = FRINGE.map((cord, index) => ({
     background: var(--color-ink);
     color: #e9ddcb;
     font-size: 14px;
+  }
+
+  .footer-legal {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .footer-legal span + span {
+    opacity: 0.75;
   }
 
   @media (max-width: 760px) {
