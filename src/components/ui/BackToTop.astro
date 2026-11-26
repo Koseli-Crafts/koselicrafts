@@ -1,0 +1,37 @@
+---
+// A bead in the corner that scrolls back to the top. It shows once the first screen is passed.
+---
+
+<button type="button" class="bead bead--small back-to-top" data-back-to-top aria-label="Go to top" title="Go to top" hidden>↑</button>
+
+<style>
+  .back-to-top {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 50;
+    opacity: 0;
+    translate: 0 12px;
+    pointer-events: none;
+    transition: opacity 200ms cubic-bezier(0.23, 1, 0.32, 1), translate 200ms cubic-bezier(0.23, 1, 0.32, 1), transform 200ms;
+  }
+
+  .back-to-top.is-shown {
+    opacity: 1;
+    translate: 0 0;
+    pointer-events: auto;
+  }
+
+  @media (max-width: 760px) {
+    .back-to-top {
+      right: 16px;
+      bottom: 16px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .back-to-top {
+      transition: none;
+    }
+  }
+</style>

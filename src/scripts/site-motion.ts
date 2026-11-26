@@ -2,8 +2,10 @@ import Lenis from 'lenis';
 import initParallax from './parallax';
 
 export default function initSiteMotion() {
+	let lenis: Lenis | null = null;
+
 	if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-		const lenis = new Lenis({
+		lenis = new Lenis({
 			duration: 1.15,
 			lerp: 0.085,
 			smoothWheel: true,
@@ -12,7 +14,7 @@ export default function initSiteMotion() {
 		});
 
 		const raf = (time: number) => {
-			lenis.raf(time);
+			lenis!.raf(time);
 			window.requestAnimationFrame(raf);
 		};
 
@@ -20,4 +22,20 @@ export default function initSiteMotion() {
 	}
 
 	initParallax();
+	initBackToTop(lenis);
+}
+
+function initBackToTop(lenis: Lenis | null) {
+	const button = document.querySelector<HTMLButtonElement>('[data-back-to-top]');
+	if (!button) return;
+	button.hidden = false;
+
+	const update = () => button.classList.toggle('is-shown', window.scrollY > window.innerHeight);
+	window.addEventListener('scroll', update, { passive: true });
+	update();
+
+	button.addEventListener('click', () => {
+		if (lenis) lenis.scrollTo(0);
+		else window.scrollTo(0, 0);
+	});
 }
