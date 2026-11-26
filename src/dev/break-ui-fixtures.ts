@@ -45,7 +45,7 @@ const worst: ProductEntry[] = [
     kind: '',
     description: 'A macramé hanging with Philippians 4:13.',
     price: '',
-    images: ['/products/macrame-philippians.jpeg'],
+    images: ['/products/psalm23-rustic.jpg'],
     cord: 'sage',
     themes: ['src/data/themes/scripture.json']
   },
