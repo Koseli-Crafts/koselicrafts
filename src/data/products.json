@@ -66,6 +66,22 @@
     ]
   },
   {
+    "title": "25 Names of Jesus Advent Ornaments",
+    "kind": "Advent set",
+    "description": "Twenty-five ornaments, one name of Jesus for each day of Advent, gathered in a linen drawstring bag with an engraved wooden tag. A card in the set links to the Bible verse behind every name, free to download.",
+    "price": "2000",
+    "images": [
+      "/products/advent-names-of-jesus-bag.webp",
+      "/products/advent-names-of-jesus-bag-in-hand.webp"
+    ],
+    "cutout": "/products/cutout-advent-names-of-jesus.webp",
+    "cord": "wood",
+    "themes": [
+      "src/data/themes/advent.json",
+      "src/data/themes/christmas.json"
+    ]
+  },
+  {
     "title": "Nepali Psalm 23 Plaque",
     "kind": "Scripture",
     "description": "Five engraved panels carrying the complete Psalm 23 (भजनसंग्रह २३) in Nepali script, linked by metal chains for hanging.",

@@ -1,0 +1,20 @@
+{
+  "order": 2,
+  "nav": "Advent",
+  "word": "Advent",
+  "kicker": "Counting down to Christmas",
+  "line": "Twenty-five names of Jesus, one for each day of Advent, with a Bible verse for every name.",
+  "cta": "See the Advent set",
+  "background": "#CDB8E0",
+  "cord": "lavender",
+  "wood": [
+    "snow",
+    "cross",
+    "disc"
+  ],
+  "image": "/products/cutout-advent-names-of-jesus.webp",
+  "imageAlt": "25 Names of Jesus Advent ornaments in a linen drawstring bag",
+  "imageHeight": 400,
+  "cordLength": 0,
+  "top": 200
+}
