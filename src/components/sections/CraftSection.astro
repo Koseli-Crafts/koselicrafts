@@ -377,10 +377,12 @@ const STEPS = [
     justify-content: center;
   }
 
+  /* The hanging loop's peak sits left of the photo's centre; the shift puts it under the cord. */
   .script-crop img {
     height: 720px;
     width: auto;
     max-width: none;
+    translate: 13px 0;
     filter: drop-shadow(0 40px 50px rgb(0 0 0 / 0.5));
   }
 
