@@ -88,7 +88,7 @@ products.forEach((product, i) => {
   }
   if (product.variants !== undefined) {
     if (!Array.isArray(product.variants)) {
-      errors.push(`${where}: "variants" must be a list of choices.`);
+      errors.push(`${where}: "Choices" must be a list, one entry per version.`);
     } else {
       product.variants.forEach((variant, k) => {
         const choice = `${where}, choice #${k + 1}`;
@@ -99,6 +99,9 @@ products.forEach((product, i) => {
         if (!variant?.photo) errors.push(`${choice}: the photo is missing.`);
       });
     }
+  }
+  if (product.swatches && Array.isArray(product.variants) && product.variants.length > 0) {
+    warnings.push(`${where} has both Choices and colour swatches. Only the Choices show; untick "Show color swatches".`);
   }
   if (!product.cutout) {
     warnings.push(`${where} has no cut-out photo, so the shop shows its first photo with the background. Add one when you can.`);

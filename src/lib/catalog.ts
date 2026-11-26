@@ -169,6 +169,17 @@ function nameCode(text: string) {
 // readable link from, so it gets a code made from the name: "piece-1k3x9qz".
 const pieceId = (title: string) => slug(title) || `piece-${nameCode(title.trim())}`;
 
+/** Link names for a piece's options. A repeated name gets a number: "pink", "pink-2". */
+function optionIds(names: string[], unnamed: string) {
+  const seen: string[] = [];
+  return names.map((name) => {
+    const base = slug(name) || unnamed;
+    const repeats = seen.filter((earlier) => earlier === base).length;
+    seen.push(base);
+    return repeats ? `${base}-${repeats + 1}` : base;
+  });
+}
+
 // Wide pieces (ornaments, frames) would look oversized at full height.
 export const displayHeight = (image: { width: number; height: number }) =>
   Math.round(Math.min(600, 400 / (image.width / image.height)));
@@ -191,32 +202,22 @@ export async function loadCatalog(entries = productsData as ProductEntry[]): Pro
       const photo = findImage(entry, entry.images[0]);
       const image = entry.cutout ? findImage(entry, entry.cutout) : photo;
       const cord = isCordId(entry.cord) ? entry.cord : 'wood';
+      const variantIds = optionIds((entry.variants ?? []).map((variant) => variant.name), 'choice');
       const variants = (entry.variants ?? []).map((variant, k) => {
         const photo = findImage(entry, variant.photo);
         return {
-          id: slug(variant.name) || `choice-${k + 1}`,
+          id: variantIds[k],
           name: variant.name.trim(),
           materialSrc: variant.material ? findImage(entry, variant.material).src : undefined,
           hex: variant.colour?.trim() || undefined,
           image: { src: photo.src, width: photo.width, height: photo.height }
         };
       });
-      const variantIds = variants.map((variant) => variant.id);
-      const repeated = variants.find((variant, k) => variantIds.indexOf(variant.id) !== k);
-      if (repeated) {
-        throw new Error(`Two choices of "${entry.title}" have names too alike to tell their links apart ("${repeated.name}"). Change one of the names.`);
-      }
       // Choices show real photos, so recolouring the cord would fight them.
       const swatchColors = entry.swatches && !variants.length ? withPresets(await ownColors(entry)) : [];
-      // Two shades can share a name ("pink"), so the second one's link becomes "pink-2".
-      const namesSoFar: string[] = [];
-      const swatches = swatchColors.map((hex) => {
-        const name = colorName(hex);
-        const base = slug(name) || 'colour';
-        const repeats = namesSoFar.filter((earlier) => earlier === base).length;
-        namesSoFar.push(base);
-        return { id: repeats ? `${base}-${repeats + 1}` : base, hex, name };
-      });
+      const swatchNames = swatchColors.map(colorName);
+      const swatchIds = optionIds(swatchNames, 'colour');
+      const swatches = swatchColors.map((hex, k) => ({ id: swatchIds[k], hex, name: swatchNames[k] }));
       const id = ids[index];
       const themes = productThemes(entry);
       const shareUrl = absoluteUrl(piecePage(id));

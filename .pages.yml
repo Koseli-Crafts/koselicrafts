@@ -128,7 +128,7 @@ content:
       - name: swatches
         label: Show color swatches
         type: boolean
-        description: Lets visitors try other macramé colours on the piece. Used for the macramé ornaments.
+        description: Lets visitors try other macramé colours on the piece. Used for the macramé ornaments. Has no effect on a piece with Choices.
 
       - name: swatchColors
         label: Swatch colours

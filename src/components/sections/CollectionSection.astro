@@ -163,8 +163,8 @@ const paragraphs = (text: string) => text.split(/\n\s*\n/).map((paragraph) => pa
 
 <script>
   import { padNumber, piecesLabel } from '../../lib/format';
-  import { recolorImage } from '../../lib/recolor';
-  import { productOrderLink } from '../../lib/contact';
+  import { pageWithOption, pieceAddress, readPieceAddress } from '../../lib/piece-address';
+  import { choiceOptions, colourOptions, type PieceOptions } from '../../scripts/piece-options';
   import { SHOW_THEME_EVENT } from '../../scripts/theme';
 
   const section = document.querySelector<HTMLElement>('[data-collection]')!;
@@ -195,16 +195,22 @@ const paragraphs = (text: string) => text.split(/\n\s*\n/).map((paragraph) => pa
    * or /#christmas, so a shared link opens it. A piece's choice follows a slash:
    * /#25-names-of-jesus-advent-ornaments/red-satin-ribbon.
    */
-  const fullAddress = () => decodeURIComponent(location.hash.slice(1));
-  const addressName = () => fullAddress().split('/')[0];
-  const choiceFromAddress = () => fullAddress().split('/')[1] ?? '';
+  function fullAddress() {
+    // A pasted link can carry a stray "%" that is not valid encoding; read it as typed.
+    try {
+      return decodeURIComponent(location.hash.slice(1));
+    } catch {
+      return location.hash.slice(1);
+    }
+  }
+  const addressName = () => readPieceAddress(fullAddress()).pieceId;
+  const choiceFromAddress = () => readPieceAddress(fullAddress()).optionId;
   const pieceFromAddress = () => items.find((item) => item.dataset.piece === addressName());
   const filterFromAddress = () => tabs.find((tab) => tab.dataset.filter !== 'all' && tab.dataset.filter === addressName());
 
   function syncAddress() {
-    const choice = choiceOf(selected);
     const wanted =
-      selected >= 0 ? items[selected].dataset.piece! + (choice ? `/${choice}` : '') :
+      selected >= 0 ? pieceAddress(items[selected].dataset.piece!, pieceOptions.get(selected)?.current()) :
       filter === 'all' ? '' : filter;
     if (fullAddress() === wanted) return;
     // Leave other anchors such as #questions alone; only clear a piece's or filter's own address.
@@ -216,15 +222,8 @@ const paragraphs = (text: string) => text.split(/\n\s*\n/).map((paragraph) => pa
   let centered = 2;
   let selected = -1;
   let lastSelected = -1;
-  /** Puts a piece back to its first photo with no choice picked; set up with the choices below. */
-  const resetChoices = new Map<number, () => void>();
-  /** The picked choice of each piece that has one, as it appears in the address. */
-  const pickedChoices = new Map<number, string>();
-  /** A piece with colours starts on its own colour, so its address names that from the first open. */
-  const startingChoices = new Map<number, string>();
-  const choiceOf = (piece: number) => pickedChoices.get(piece) ?? startingChoices.get(piece);
-  /** Picks a piece's choice by its address name, for links that name one. */
-  const pickChoice = new Map<number, (choiceId: string) => void>();
+  /** The colours or Choices of each piece that has them; set up near the end. */
+  const pieceOptions = new Map<number, PieceOptions>();
 
   const visibleItems = () =>
     items.filter((item) => filter === 'all' || item.dataset.themes!.split(' ').includes(filter));
@@ -238,7 +237,8 @@ const paragraphs = (text: string) => text.split(/\n\s*\n/).map((paragraph) => pa
    * wide screens show it at (phones show pieces at half that while browsing).
    */
   const PHONE_PIECE_ROOM = 320;
-  const PHONE_OPEN_SCALE = 2;
+  /** How much bigger an open piece may grow than its browsing size on phones. */
+  const PHONE_MOST_GROWTH = 2;
   const BREATHING_ROOM = 8;
   const filterRow = section.querySelector<HTMLElement>('.tabs')!;
 
@@ -256,7 +256,7 @@ const paragraphs = (text: string) => text.split(/\n\s*\n/).map((paragraph) => pa
   function phoneOpenSpot(item: HTMLElement): Spot {
     const roomTop = filterRow.getBoundingClientRect().bottom - cluster.getBoundingClientRect().top + BREATHING_ROOM;
     const roomBottom = panel.offsetTop - BREATHING_ROOM;
-    const scale = Math.min(PHONE_OPEN_SCALE, (roomBottom - roomTop) / item.offsetHeight);
+    const scale = Math.min(PHONE_MOST_GROWTH, (roomBottom - roomTop) / item.offsetHeight);
     const restingBottom = item.offsetTop + item.offsetHeight;
     return { x: 0, y: roomBottom - restingBottom, scale, opacity: 1, rotate: 0, layer: 20, blur: 0 };
   }
@@ -336,7 +336,7 @@ const paragraphs = (text: string) => text.split(/\n\s*\n/).map((paragraph) => pa
 
   function render() {
     // A closed piece goes back to its first photo, so the collection always shows the originals.
-    if (lastSelected !== selected) resetChoices.get(lastSelected)?.();
+    if (lastSelected !== selected) pieceOptions.get(lastSelected)?.reset();
     lastSelected = selected;
     const list = visibleItems();
     const selectedPosition = list.findIndex((item) => Number(item.dataset.item) === selected);
@@ -513,7 +513,7 @@ const paragraphs = (text: string) => text.split(/\n\s*\n/).map((paragraph) => pa
     if (item) {
       if (!visibleItems().includes(item)) filter = 'all';
       openPiece(item);
-      if (choice) pickChoice.get(Number(item.dataset.item))?.(choice);
+      if (choice) pieceOptions.get(Number(item.dataset.item))?.pick(choice);
     } else if (tab) {
       setFilter(tab.dataset.filter!);
     } else {
@@ -528,8 +528,7 @@ const paragraphs = (text: string) => text.split(/\n\s*\n/).map((paragraph) => pa
     const label = button.textContent!;
     const piece = Number(button.closest<HTMLElement>('[data-panel-for]')!.dataset.panelFor);
     button.addEventListener('click', async () => {
-      const choice = choiceOf(piece);
-      const url = button.dataset.shareUrl! + (choice ? `#${choice}` : '');
+      const url = pageWithOption(button.dataset.shareUrl!, pieceOptions.get(piece)?.current());
       if (navigator.share) {
         await navigator.share({ title: button.dataset.share, url }).catch(() => {});
         return;
@@ -551,169 +550,15 @@ const paragraphs = (text: string) => text.split(/\n\s*\n/).map((paragraph) => pa
   document.addEventListener(SHOW_THEME_EVENT, (event) => setFilter((event as CustomEvent<string>).detail));
   phone.addEventListener('change', render);
 
-  // Macramé colours: exactly one swatch is chosen; the first is the piece's own.
-  // Works like a set of radio buttons: Tab reaches the chosen one, arrow keys move.
-  const NEXT_KEYS = ['ArrowRight', 'ArrowDown'];
-  const PREVIOUS_KEYS = ['ArrowLeft', 'ArrowUp'];
-
-  const RECOLOUR_DIM_AFTER_MS = 120;
-  const RECOLOUR_FADE_MS = 200;
-
+  const optionHooks = { onPick: syncAddress, onResize: render };
+  const pieceImage = (piece: number) => items[piece].querySelector('img')!;
   section.querySelectorAll<HTMLElement>('[data-swatch-group]').forEach((group) => {
     const piece = Number(group.dataset.swatchGroup);
-    const image = items[piece].querySelector('img')!;
-    const original = image.dataset.originalSrc!;
-    const sourceColor = group.dataset.sourceColor!;
-    const state = group.parentElement!.querySelector('[data-swatch-state]')!;
-    const swatches = [...group.querySelectorAll<HTMLButtonElement>('[data-swatch-color]')];
-    const orderLink = group.closest('[data-panel-for]')!.querySelector<HTMLAnchorElement>('[data-order-title]')!;
-    const originalOrder = orderLink.href;
-    let wanted = sourceColor;
-    startingChoices.set(piece, swatches[0].dataset.swatchId!);
-
-    resetChoices.set(piece, () => {
-      pickedChoices.delete(piece);
-      if (wanted === sourceColor) return;
-      wanted = sourceColor;
-      swatches.forEach((swatch, k) => {
-        swatch.setAttribute('aria-checked', String(k === 0));
-        swatch.tabIndex = k === 0 ? 0 : -1;
-      });
-      state.textContent = 'original';
-      orderLink.href = originalOrder;
-      image.src = original;
-      image.style.opacity = '';
-    });
-
-    async function choose(swatch: HTMLButtonElement) {
-      swatches.forEach((other) => {
-        other.setAttribute('aria-checked', String(other === swatch));
-        other.tabIndex = other === swatch ? 0 : -1;
-      });
-      wanted = swatch.dataset.swatchColor!;
-      const isOriginal = wanted === sourceColor;
-      state.textContent = isOriginal ? 'original' : 'recoloured';
-      pickedChoices.set(piece, swatch.dataset.swatchId!);
-      syncAddress();
-      orderLink.href = productOrderLink(
-        orderLink.dataset.orderTitle!,
-        isOriginal ? orderLink.dataset.orderUrl! : `${orderLink.dataset.orderUrl}#${swatch.dataset.swatchId}`,
-        isOriginal ? undefined : `${swatch.dataset.swatchName} cord`
-      );
-      const target = wanted;
-
-      // Show the tap registered if the recolouring takes a moment. Only the
-      // latest choice may dim, so an older, slower one can't leave it dimmed.
-      const dim = window.setTimeout(() => {
-        if (wanted === target) image.style.opacity = '0.85';
-      }, RECOLOUR_DIM_AFTER_MS);
-      const url = await recolorImage(original, sourceColor, target);
-      window.clearTimeout(dim);
-      if (wanted !== target) return;
-
-      image.src = url;
-      await image.decode().catch(() => {});
-      image.style.opacity = '';
-      image.animate([{ opacity: 0.6 }, { opacity: 1 }], {
-        duration: RECOLOUR_FADE_MS,
-        easing: 'cubic-bezier(0.23, 1, 0.32, 1)'
-      });
-    }
-
-    pickChoice.set(piece, (swatchId) => {
-      const swatch = swatches.find((candidate) => candidate.dataset.swatchId === swatchId);
-      if (swatch) choose(swatch);
-    });
-
-    swatches.forEach((swatch, index) => {
-      swatch.addEventListener('click', () => choose(swatch));
-      swatch.addEventListener('keydown', (event) => {
-        const move =
-          NEXT_KEYS.includes(event.key) ? 1 :
-          PREVIOUS_KEYS.includes(event.key) ? -1 :
-          event.key === 'Home' ? -index :
-          event.key === 'End' ? swatches.length - 1 - index : 0;
-        if (!move) return;
-        event.preventDefault();
-        const target = swatches[(index + move + swatches.length) % swatches.length];
-        target.focus();
-        choose(target);
-      });
-    });
+    pieceOptions.set(piece, colourOptions(group, pieceImage(piece), optionHooks));
   });
-
-  // Choices: each shows its own photo of the piece. None is picked until the visitor taps one.
-  const VARIANT_FADE_MS = 200;
-
   section.querySelectorAll<HTMLElement>('[data-variant-group]').forEach((group) => {
     const piece = Number(group.dataset.variantGroup);
-    const image = items[piece].querySelector('img')!;
-    const state = group.parentElement!.querySelector('[data-variant-state]')!;
-    const choices = [...group.querySelectorAll<HTMLButtonElement>('[data-variant-name]')];
-    const orderLink = group.closest('[data-panel-for]')!.querySelector<HTMLAnchorElement>('[data-order-title]')!;
-    const originalOrder = orderLink.href;
-    const originalHeight = image.style.getPropertyValue('--display-height');
-    let wanted = '';
-
-    resetChoices.set(piece, () => {
-      if (!wanted) return;
-      wanted = '';
-      pickedChoices.delete(piece);
-      choices.forEach((choice, k) => {
-        choice.setAttribute('aria-checked', 'false');
-        choice.tabIndex = k === 0 ? 0 : -1;
-      });
-      state.textContent = 'none picked yet';
-      orderLink.href = originalOrder;
-      image.src = image.dataset.originalSrc!;
-      image.style.setProperty('--display-height', originalHeight);
-    });
-
-    async function choose(choice: HTMLButtonElement) {
-      choices.forEach((other) => {
-        other.setAttribute('aria-checked', String(other === choice));
-        other.tabIndex = other === choice ? 0 : -1;
-      });
-      const name = choice.dataset.variantName!;
-      const choiceId = choice.dataset.variantId!;
-      wanted = name;
-      state.textContent = name;
-      pickedChoices.set(piece, choiceId);
-      syncAddress();
-      // Mid-sentence in the message: "…with red satin ribbon."
-      const inSentence = name[0].toLowerCase() + name.slice(1);
-      orderLink.href = productOrderLink(orderLink.dataset.orderTitle!, `${orderLink.dataset.orderUrl}#${choiceId}`, inSentence);
-
-      const next = new Image();
-      next.src = choice.dataset.variantSrc!;
-      await next.decode().catch(() => {});
-      if (wanted !== name) return;
-      image.src = next.src;
-      image.style.setProperty('--display-height', choice.dataset.variantHeight!);
-      render();
-      image.animate([{ opacity: 0.4 }, { opacity: 1 }], { duration: VARIANT_FADE_MS, easing: ENTER_EASE });
-    }
-
-    pickChoice.set(piece, (choiceId) => {
-      const choice = choices.find((candidate) => candidate.dataset.variantId === choiceId);
-      if (choice) choose(choice);
-    });
-
-    choices.forEach((choice, index) => {
-      choice.addEventListener('click', () => choose(choice));
-      choice.addEventListener('keydown', (event) => {
-        const move =
-          NEXT_KEYS.includes(event.key) ? 1 :
-          PREVIOUS_KEYS.includes(event.key) ? -1 :
-          event.key === 'Home' ? -index :
-          event.key === 'End' ? choices.length - 1 - index : 0;
-        if (!move) return;
-        event.preventDefault();
-        const target = choices[(index + move + choices.length) % choices.length];
-        target.focus();
-        choose(target);
-      });
-    });
+    pieceOptions.set(piece, choiceOptions(group, pieceImage(piece), optionHooks));
   });
 
   if (!showAddress()) render();

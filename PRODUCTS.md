@@ -47,8 +47,8 @@ Pages CMS is 100% free and open source (MIT).
    | **Cut-out photo** | The piece on its own with the background removed (see *Photo tips*). This is the picture that floats in the collection. |
    | **Cord colour** | The macramé colour. Pick **Wood** if there is no cord. |
    | **Themes** | Which collection filters show the piece. Click the box and start typing a theme's name to see the choices. Pick one or more (see "Themes" below to add one). |
-   | **Choices** | Only for a piece that comes in versions, like the Advent set's red ribbon, white cord or jute twine. Add one entry per version: a **Name** ("Red satin ribbon"), an optional **Colour code** for the dot on its button, and a **Photo** of that version with the background removed. Visitors tap a choice to see its photo, and their WhatsApp order says which one. Leave empty for a piece with one version. |
-   | **Show color swatches** | Tick it for macramé pieces whose cord colour visitors may want to change, like the ornaments. Shows a row of colour squares; tapping one recolours the cord in the picture. |
+   | **Choices** | Only for a piece that comes in versions, like the Advent set's red ribbon, white cord or jute twine. Add one entry per version: a **Name** ("Red satin ribbon"); a **Material close-up**, a small square photo of just the ribbon or cord, shown in its square button; and a **Photo** of that version with the background removed, taken the same way as the others. With no close-up, the optional **Colour code** fills the square instead, and with neither the button shows the name. Visitors tap a choice to see its photo, and their WhatsApp order says which one. Leave empty for a piece with one version. A piece with Choices shows no colour swatches. |
+   | **Show color swatches** | Tick it for macramé pieces whose cord colour visitors may want to change, like the ornaments. Shows a row of colour squares; tapping one recolours the cord in the picture. Has no effect on a piece with **Choices**. |
    | **Swatch colours** | Leave it **empty**. The site then picks the cord's colours from the first photo by itself. Only fill it in if those picked colours look wrong (see below). |
 
 4. Click **Save**.
@@ -108,7 +108,7 @@ Each opens the piece with that one already picked. Renaming a choice breaks its
 old links the same way.
 
 When a customer taps **Order on WhatsApp**, the message names the piece and
-includes its link, and the cord colour or choice if they picked one.
+includes its link, the cord colour on pieces with colour swatches, and the choice once one is picked.
 
 ### Seasonal: which theme comes first
 

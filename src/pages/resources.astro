@@ -5,11 +5,10 @@ import TagButton from '../components/ui/TagButton.astro';
 import logo from '../assets/KoseliCrafts_logo.png';
 import { loadResources } from '../lib/resources';
 import { QUESTION_LINK } from '../lib/contact';
-import { padNumber } from '../lib/format';
+import { padNumber, textLang } from '../lib/format';
 
 const resources = loadResources();
 const home = import.meta.env.BASE_URL;
-const languageOf = (text: string) => (/[\u0900-\u097F]/.test(text) ? 'ne' : undefined);
 ---
 
 <Layout
@@ -52,7 +51,7 @@ const languageOf = (text: string) => (/[\u0900-\u097F]/.test(text) ? 'ne' : unde
           <li class:list={['resource-row', !resource.download && 'resource-row--soon']}>
             <span class="resource-no">{padNumber(index + 1)}</span>
             <div class="resource-text">
-              <h2 lang={languageOf(resource.title)}>{resource.title}</h2>
+              <h2 lang={textLang(resource.title)}>{resource.title}</h2>
               {resource.description && <p>{resource.description}</p>}
               {resource.download && <span class="resource-size">{resource.download.sizeLabel}</span>}
             </div>
@@ -311,7 +310,7 @@ const languageOf = (text: string) => (/[\u0900-\u097F]/.test(text) ? 'ne' : unde
     }
   }
 
-  @media (prefers-reduced-motion: reduce) {
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: reduce) {
     .resource-row:hover {
       transform: none;
     }
