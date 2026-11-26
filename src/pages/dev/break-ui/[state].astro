@@ -1,0 +1,51 @@
+---
+// Dev only: the shop with worst-case data. Production builds make no pages here.
+import Layout from '../../../layouts/Layout.astro';
+import CollectionSection from '../../../components/sections/CollectionSection.astro';
+import { STATES } from '../../../dev/break-ui-fixtures';
+
+export function getStaticPaths() {
+  if (!import.meta.env.DEV) return [];
+  return Object.keys(STATES).map((state) => ({ params: { state } }));
+}
+
+const current = Astro.params.state as keyof typeof STATES;
+---
+
+<Layout title="Break UI · Koseli Crafts">
+  <CollectionSection entries={STATES[current].entries} />
+  <div style="height: 400px"></div>
+  <nav class="break-toggle" aria-label="Test data">
+    {Object.entries(STATES).map(([state, { label }]) => (
+      <a href={`${import.meta.env.BASE_URL}dev/break-ui/${state}`} aria-current={state === current ? 'page' : undefined}>{label}</a>
+    ))}
+  </nav>
+</Layout>
+
+<style>
+  .break-toggle {
+    position: fixed;
+    z-index: 100;
+    left: 50%;
+    bottom: 12px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 10px;
+    background: #ddd;
+    font: 13px system-ui, sans-serif;
+  }
+
+  .break-toggle a {
+    padding: 6px 10px;
+    border-radius: 8px;
+    color: #333;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .break-toggle a[aria-current='page'] {
+    background: #fff;
+  }
+</style>
