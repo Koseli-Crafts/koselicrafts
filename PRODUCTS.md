@@ -47,6 +47,7 @@ Pages CMS is 100% free and open source (MIT).
    | **Cut-out photo** | The piece on its own with the background removed (see *Photo tips*). This is the picture that floats in the collection. |
    | **Cord colour** | The macramé colour. Pick **Wood** if there is no cord. |
    | **Themes** | Which collection filters show the piece. Click the box and start typing a theme's name to see the choices. Pick one or more (see "Themes" below to add one). |
+   | **Choices** | Only for a piece that comes in versions, like the Advent set's red ribbon, white cord or jute twine. Add one entry per version: a **Name** ("Red satin ribbon"), an optional **Colour code** for the dot on its button, and a **Photo** of that version with the background removed. Visitors tap a choice to see its photo, and their WhatsApp order says which one. Leave empty for a piece with one version. |
    | **Show color swatches** | Tick it for macramé pieces whose cord colour visitors may want to change, like the ornaments. Shows a row of colour squares; tapping one recolours the cord in the picture. |
    | **Swatch colours** | Leave it **empty**. The site then picks the cord's colours from the first photo by itself. Only fill it in if those picked colours look wrong (see below). |
 
@@ -99,8 +100,15 @@ name, like "Maya Ornament माया", to get a readable link.
 Each theme filter has a link too, made from the theme's file name:
 `koselicrafts.com/#christmas` opens the shop with the Christmas filter on.
 
+Choices and colour swatches have links too. Pick one, then tap **Share this
+piece**: picking "Red satin ribbon" sends
+`koselicrafts.com/pieces/25-names-of-jesus-advent-ornaments/#red-satin-ribbon`,
+and picking green on the Maya ornament sends `…/pieces/nepali-maya-ornament/#green`.
+Each opens the piece with that one already picked. Renaming a choice breaks its
+old links the same way.
+
 When a customer taps **Order on WhatsApp**, the message names the piece and
-includes its link, and the cord colour if they picked a different one.
+includes its link, and the cord colour or choice if they picked one.
 
 ### Seasonal: which theme comes first
 

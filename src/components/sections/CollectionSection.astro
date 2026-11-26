@@ -85,11 +85,42 @@ const paragraphs = (text: string) => text.split(/\n\s*\n/).map((paragraph) => pa
                       title={label}
                       data-swatch-color={swatch.hex}
                       data-swatch-name={swatch.name}
+                      data-swatch-id={swatch.id}
                     >
                       <span style={{ background: swatch.hex }}></span>
                     </button>
                   );
                 })}
+              </div>
+            </div>
+          )}
+          {product.variants.length > 0 && (
+            <div class="swatches">
+              <span class="eyebrow muted">Choose one · <span data-variant-state>none picked yet</span></span>
+              <div role="radiogroup" aria-label={`Versions of ${product.title}`} class="swatch-row" data-variant-group={index}>
+                {product.variants.map((variant, k) => (
+                  <button
+                    type="button"
+                    role="radio"
+                    class:list={[variant.materialSrc || variant.hex ? 'swatch swatch--choice' : 'variant']}
+                    aria-checked="false"
+                    tabindex={k === 0 ? 0 : -1}
+                    aria-label={variant.name}
+                    title={variant.name}
+                    data-variant-name={variant.name}
+                    data-variant-id={variant.id}
+                    data-variant-src={variant.image.src}
+                    data-variant-height={displayHeight(variant.image)}
+                  >
+                    {variant.materialSrc ? (
+                      <span style={{ background: `center / cover url(${variant.materialSrc})` }}></span>
+                    ) : variant.hex ? (
+                      <span style={{ background: variant.hex }}></span>
+                    ) : (
+                      variant.name
+                    )}
+                  </button>
+                ))}
               </div>
             </div>
           )}
@@ -161,15 +192,21 @@ const paragraphs = (text: string) => text.split(/\n\s*\n/).map((paragraph) => pa
 
   /**
    * Each piece and each filter has its own address, e.g. /#rustic-psalm-23-wall-art
-   * or /#christmas, so a shared link opens it.
+   * or /#christmas, so a shared link opens it. A piece's choice follows a slash:
+   * /#25-names-of-jesus-advent-ornaments/red-satin-ribbon.
    */
-  const addressName = () => decodeURIComponent(location.hash.slice(1));
+  const fullAddress = () => decodeURIComponent(location.hash.slice(1));
+  const addressName = () => fullAddress().split('/')[0];
+  const choiceFromAddress = () => fullAddress().split('/')[1] ?? '';
   const pieceFromAddress = () => items.find((item) => item.dataset.piece === addressName());
   const filterFromAddress = () => tabs.find((tab) => tab.dataset.filter !== 'all' && tab.dataset.filter === addressName());
 
   function syncAddress() {
-    const wanted = selected >= 0 ? items[selected].dataset.piece! : filter === 'all' ? '' : filter;
-    if (addressName() === wanted) return;
+    const choice = choiceOf(selected);
+    const wanted =
+      selected >= 0 ? items[selected].dataset.piece! + (choice ? `/${choice}` : '') :
+      filter === 'all' ? '' : filter;
+    if (fullAddress() === wanted) return;
     // Leave other anchors such as #questions alone; only clear a piece's or filter's own address.
     if (!wanted && !pieceFromAddress() && !filterFromAddress()) return;
     history.replaceState(history.state, '', `${location.pathname}${location.search}${wanted && `#${wanted}`}`);
@@ -178,6 +215,16 @@ const paragraphs = (text: string) => text.split(/\n\s*\n/).map((paragraph) => pa
   let filter = 'all';
   let centered = 2;
   let selected = -1;
+  let lastSelected = -1;
+  /** Puts a piece back to its first photo with no choice picked; set up with the choices below. */
+  const resetChoices = new Map<number, () => void>();
+  /** The picked choice of each piece that has one, as it appears in the address. */
+  const pickedChoices = new Map<number, string>();
+  /** A piece with colours starts on its own colour, so its address names that from the first open. */
+  const startingChoices = new Map<number, string>();
+  const choiceOf = (piece: number) => pickedChoices.get(piece) ?? startingChoices.get(piece);
+  /** Picks a piece's choice by its address name, for links that name one. */
+  const pickChoice = new Map<number, (choiceId: string) => void>();
 
   const visibleItems = () =>
     items.filter((item) => filter === 'all' || item.dataset.themes!.split(' ').includes(filter));
@@ -288,6 +335,9 @@ const paragraphs = (text: string) => text.split(/\n\s*\n/).map((paragraph) => pa
   }
 
   function render() {
+    // A closed piece goes back to its first photo, so the collection always shows the originals.
+    if (lastSelected !== selected) resetChoices.get(lastSelected)?.();
+    lastSelected = selected;
     const list = visibleItems();
     const selectedPosition = list.findIndex((item) => Number(item.dataset.item) === selected);
     const focused = selectedPosition >= 0;
@@ -459,9 +509,11 @@ const paragraphs = (text: string) => text.split(/\n\s*\n/).map((paragraph) => pa
   function showAddress() {
     const item = pieceFromAddress();
     const tab = filterFromAddress();
+    const choice = choiceFromAddress();
     if (item) {
       if (!visibleItems().includes(item)) filter = 'all';
       openPiece(item);
+      if (choice) pickChoice.get(Number(item.dataset.item))?.(choice);
     } else if (tab) {
       setFilter(tab.dataset.filter!);
     } else {
@@ -474,8 +526,10 @@ const paragraphs = (text: string) => text.split(/\n\s*\n/).map((paragraph) => pa
 
   section.querySelectorAll<HTMLButtonElement>('[data-share]').forEach((button) => {
     const label = button.textContent!;
+    const piece = Number(button.closest<HTMLElement>('[data-panel-for]')!.dataset.panelFor);
     button.addEventListener('click', async () => {
-      const url = button.dataset.shareUrl!;
+      const choice = choiceOf(piece);
+      const url = button.dataset.shareUrl! + (choice ? `#${choice}` : '');
       if (navigator.share) {
         await navigator.share({ title: button.dataset.share, url }).catch(() => {});
         return;
@@ -506,13 +560,30 @@ const paragraphs = (text: string) => text.split(/\n\s*\n/).map((paragraph) => pa
   const RECOLOUR_FADE_MS = 200;
 
   section.querySelectorAll<HTMLElement>('[data-swatch-group]').forEach((group) => {
-    const image = items[Number(group.dataset.swatchGroup)].querySelector('img')!;
+    const piece = Number(group.dataset.swatchGroup);
+    const image = items[piece].querySelector('img')!;
     const original = image.dataset.originalSrc!;
     const sourceColor = group.dataset.sourceColor!;
     const state = group.parentElement!.querySelector('[data-swatch-state]')!;
     const swatches = [...group.querySelectorAll<HTMLButtonElement>('[data-swatch-color]')];
     const orderLink = group.closest('[data-panel-for]')!.querySelector<HTMLAnchorElement>('[data-order-title]')!;
+    const originalOrder = orderLink.href;
     let wanted = sourceColor;
+    startingChoices.set(piece, swatches[0].dataset.swatchId!);
+
+    resetChoices.set(piece, () => {
+      pickedChoices.delete(piece);
+      if (wanted === sourceColor) return;
+      wanted = sourceColor;
+      swatches.forEach((swatch, k) => {
+        swatch.setAttribute('aria-checked', String(k === 0));
+        swatch.tabIndex = k === 0 ? 0 : -1;
+      });
+      state.textContent = 'original';
+      orderLink.href = originalOrder;
+      image.src = original;
+      image.style.opacity = '';
+    });
 
     async function choose(swatch: HTMLButtonElement) {
       swatches.forEach((other) => {
@@ -520,11 +591,14 @@ const paragraphs = (text: string) => text.split(/\n\s*\n/).map((paragraph) => pa
         other.tabIndex = other === swatch ? 0 : -1;
       });
       wanted = swatch.dataset.swatchColor!;
-      state.textContent = wanted === sourceColor ? 'original' : 'recoloured';
+      const isOriginal = wanted === sourceColor;
+      state.textContent = isOriginal ? 'original' : 'recoloured';
+      pickedChoices.set(piece, swatch.dataset.swatchId!);
+      syncAddress();
       orderLink.href = productOrderLink(
         orderLink.dataset.orderTitle!,
-        orderLink.dataset.orderUrl!,
-        wanted === sourceColor ? undefined : swatch.dataset.swatchName
+        isOriginal ? orderLink.dataset.orderUrl! : `${orderLink.dataset.orderUrl}#${swatch.dataset.swatchId}`,
+        isOriginal ? undefined : `${swatch.dataset.swatchName} cord`
       );
       const target = wanted;
 
@@ -546,6 +620,11 @@ const paragraphs = (text: string) => text.split(/\n\s*\n/).map((paragraph) => pa
       });
     }
 
+    pickChoice.set(piece, (swatchId) => {
+      const swatch = swatches.find((candidate) => candidate.dataset.swatchId === swatchId);
+      if (swatch) choose(swatch);
+    });
+
     swatches.forEach((swatch, index) => {
       swatch.addEventListener('click', () => choose(swatch));
       swatch.addEventListener('keydown', (event) => {
@@ -557,6 +636,80 @@ const paragraphs = (text: string) => text.split(/\n\s*\n/).map((paragraph) => pa
         if (!move) return;
         event.preventDefault();
         const target = swatches[(index + move + swatches.length) % swatches.length];
+        target.focus();
+        choose(target);
+      });
+    });
+  });
+
+  // Choices: each shows its own photo of the piece. None is picked until the visitor taps one.
+  const VARIANT_FADE_MS = 200;
+
+  section.querySelectorAll<HTMLElement>('[data-variant-group]').forEach((group) => {
+    const piece = Number(group.dataset.variantGroup);
+    const image = items[piece].querySelector('img')!;
+    const state = group.parentElement!.querySelector('[data-variant-state]')!;
+    const choices = [...group.querySelectorAll<HTMLButtonElement>('[data-variant-name]')];
+    const orderLink = group.closest('[data-panel-for]')!.querySelector<HTMLAnchorElement>('[data-order-title]')!;
+    const originalOrder = orderLink.href;
+    const originalHeight = image.style.getPropertyValue('--display-height');
+    let wanted = '';
+
+    resetChoices.set(piece, () => {
+      if (!wanted) return;
+      wanted = '';
+      pickedChoices.delete(piece);
+      choices.forEach((choice, k) => {
+        choice.setAttribute('aria-checked', 'false');
+        choice.tabIndex = k === 0 ? 0 : -1;
+      });
+      state.textContent = 'none picked yet';
+      orderLink.href = originalOrder;
+      image.src = image.dataset.originalSrc!;
+      image.style.setProperty('--display-height', originalHeight);
+    });
+
+    async function choose(choice: HTMLButtonElement) {
+      choices.forEach((other) => {
+        other.setAttribute('aria-checked', String(other === choice));
+        other.tabIndex = other === choice ? 0 : -1;
+      });
+      const name = choice.dataset.variantName!;
+      const choiceId = choice.dataset.variantId!;
+      wanted = name;
+      state.textContent = name;
+      pickedChoices.set(piece, choiceId);
+      syncAddress();
+      // Mid-sentence in the message: "…with red satin ribbon."
+      const inSentence = name[0].toLowerCase() + name.slice(1);
+      orderLink.href = productOrderLink(orderLink.dataset.orderTitle!, `${orderLink.dataset.orderUrl}#${choiceId}`, inSentence);
+
+      const next = new Image();
+      next.src = choice.dataset.variantSrc!;
+      await next.decode().catch(() => {});
+      if (wanted !== name) return;
+      image.src = next.src;
+      image.style.setProperty('--display-height', choice.dataset.variantHeight!);
+      render();
+      image.animate([{ opacity: 0.4 }, { opacity: 1 }], { duration: VARIANT_FADE_MS, easing: ENTER_EASE });
+    }
+
+    pickChoice.set(piece, (choiceId) => {
+      const choice = choices.find((candidate) => candidate.dataset.variantId === choiceId);
+      if (choice) choose(choice);
+    });
+
+    choices.forEach((choice, index) => {
+      choice.addEventListener('click', () => choose(choice));
+      choice.addEventListener('keydown', (event) => {
+        const move =
+          NEXT_KEYS.includes(event.key) ? 1 :
+          PREVIOUS_KEYS.includes(event.key) ? -1 :
+          event.key === 'Home' ? -index :
+          event.key === 'End' ? choices.length - 1 - index : 0;
+        if (!move) return;
+        event.preventDefault();
+        const target = choices[(index + move + choices.length) % choices.length];
         target.focus();
         choose(target);
       });
@@ -865,6 +1018,17 @@ const paragraphs = (text: string) => text.split(/\n\s*\n/).map((paragraph) => pa
     transition: transform 160ms var(--motion-out), box-shadow 0.2s;
   }
 
+  /* Choices can hold a close-up of their material, so their squares are larger. */
+  .swatch--choice {
+    width: 52px;
+    height: 52px;
+  }
+
+  .swatch--choice span {
+    width: 40px;
+    height: 40px;
+  }
+
   .swatch[aria-checked='true'] span {
     transform: scale(1.15);
     box-shadow: 0 0 0 3px var(--color-ink);
@@ -876,6 +1040,38 @@ const paragraphs = (text: string) => text.split(/\n\s*\n/).map((paragraph) => pa
 
   .swatch[aria-checked='true']:active span {
     transform: scale(1.05);
+  }
+
+  /* A choice with no colour code shows its name instead of a square. */
+  .variant {
+    margin-left: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 16px;
+    border: 1.5px solid rgb(43 33 24 / 0.2);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-ink);
+    font: 600 14px var(--font-body);
+    cursor: pointer;
+    transition: background 160ms var(--motion-out), border-color 160ms var(--motion-out), transform 120ms var(--motion-out);
+  }
+
+  .variant:active {
+    transform: scale(0.97);
+  }
+
+  .variant:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+  }
+
+  .variant[aria-checked='true'] {
+    border-color: var(--color-ink);
+    background: var(--color-ink);
+    color: var(--color-paper);
   }
 
   .panel-order {
@@ -1178,6 +1374,10 @@ const paragraphs = (text: string) => text.split(/\n\s*\n/).map((paragraph) => pa
 
     .swatch {
       width: 41px;
+    }
+
+    .swatch--choice {
+      width: 52px;
     }
 
     /* The open piece fills the middle on phones, so the close button sits beside it. */

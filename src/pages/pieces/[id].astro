@@ -26,7 +26,8 @@ const description = `${product.priceLabel}. ${product.description}`;
     <link rel="canonical" href={absoluteUrl(piecePage(product.id))} />
     <ShareTags title={title} description={description} url={absoluteUrl(piecePage(product.id))} image={absoluteUrl(shareImagePath(product.id))} />
     <meta http-equiv="refresh" content={`0; url=${shopLink}`} />
-    <script is:inline define:vars={{ shopLink }}>location.replace(shopLink);</script>
+    <!-- A choice rides along after a #: /pieces/x/#red-satin-ribbon opens /#x/red-satin-ribbon. -->
+    <script is:inline define:vars={{ shopLink }}>location.replace(shopLink + (location.hash ? `/${location.hash.slice(1)}` : ''));</script>
   </head>
   <body>
     <p><a href={shopLink}>See {product.title} at Koseli Crafts</a></p>

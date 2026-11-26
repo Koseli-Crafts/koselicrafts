@@ -96,6 +96,35 @@ content:
           label: "{nav}"
           value: "{path}"
 
+      - name: variants
+        label: Choices
+        type: object
+        list: true
+        description: Optional. Versions of the piece a customer picks between, such as hanging ribbon or cord. Each needs its own photo; tapping a choice shows it, and the WhatsApp order names it. Leave empty if there is only one version.
+        fields:
+          - name: name
+            label: Name
+            type: string
+            required: true
+            description: 'What this version is, e.g. "Red satin ribbon". Shown on its button and in the WhatsApp order.'
+          - name: material
+            label: Material close-up
+            type: image
+            options:
+              media: images
+            description: Optional. A small, close photo of just the material (the ribbon, the cord), shown in this choice's square button. Square photos fit best.
+          - name: colour
+            label: Colour code
+            type: string
+            description: 'Optional. Used for the square button when there is no material close-up: a colour code like #b3263a. Leave both empty to show the name instead.'
+          - name: photo
+            label: Photo
+            type: image
+            required: true
+            options:
+              media: images
+            description: The piece in this version, with the background removed like the cut-out photo. Take every choice's photo the same way so switching looks smooth.
+
       - name: swatches
         label: Show color swatches
         type: boolean

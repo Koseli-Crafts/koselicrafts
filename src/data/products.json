@@ -68,17 +68,40 @@
   {
     "title": "25 Names of Jesus Advent Ornaments",
     "kind": "Advent set",
-    "description": "Twenty-five ornaments, one name of Jesus for each day of Advent, gathered in a linen drawstring bag with an engraved wooden tag. A card in the set links to the Bible verse behind every name, free to download.",
+    "description": "Twenty-five engraved ornaments, one for each day of Advent, each with a name of Jesus and its Bible verse inside a leafy wreath. Choose how they hang: red satin ribbon, white cotton cord or natural jute twine. They come in a linen drawstring bag with a card that links to every verse.",
     "price": "2000",
     "images": [
       "/products/advent-names-of-jesus-bag.webp",
-      "/products/advent-names-of-jesus-bag-in-hand.webp"
+      "/products/advent-names-of-jesus-bag-in-hand.webp",
+      "/products/advent-names-of-jesus-all-25.webp",
+      "/products/advent-names-of-jesus-hanging.webp",
+      "/products/advent-names-of-jesus-ornament.webp"
     ],
     "cutout": "/products/cutout-advent-names-of-jesus.webp",
     "cord": "wood",
     "themes": [
       "src/data/themes/advent.json",
       "src/data/themes/christmas.json"
+    ],
+    "variants": [
+      {
+        "name": "Red satin ribbon",
+        "material": "/products/advent-material-red-ribbon.webp",
+        "colour": "#b72d38",
+        "photo": "/products/advent-hanger-red-ribbon.webp"
+      },
+      {
+        "name": "White cotton cord",
+        "material": "/products/advent-material-white-cord.webp",
+        "colour": "#eceee8",
+        "photo": "/products/advent-hanger-white-cord.webp"
+      },
+      {
+        "name": "Natural jute twine",
+        "material": "/products/advent-material-jute-twine.webp",
+        "colour": "#c4ae84",
+        "photo": "/products/advent-hanger-jute-twine.webp"
+      }
     ]
   },
   {

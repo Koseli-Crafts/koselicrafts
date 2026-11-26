@@ -10,11 +10,14 @@ export const ORDER_LINK = whatsappLink('Hello Koseli Crafts, I’d like to place
 
 export const QUESTION_LINK = whatsappLink('Hello Koseli Crafts, I’d like to ask about a gift.');
 
-/** The order message names the piece, the cord colour if the visitor picked another, and links to it. */
-export const productOrderLink = (title: string, pieceUrl: string, cordColour?: string) =>
+/**
+ * The order message names the piece, the visitor's choice if they made one
+ * ("blue cord", "Red satin ribbon"), and links to the piece.
+ */
+export const productOrderLink = (title: string, pieceUrl: string, choice?: string) =>
   whatsappLink(
     `Hello, I like ${title} and want to place an order.` +
-    (cordColour ? ` I’d like it with ${cordColour} cord.` : '') +
+    (choice ? ` I’d like it with ${choice}.` : '') +
     `\n${pieceUrl}`
   );
 

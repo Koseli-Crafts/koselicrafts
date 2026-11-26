@@ -86,10 +86,27 @@ products.forEach((product, i) => {
     errors.push(`${where}: "images" must list at least one image filename.`);
     return;
   }
+  if (product.variants !== undefined) {
+    if (!Array.isArray(product.variants)) {
+      errors.push(`${where}: "variants" must be a list of choices.`);
+    } else {
+      product.variants.forEach((variant, k) => {
+        const choice = `${where}, choice #${k + 1}`;
+        if (!String(variant?.name ?? '').trim()) errors.push(`${choice}: the name is missing.`);
+        if (variant?.colour && !/^#[0-9a-f]{6}$/i.test(String(variant.colour).trim())) {
+          errors.push(`${choice}: the colour must be a code like "#b3263a" (it is "${variant.colour}").`);
+        }
+        if (!variant?.photo) errors.push(`${choice}: the photo is missing.`);
+      });
+    }
+  }
   if (!product.cutout) {
     warnings.push(`${where} has no cut-out photo, so the shop shows its first photo with the background. Add one when you can.`);
   }
-  for (const imageRef of [...product.images, ...(product.cutout ? [product.cutout] : [])]) {
+  const variantPhotos = Array.isArray(product.variants)
+    ? product.variants.flatMap((variant) => [variant?.photo, variant?.material]).filter(Boolean)
+    : [];
+  for (const imageRef of [...product.images, ...(product.cutout ? [product.cutout] : []), ...variantPhotos]) {
     const filename = basename(imageRef);
     used.add(filename);
     if (!String(imageRef).startsWith(PREFIX)) {

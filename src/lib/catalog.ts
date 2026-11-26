@@ -21,6 +21,15 @@ export interface ProductEntry {
   themes?: string[];
   swatches?: boolean;
   swatchColors?: string[];
+  variants?: VariantEntry[];
+}
+
+/** One "Choices" entry: a version of the piece with its own photo, e.g. a hanging ribbon. */
+interface VariantEntry {
+  name: string;
+  material?: string;
+  colour?: string;
+  photo: string;
 }
 
 export interface Product {
@@ -43,9 +52,24 @@ export interface Product {
   themes: string[];
   /** Macramé colours a visitor can try; the first is the piece's own colour. */
   swatches: Swatch[];
+  /** Versions a visitor picks between, each with its own photo. None is picked at first. */
+  variants: Variant[];
+}
+
+export interface Variant {
+  /** Its part of the piece's address: /#the-piece/red-satin-ribbon. */
+  id: string;
+  name: string;
+  /** Close-up of the material, shown in its square button. */
+  materialSrc?: string;
+  /** Colour of its square button when there is no close-up. */
+  hex?: string;
+  image: { src: string; width: number; height: number };
 }
 
 export interface Swatch {
+  /** Its part of the piece's address: /#the-piece/deep-pink. */
+  id: string;
   hex: string;
   name: string;
 }
@@ -167,8 +191,32 @@ export async function loadCatalog(entries = productsData as ProductEntry[]): Pro
       const photo = findImage(entry, entry.images[0]);
       const image = entry.cutout ? findImage(entry, entry.cutout) : photo;
       const cord = isCordId(entry.cord) ? entry.cord : 'wood';
-      const swatchColors = entry.swatches ? withPresets(await ownColors(entry)) : [];
-      const swatches = swatchColors.map((hex) => ({ hex, name: colorName(hex) }));
+      const variants = (entry.variants ?? []).map((variant, k) => {
+        const photo = findImage(entry, variant.photo);
+        return {
+          id: slug(variant.name) || `choice-${k + 1}`,
+          name: variant.name.trim(),
+          materialSrc: variant.material ? findImage(entry, variant.material).src : undefined,
+          hex: variant.colour?.trim() || undefined,
+          image: { src: photo.src, width: photo.width, height: photo.height }
+        };
+      });
+      const variantIds = variants.map((variant) => variant.id);
+      const repeated = variants.find((variant, k) => variantIds.indexOf(variant.id) !== k);
+      if (repeated) {
+        throw new Error(`Two choices of "${entry.title}" have names too alike to tell their links apart ("${repeated.name}"). Change one of the names.`);
+      }
+      // Choices show real photos, so recolouring the cord would fight them.
+      const swatchColors = entry.swatches && !variants.length ? withPresets(await ownColors(entry)) : [];
+      // Two shades can share a name ("pink"), so the second one's link becomes "pink-2".
+      const namesSoFar: string[] = [];
+      const swatches = swatchColors.map((hex) => {
+        const name = colorName(hex);
+        const base = slug(name) || 'colour';
+        const repeats = namesSoFar.filter((earlier) => earlier === base).length;
+        namesSoFar.push(base);
+        return { id: repeats ? `${base}-${repeats + 1}` : base, hex, name };
+      });
       const id = ids[index];
       const themes = productThemes(entry);
       const shareUrl = absoluteUrl(piecePage(id));
@@ -187,7 +235,8 @@ export async function loadCatalog(entries = productsData as ProductEntry[]): Pro
         cord,
         cordLabel: cord === 'wood' ? CORDS.wood.label : `${CORDS[cord].label} cord`,
         themes,
-        swatches
+        swatches,
+        variants
       };
     })
   );
