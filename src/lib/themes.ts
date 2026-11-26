@@ -36,6 +36,8 @@ export interface Theme {
   background: string;
   cord: CordId;
   image: string;
+  /** The photo's file name in src/assets/products/, for the link preview picture. */
+  imageFile: string;
   imageAlt: string;
   imageHeight: number;
   cordLength: number;
@@ -89,6 +91,7 @@ function toTheme(id: string, entry: ThemeEntry): Theme {
     background: entry.background.trim(),
     cord: entry.cord,
     image: image.src,
+    imageFile: basename(entry.image),
     imageAlt: entry.imageAlt?.trim() || entry.word.trim(),
     imageHeight: entry.imageHeight || 620,
     cordLength: entry.cordLength ?? 120,

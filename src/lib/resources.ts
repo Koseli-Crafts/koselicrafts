@@ -1,5 +1,6 @@
 import { existsSync, statSync } from 'node:fs';
 import resourcesData from '../data/resources.json';
+import { SITE_ROOT } from './site';
 
 /** One entry of src/data/resources.json, as Pages CMS writes it. */
 interface ResourceEntry {
@@ -17,7 +18,6 @@ export interface Resource {
 }
 
 const PUBLIC_DIR = 'public/resources';
-const SITE_ROOT = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 export const RESOURCES_PAGE = `${SITE_ROOT}/resources`;
 

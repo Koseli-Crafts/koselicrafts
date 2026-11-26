@@ -15,6 +15,7 @@ const languageOf = (text: string) => (/[\u0900-\u097F]/.test(text) ? 'ne' : unde
 <Layout
   title="Resources · Koseli Crafts"
   description="Catalogues, guides and other files from Koseli Crafts to download as PDFs."
+  themeColor="#f7f1e8"
 >
 <main class="resources">
   <header class="resources-head">
@@ -175,9 +176,16 @@ const languageOf = (text: string) => (/[\u0900-\u097F]/.test(text) ? 'ne' : unde
     transition: background 0.4s, transform 0.4s var(--motion-out);
   }
 
-  .resource-row:hover {
-    background: var(--theme-bg);
-    transform: rotate(-0.6deg) scale(1.01);
+  @media (hover: hover) and (pointer: fine) {
+    .resource-row:hover {
+      background: var(--theme-bg);
+      transform: rotate(-0.6deg) scale(1.01);
+    }
+
+    .resource-row--soon:hover {
+      background: none;
+      transform: none;
+    }
   }
 
   .resource-no {
@@ -226,10 +234,6 @@ const languageOf = (text: string) => (/[\u0900-\u097F]/.test(text) ? 'ne' : unde
     border: 2px dashed var(--color-sand);
   }
 
-  .resource-row--soon:hover {
-    background: none;
-    transform: none;
-  }
 
   .resource-row--soon .resource-text {
     color: var(--color-muted);

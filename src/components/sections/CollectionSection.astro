@@ -72,6 +72,7 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
                       aria-label={label}
                       title={label}
                       data-swatch-color={swatch.hex}
+                      data-swatch-name={swatch.name}
                     >
                       <span style={{ background: swatch.hex }}></span>
                     </button>
@@ -82,9 +83,9 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
           )}
           <div class="panel-order">
             <span class="price">{product.priceLabel}</span>
-            <TagButton href={product.orderLink} label="Order on WhatsApp" />
+            <TagButton href={product.orderLink} label="Order on WhatsApp" data-order-title={product.title} data-order-url={product.shareUrl} />
           </div>
-          <button type="button" class="wavy-link share" data-share={product.title}>Share this piece</button>
+          <button type="button" class="wavy-link share" data-share={product.title} data-share-url={product.shareUrl}>Share this piece</button>
         </div>
       ))}
     </div>
@@ -119,6 +120,7 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
 <script>
   import { piecesLabel } from '../../lib/format';
   import { recolorImage } from '../../lib/recolor';
+  import { productOrderLink } from '../../lib/contact';
   import { SHOW_THEME_EVENT } from '../../scripts/theme';
 
   const section = document.querySelector<HTMLElement>('[data-collection]')!;
@@ -165,12 +167,25 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
 
   /**
    * On phones the open piece sits between the filter buttons and the details
-   * panel. It is shown at the design's 80% size, or smaller when a tall panel
-   * leaves less room, so it never runs under either of them.
+   * panel. The section grows to leave the piece PHONE_PIECE_ROOM above the panel,
+   * however long the description, and the piece fills that room up to the size
+   * wide screens show it at (phones show pieces at half that while browsing).
    */
-  const PHONE_OPEN_SCALE = 0.8;
+  const PHONE_PIECE_ROOM = 320;
+  const PHONE_OPEN_SCALE = 2;
   const BREATHING_ROOM = 8;
   const filterRow = section.querySelector<HTMLElement>('.tabs')!;
+
+  /** Grows the section on phones so the open piece keeps its room above the panel. */
+  function fitPhoneSection(focused: boolean) {
+    if (!focused || !phone.matches) {
+      section.style.height = '';
+      return;
+    }
+    const roomTop = filterRow.getBoundingClientRect().bottom - section.getBoundingClientRect().top;
+    const panelBelowSection = section.offsetHeight - (cluster.offsetTop + panel.offsetTop + panel.offsetHeight);
+    section.style.height = `${Math.ceil(roomTop + 2 * BREATHING_ROOM + PHONE_PIECE_ROOM + panel.offsetHeight + panelBelowSection)}px`;
+  }
 
   function phoneOpenSpot(item: HTMLElement): Spot {
     const roomTop = filterRow.getBoundingClientRect().bottom - cluster.getBoundingClientRect().top + BREATHING_ROOM;
@@ -233,6 +248,26 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     );
   }
 
+  /**
+   * The pieces form a ring: a piece's place counts from the centred one the
+   * shorter way round, so the last piece waits just left of the first.
+   */
+  function ringOffset(position: number, center: number, count: number) {
+    const half = Math.floor(count / 2);
+    return ((position - center + half) % count + count) % count - half;
+  }
+
+  /** Each piece's place at the last render, to spot one that wraps round the ring. */
+  const lastOffsets = new Map<HTMLElement, number>();
+
+  /** A piece wrapping from one end of the ring to the other fades in at its new place instead of sliding across. */
+  function jump(item: HTMLElement, order: number) {
+    item.style.transition = 'none';
+    void item.offsetWidth;
+    item.style.transition = '';
+    enter(item, order);
+  }
+
   function render() {
     const list = visibleItems();
     const selectedPosition = list.findIndex((item) => Number(item.dataset.item) === selected);
@@ -244,12 +279,16 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     panel.classList.toggle('is-open', focused);
     panelBodies.forEach((body, index) => { body.hidden = index !== selected; });
     closeWrap.hidden = !focused;
+    fitPhoneSection(focused);
 
     const wasHidden = new Set(items.filter((item) => item.hidden));
     items.forEach((item) => { item.hidden = !list.includes(item); });
     let entering = 0;
     list.forEach((item, k) => {
-      const offset = k - center;
+      const offset = ringOffset(k, center, list.length);
+      const lastOffset = lastOffsets.get(item);
+      const wrapped = lastOffset !== undefined && list.length > 2 && Math.abs(offset - lastOffset) >= list.length - 1;
+      lastOffsets.set(item, offset);
       const spot = !focused ? browsingSpot(offset) : offset === 0 ? openSpot(item) : hiddenSpot(offset);
       item.style.zIndex = String(spot.layer);
       item.style.opacity = String(spot.opacity);
@@ -259,6 +298,7 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
       spots.set(item, spot);
       item.tabIndex = spot.opacity > 0 ? 0 : -1;
       if (hasRendered && wasHidden.has(item) && spot.opacity > 0) enter(item, entering++);
+      else if (hasRendered && wrapped && spot.opacity > 0) jump(item, 0);
     });
 
     pager.hidden = focused;
@@ -409,7 +449,7 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
   section.querySelectorAll<HTMLButtonElement>('[data-share]').forEach((button) => {
     const label = button.textContent!;
     button.addEventListener('click', async () => {
-      const url = location.href;
+      const url = button.dataset.shareUrl!;
       if (navigator.share) {
         await navigator.share({ title: button.dataset.share, url }).catch(() => {});
         return;
@@ -445,6 +485,7 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     const sourceColor = group.dataset.sourceColor!;
     const state = group.parentElement!.querySelector('[data-swatch-state]')!;
     const swatches = [...group.querySelectorAll<HTMLButtonElement>('[data-swatch-color]')];
+    const orderLink = group.closest('[data-panel-for]')!.querySelector<HTMLAnchorElement>('[data-order-title]')!;
     let wanted = sourceColor;
 
     async function choose(swatch: HTMLButtonElement) {
@@ -454,6 +495,11 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
       });
       wanted = swatch.dataset.swatchColor!;
       state.textContent = wanted === sourceColor ? 'original' : 'recoloured';
+      orderLink.href = productOrderLink(
+        orderLink.dataset.orderTitle!,
+        orderLink.dataset.orderUrl!,
+        wanted === sourceColor ? undefined : swatch.dataset.swatchName
+      );
       const target = wanted;
 
       // Show the tap registered if the recolouring takes a moment. Only the
@@ -640,9 +686,11 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     color: var(--color-muted);
   }
 
+  /* Sideways swipes move the pieces; up and down still scroll the page. */
   .cluster {
     position: absolute;
     inset: 170px 0 120px;
+    touch-action: pan-y;
   }
 
   .item {
@@ -653,6 +701,8 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     border: 0;
     background: none;
     cursor: pointer;
+    /* A long press is the start of a swipe, not a request to save the photo. */
+    -webkit-touch-callout: none;
     transform-origin: 50% 100%;
     /* Arrows, filters, opening a piece and letting go of a swipe all settle the same way. */
     transition: transform 350ms var(--motion-drawer), opacity 250ms var(--motion-out), filter 250ms var(--motion-out);
@@ -678,8 +728,11 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 150ms ease;
   }
 
-  .item:hover img {
-    transform: translateY(-12px);
+  /* A tap on a phone would leave the piece lifted, so only a mouse lifts it. */
+  @media (hover: hover) and (pointer: fine) {
+    .item:hover img {
+      transform: translateY(-12px);
+    }
   }
 
   .item-shadow {
@@ -1034,7 +1087,6 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
 
     .cluster {
       inset: 190px 0 100px;
-      touch-action: pan-y;
     }
 
     .item {

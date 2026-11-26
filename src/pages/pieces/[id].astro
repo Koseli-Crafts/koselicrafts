@@ -1,0 +1,34 @@
+---
+// A piece's own address, for sharing. Link previews read its tags; people are sent
+// straight on to the piece in the shop.
+import ShareTags from '../../components/ShareTags.astro';
+import { loadCatalog } from '../../lib/catalog';
+import { SITE_ROOT, absoluteUrl, piecePage, shareImagePath } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const products = await loadCatalog();
+  return products.map((product) => ({ params: { id: product.id }, props: { product } }));
+}
+
+const { product } = Astro.props;
+const shopLink = `${SITE_ROOT}/#${product.id}`;
+const title = `${product.title} · Koseli Crafts`;
+const description = `${product.priceLabel}. ${product.description}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={absoluteUrl(piecePage(product.id))} />
+    <ShareTags title={title} description={description} url={absoluteUrl(piecePage(product.id))} image={absoluteUrl(shareImagePath(product.id))} />
+    <meta http-equiv="refresh" content={`0; url=${shopLink}`} />
+    <script is:inline define:vars={{ shopLink }}>location.replace(shopLink);</script>
+  </head>
+  <body>
+    <p><a href={shopLink}>See {product.title} at Koseli Crafts</a></p>
+  </body>
+</html>

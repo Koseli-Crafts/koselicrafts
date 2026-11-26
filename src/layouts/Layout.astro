@@ -4,14 +4,19 @@ import 'lenis/dist/lenis.css';
 import { WOOD } from '../data/decor';
 import { FIRST_THEME } from '../lib/themes';
 import BackToTop from '../components/ui/BackToTop.astro';
+import ShareTags from '../components/ShareTags.astro';
+import { SITE_SHARE_IMAGE, absoluteUrl, shareImagePath } from '../lib/site';
 
 interface Props {
 	title?: string;
 	description?: string;
+	/** The phone's browser bar takes this colour; match the top of the page. */
+	themeColor?: string;
 }
 
 const {
 	title = 'Koseli Crafts · Handmade gifts from Kathmandu',
+	themeColor = FIRST_THEME.background,
 	description = 'Engraved wooden gifts and macramé wall hangings, made by hand in Kathmandu, Nepal. Scripture in Nepali and English, and custom engraving. Order on WhatsApp.'
 } = Astro.props;
 ---
@@ -32,6 +37,8 @@ const {
 		/>
 		<title>{title}</title>
 		<meta name="description" content={description} />
+		<meta name="theme-color" content={themeColor} />
+		<ShareTags title={title} description={description} url={absoluteUrl(Astro.url.pathname)} image={absoluteUrl(shareImagePath(SITE_SHARE_IMAGE))} />
 	</head>
 	<body>
 		<slot />

@@ -87,14 +87,24 @@ twice before renaming a product you have already shared.
 
 ## Share a link to a product or a theme
 
-Every product and every theme filter has its own link. Open the piece (or tap
-the filter) on the website and copy the address from the browser, or tap
-**Share this piece** under the order button. Whoever opens the link lands on
-the shop with that piece open, or with that filter on.
+Every product has its own link. Tap **Share this piece** under the order
+button to send it. Pasted into WhatsApp or Facebook, it shows the piece's
+photo, name and price, and whoever taps it lands on the shop with that piece
+open. The link is made from the name: "Rustic Psalm 23 Wall Art" becomes
+`koselicrafts.com/pieces/rustic-psalm-23-wall-art/`. That is why renaming
+breaks old links.
 
-The link is made from the name: "Rustic Psalm 23 Wall Art" becomes
-`koselicrafts.com/#rustic-psalm-23-wall-art`, and the Christmas theme
-`koselicrafts.com/#christmas`. That is why renaming breaks old links.
+Each theme filter has a link too, made from the theme's file name:
+`koselicrafts.com/#christmas` opens the shop with the Christmas filter on.
+
+When a customer taps **Order on WhatsApp**, the message names the piece and
+includes its link, and the cord colour if they picked a different one.
+
+### Seasonal: which theme comes first
+
+The theme with **Position** 1 is the one the page opens with, and its picture
+is the preview for links to the home page. Advent is first until Christmas.
+After Christmas, give Advent a higher number (for example 7) in **Themes**.
 
 ---
 

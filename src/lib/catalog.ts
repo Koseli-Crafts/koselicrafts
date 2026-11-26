@@ -3,7 +3,8 @@ import productsData from '../data/products.json';
 import pagesCmsConfig from '../../.pages.yml?raw';
 import { CORDS, WOOD, isCordId, type CordId } from '../data/decor';
 import { basename, productImage, productImageNames } from './product-images';
-import { THEMES, isThemeId, themeIdOf } from './themes';
+import { FIRST_THEME, THEMES, isThemeId, themeIdOf } from './themes';
+import { absoluteUrl, piecePage } from './site';
 import { colorName, hexToRgb, rgbDistance } from './color';
 import { productOrderLink } from './contact';
 import { getPalette } from './palette';
@@ -30,6 +31,12 @@ export interface Product {
   priceLabel: string;
   orderLink: string;
   image: { src: string; width: number; height: number };
+  /** The shown photo's file name in src/assets/products/, for the link preview picture. */
+  imageFile: string;
+  /** The colour of the piece's first theme, behind it in the link preview. */
+  themeBackground: string;
+  /** The piece's own page, for sharing. */
+  shareUrl: string;
   cord: CordId;
   cordLabel: string;
   /** Theme ids, e.g. "christmas". */
@@ -111,7 +118,14 @@ function productThemes(entry: ProductEntry) {
   });
 }
 
-const slug = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+// "God’s Macramé Cross" becomes "gods-macrame-cross": accents and apostrophes dropped, other gaps a dash.
+const slug = (text: string) =>
+  text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f'’]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
 
 // Wide pieces (ornaments, frames) would look oversized at full height.
 export const displayHeight = (image: { width: number; height: number }) =>
@@ -137,18 +151,24 @@ export async function loadCatalog(): Promise<Product[]> {
       const cord = isCordId(entry.cord) ? entry.cord : 'wood';
       const swatchColors = entry.swatches ? withPresets(await ownColors(entry)) : [];
       const swatches = swatchColors.map((hex) => ({ hex, name: colorName(hex) }));
+      const id = slug(entry.title);
+      const themes = productThemes(entry);
+      const shareUrl = absoluteUrl(piecePage(id));
 
       return {
-        id: slug(entry.title),
+        id,
         title: entry.title,
         kind: entry.kind?.trim() || 'Handmade',
         description: entry.description,
         priceLabel: formatPrice(entry.price),
-        orderLink: productOrderLink(entry.title),
+        orderLink: productOrderLink(entry.title, shareUrl),
         image: { src: image.src, width: image.width, height: image.height },
+        imageFile: basename(entry.cutout || entry.images[0]),
+        themeBackground: THEMES.find((theme) => theme.id === themes[0])?.background ?? FIRST_THEME.background,
+        shareUrl,
         cord,
         cordLabel: cord === 'wood' ? CORDS.wood.label : `${CORDS[cord].label} cord`,
-        themes: productThemes(entry),
+        themes,
         swatches
       };
     })
