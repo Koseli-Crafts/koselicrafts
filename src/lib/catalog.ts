@@ -121,6 +121,15 @@ export async function loadCatalog(): Promise<Product[]> {
   checkCmsChoices();
   const entries = productsData as ProductEntry[];
 
+  // Each product's link (/#its-name) comes from its name and sits beside the theme
+  // filters' links (/#christmas), so no two may be the same.
+  const seen = new Map<string, string>(THEMES.map((theme) => [theme.id, `the theme "${theme.nav}"`]));
+  for (const entry of entries) {
+    const other = seen.get(slug(entry.title));
+    if (other) throw new Error(`The product "${entry.title}" has a name too alike to ${other} to tell their links apart. Change the product's name.`);
+    seen.set(slug(entry.title), `the product "${entry.title}"`);
+  }
+
   return Promise.all(
     entries.map(async (entry) => {
       const photo = findImage(entry, entry.images[0]);

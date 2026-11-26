@@ -78,6 +78,24 @@ Click **Products**, click the product, edit any field, click **Save**.
 To change a photo: remove the old one with its **✕**, upload the new one, and
 drag it into position.
 
+**Renaming a product changes its link** (see *Share a link to a product*
+below). Links already sent for it, in WhatsApp chats or social posts, will open
+the shop's home page but no longer open the piece. Fix a typo freely; think
+twice before renaming a product you have already shared.
+
+---
+
+## Share a link to a product or a theme
+
+Every product and every theme filter has its own link. Open the piece (or tap
+the filter) on the website and copy the address from the browser, or tap
+**Share this piece** under the order button. Whoever opens the link lands on
+the shop with that piece open, or with that filter on.
+
+The link is made from the name: "Rustic Psalm 23 Wall Art" becomes
+`koselicrafts.com/#rustic-psalm-23-wall-art`, and the Christmas theme
+`koselicrafts.com/#christmas`. That is why renaming breaks old links.
+
 ---
 
 ## Remove a product
