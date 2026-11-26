@@ -45,7 +45,7 @@ content:
       - name: price
         label: Price (Rs.)
         type: string
-        description: 'Just the number, e.g. 1200. For a range use 750-1500. Leave empty to show "TBD".'
+        description: 'Just the number, without "Rs.", e.g. 1200. For a range use 750-1500. Leave empty to show "Price on request".'
 
       - name: images
         label: Photos
