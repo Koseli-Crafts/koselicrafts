@@ -24,6 +24,22 @@
 
   html {
     scroll-behavior: smooth;
+    /* Phones flash a grey box on every tap; the buttons give their own press feedback. */
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* No double-tap-to-zoom wait on controls, so taps register at once. */
+  a,
+  button {
+    touch-action: manipulation;
+  }
+
+  /* A long press on a control should not select its label. */
+  button,
+  .tag-btn {
+    user-select: none;
+    -webkit-user-select: none;
   }
 
   html.lenis,

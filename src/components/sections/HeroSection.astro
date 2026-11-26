@@ -269,7 +269,7 @@ import { WOOD } from '../../data/decor';
     position: relative;
     /* Sideways swipes come to the page script; vertical scrolling stays with the browser. */
     touch-action: pan-y;
-    height: max(100vh, 820px);
+    height: max(100svh, 820px);
     overflow: hidden;
   }
 
@@ -472,8 +472,10 @@ import { WOOD } from '../../data/decor';
     transition: transform 0.5s cubic-bezier(0.3, 1.6, 0.5, 1);
   }
 
-  .order-badge:hover .order-badge-core {
-    transform: scale(1.12) rotate(-45deg);
+  @media (hover: hover) and (pointer: fine) {
+    .order-badge:hover .order-badge-core {
+      transform: scale(1.12) rotate(-45deg);
+    }
   }
 
   .order-badge:focus-visible {
@@ -721,7 +723,7 @@ import { WOOD } from '../../data/decor';
     .hero {
       --zone-top: 112px;
       --zone-bottom: 150px;
-      --zone: calc(max(100vh, 820px) - var(--zone-top) - var(--zone-bottom));
+      --zone: calc(max(100svh, 820px) - var(--zone-top) - var(--zone-bottom));
       --text-h: max(calc(var(--zone) * 0.2), 112px);
       --piece-h: calc(var(--zone) * 0.7 - var(--text-h));
     }

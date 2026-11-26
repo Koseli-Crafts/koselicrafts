@@ -43,17 +43,40 @@
     width: 38px;
   }
 
-  .tag-btn:hover,
   .tag-btn:focus-visible {
     transform: translateY(-3px);
   }
 
-  .tag-btn:hover {
-    box-shadow: 0 18px 30px rgb(43 33 24 / 0.32);
-  }
+  /* Hover effects only where a mouse can hover: on phones a tap would leave them stuck on. */
+  @media (hover: hover) and (pointer: fine) {
+    .tag-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 30px rgb(43 33 24 / 0.32);
+    }
 
-  .tag-btn--flat:hover {
-    box-shadow: none;
+    .tag-btn--flat:hover {
+      box-shadow: none;
+    }
+
+    .tag-btn:hover .tag-btn-arrow {
+      transform: translateX(5px);
+    }
+
+    .tag-btn:hover .tag-btn-arrow--down {
+      transform: translateY(4px);
+    }
+
+    .tag-btn:hover .tag-btn-tassel {
+      animation: tassel-swing 1.1s ease-in-out;
+    }
+
+    .bead:hover {
+      transform: translateY(-2px) rotate(-8deg);
+    }
+
+    .wavy-link:hover {
+      text-decoration: underline wavy 2px;
+    }
   }
 
   .tag-btn:active {
@@ -68,14 +91,6 @@
   .tag-btn-arrow {
     display: inline-block;
     transition: transform 0.4s;
-  }
-
-  .tag-btn:hover .tag-btn-arrow {
-    transform: translateX(5px);
-  }
-
-  .tag-btn:hover .tag-btn-arrow--down {
-    transform: translateY(4px);
   }
 
   .tag-btn-knot {
@@ -103,7 +118,6 @@
     filter: drop-shadow(0 6px 6px rgb(43 33 24 / 0.3));
   }
 
-  .tag-btn:hover .tag-btn-tassel,
   .tag-btn:focus-visible .tag-btn-tassel {
     animation: tassel-swing 1.1s ease-in-out;
   }
@@ -132,10 +146,6 @@
     background: var(--wood-disc) center / 100% 100% no-repeat;
     filter: drop-shadow(0 8px 10px rgb(43 33 24 / 0.28));
     transition: transform 0.45s cubic-bezier(0.3, 1.5, 0.5, 1);
-  }
-
-  .bead:hover {
-    transform: translateY(-2px) rotate(-8deg);
   }
 
   .bead:active {
@@ -193,7 +203,6 @@
     text-underline-offset: 7px;
   }
 
-  .wavy-link:hover,
   .wavy-link:focus-visible {
     text-decoration: underline wavy 2px;
   }

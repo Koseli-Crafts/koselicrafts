@@ -15,6 +15,7 @@ export function showThemeInCollection(id: string) {
 /** Recolours everything on the page that follows the current theme. */
 export function paintTheme(theme: Theme) {
   document.documentElement.style.setProperty('--theme-bg', theme.background);
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme.background);
   document.querySelectorAll<HTMLImageElement>('img[data-theme-tassel]').forEach((img) => {
     img.src = theme.floats.tassel;
   });
