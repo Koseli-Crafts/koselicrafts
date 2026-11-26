@@ -81,7 +81,7 @@ const HERO_SHADOW = 'rgba(43,33,24,0.22)';
     <div class="hero-piece-hook" data-hero-hook style={{ top: FIRST_THEME.top }}>
       <div class="hero-hang">
         <div class="sway hero-piece-sway">
-          <span class="hero-cord" data-hero-cord aria-hidden="true" style={{ height: `${FIRST_THEME.cordLength}px` }}></span>
+          <span class="hero-cord" data-hero-cord aria-hidden="true" style={{ height: `${FIRST_THEME.cordLength}px`, visibility: FIRST_THEME.cordLength ? undefined : 'hidden' }}></span>
           <img
             class="hero-img"
             data-hero-image
@@ -169,6 +169,8 @@ import { WOOD } from '../../data/decor';
     word.style.fontSize = heroWordSize(theme.word);
     hook.style.top = theme.top;
     cord.style.height = `${theme.cordLength}px`;
+    // Phones stretch the cord to place the piece, so a theme with no cord hides it but keeps its room.
+    cord.style.visibility = theme.cordLength ? '' : 'hidden';
     image.src = theme.image;
     image.alt = theme.imageAlt;
     image.style.height = `min(${theme.imageHeight}px, 64vh)`;
