@@ -198,6 +198,12 @@
     text-transform: uppercase;
   }
 
+  /* Spacing letters apart breaks the joined letters of Nepali script. */
+  .eyebrow:lang(ne),
+  .eyebrow :lang(ne) {
+    letter-spacing: 0;
+  }
+
   .wavy-link {
     text-decoration: none;
     text-underline-offset: 7px;

@@ -92,7 +92,9 @@ button to send it. Pasted into WhatsApp or Facebook, it shows the piece's
 photo, name and price, and whoever taps it lands on the shop with that piece
 open. The link is made from the name: "Rustic Psalm 23 Wall Art" becomes
 `koselicrafts.com/pieces/rustic-psalm-23-wall-art/`. That is why renaming
-breaks old links.
+breaks old links. A name written only in Nepali still gets a working link, but
+an unreadable one (`/pieces/piece-1n8y0kj/`); put a few English words in the
+name, like "Maya Ornament माया", to get a readable link.
 
 Each theme filter has a link too, made from the theme's file name:
 `koselicrafts.com/#christmas` opens the shop with the Christmas filter on.

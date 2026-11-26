@@ -1,6 +1,9 @@
 /** 3 → "03" */
 export const padNumber = (n: number) => String(n).padStart(2, '0');
 
+/** "ne" for text written in Devanagari, so styles made for English (wide letter spacing) can step aside. */
+export const textLang = (text: string) => (/[\u0900-\u097F]/.test(text) ? 'ne' : undefined);
+
 export const piecesLabel = (count: number) => `${count} ${count === 1 ? 'piece' : 'pieces'}`;
 
 /** The hero's big theme word fills about the same width whatever its length. */

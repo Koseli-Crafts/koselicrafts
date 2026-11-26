@@ -10,7 +10,7 @@ import { productOrderLink } from './contact';
 import { getPalette } from './palette';
 
 /** One entry of src/data/products.json, as Pages CMS writes it. */
-interface ProductEntry {
+export interface ProductEntry {
   title: string;
   kind?: string;
   description: string;
@@ -64,7 +64,8 @@ function findImage(product: ProductEntry, imageRef: string) {
 // Price may be a number (1200), a range ("750-1500"), or empty/0 when it has
 // not been decided yet.
 function formatPrice(price: ProductEntry['price']) {
-  const text = String(price ?? '').trim();
+  // Staff sometimes type the currency anyway: "Rs. 1500" or "1500/-".
+  const text = String(price ?? '').trim().replace(/^rs\.?\s*/i, '').replace(/\s*\/-$/, '');
   if (!text || Number(text) === 0) return 'Price on request';
   const amounts = text.split(/\s*[-–]\s*/).map(Number);
   if (amounts.some(Number.isNaN)) return `Rs. ${text}`;
@@ -127,31 +128,48 @@ const slug = (text: string) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
 
+/**
+ * A short code made from the text itself, so it stays the same however the
+ * products are ordered (FNV-1a, written in base 36).
+ */
+function nameCode(text: string) {
+  let hash = 0x811c9dc5;
+  for (const char of text) {
+    hash ^= char.codePointAt(0)!;
+    hash = Math.imul(hash, 0x01000193) >>> 0;
+  }
+  return hash.toString(36);
+}
+
+// A name with no English letters (written only in Nepali) has nothing to make a
+// readable link from, so it gets a code made from the name: "piece-1k3x9qz".
+const pieceId = (title: string) => slug(title) || `piece-${nameCode(title.trim())}`;
+
 // Wide pieces (ornaments, frames) would look oversized at full height.
 export const displayHeight = (image: { width: number; height: number }) =>
   Math.round(Math.min(600, 400 / (image.width / image.height)));
 
-export async function loadCatalog(): Promise<Product[]> {
+export async function loadCatalog(entries = productsData as ProductEntry[]): Promise<Product[]> {
   checkCmsChoices();
-  const entries = productsData as ProductEntry[];
 
   // Each product's link (/#its-name) comes from its name and sits beside the theme
   // filters' links (/#christmas), so no two may be the same.
+  const ids = entries.map((entry) => pieceId(entry.title));
   const seen = new Map<string, string>(THEMES.map((theme) => [theme.id, `the theme "${theme.nav}"`]));
-  for (const entry of entries) {
-    const other = seen.get(slug(entry.title));
+  entries.forEach((entry, index) => {
+    const other = seen.get(ids[index]);
     if (other) throw new Error(`The product "${entry.title}" has a name too alike to ${other} to tell their links apart. Change the product's name.`);
-    seen.set(slug(entry.title), `the product "${entry.title}"`);
-  }
+    seen.set(ids[index], `the product "${entry.title}"`);
+  });
 
   return Promise.all(
-    entries.map(async (entry) => {
+    entries.map(async (entry, index) => {
       const photo = findImage(entry, entry.images[0]);
       const image = entry.cutout ? findImage(entry, entry.cutout) : photo;
       const cord = isCordId(entry.cord) ? entry.cord : 'wood';
       const swatchColors = entry.swatches ? withPresets(await ownColors(entry)) : [];
       const swatches = swatchColors.map((hex) => ({ hex, name: colorName(hex) }));
-      const id = slug(entry.title);
+      const id = ids[index];
       const themes = productThemes(entry);
       const shareUrl = absoluteUrl(piecePage(id));
 

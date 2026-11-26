@@ -86,6 +86,9 @@ products.forEach((product, i) => {
     errors.push(`${where}: "images" must list at least one image filename.`);
     return;
   }
+  if (!product.cutout) {
+    warnings.push(`${where} has no cut-out photo, so the shop shows its first photo with the background. Add one when you can.`);
+  }
   for (const imageRef of [...product.images, ...(product.cutout ? [product.cutout] : [])]) {
     const filename = basename(imageRef);
     used.add(filename);

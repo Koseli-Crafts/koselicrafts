@@ -1,11 +1,19 @@
 ---
 import TagButton from '../ui/TagButton.astro';
 import { THEMES } from '../../lib/themes';
-import { displayHeight, loadCatalog } from '../../lib/catalog';
-import { piecesLabel } from '../../lib/format';
+import { displayHeight, loadCatalog, type ProductEntry } from '../../lib/catalog';
+import { piecesLabel, textLang } from '../../lib/format';
+import { QUESTION_LINK } from '../../lib/contact';
 
-const products = await loadCatalog();
+interface Props {
+  /** Products to show instead of src/data/products.json (the dev-only worst-case page uses this). */
+  entries?: ProductEntry[];
+}
+
+const products = await loadCatalog(Astro.props.entries);
 const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
+// Staff press Enter between paragraphs in Pages CMS; a blank line starts a new one.
+const paragraphs = (text: string) => text.split(/\n\s*\n/).map((paragraph) => paragraph.trim()).filter(Boolean);
 ---
 
 <section id="collection" class="collection" data-collection>
@@ -25,6 +33,10 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
   </div>
 
   <p class="side-note hide-below-900">Made in Kathmandu, Nepal</p>
+
+  <p class="empty" data-empty hidden>
+    Nothing here yet. <a href={QUESTION_LINK} target="_blank" rel="noopener">Ask us about it on WhatsApp</a>.
+  </p>
 
   <div class="cluster" data-cluster>
     {products.map((product, index) => (
@@ -53,9 +65,9 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     <div class="panel" data-panel aria-live="polite">
       {products.map((product, index) => (
         <div class="panel-body" data-panel-for={index} hidden>
-          <span class="eyebrow muted">{product.kind} · {product.cordLabel}</span>
+          <span class="eyebrow muted"><span lang={textLang(product.kind)}>{product.kind}</span> · {product.cordLabel}</span>
           <h3>{product.title}</h3>
-          <p class="panel-text">{product.description}</p>
+          {paragraphs(product.description).map((paragraph) => <p class="panel-text">{paragraph}</p>)}
           {product.swatches.length > 1 && (
             <div class="swatches">
               <span class="eyebrow muted">Macramé colour · <span data-swatch-state>original</span></span>
@@ -108,9 +120,10 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     </div>
     <div class="pager" data-pager>
       <button type="button" class="bead bead--small pager-arrow" data-cluster-step="-1" aria-label="Previous pieces">←</button>
-      <div class="dots" aria-hidden="true">
+      <div class="dots" data-dots aria-hidden="true">
         {products.map(() => <span class="dot"></span>)}
       </div>
+      <span class="pager-count" data-pager-count hidden></span>
       <button type="button" class="bead bead--small pager-arrow" data-cluster-step="1" aria-label="Next pieces">→</button>
     </div>
     <span class="eyebrow hide-below-900" data-step-hint>Tap a piece to look closer</span>
@@ -118,7 +131,7 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
 </section>
 
 <script>
-  import { piecesLabel } from '../../lib/format';
+  import { padNumber, piecesLabel } from '../../lib/format';
   import { recolorImage } from '../../lib/recolor';
   import { productOrderLink } from '../../lib/contact';
   import { SHOW_THEME_EVENT } from '../../scripts/theme';
@@ -139,6 +152,12 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
   const stepHint = section.querySelector<HTMLElement>('[data-step-hint]')!;
   const phone = window.matchMedia('(max-width: 760px)');
   const caption = section.querySelector<HTMLElement>('[data-caption]')!;
+  const empty = section.querySelector<HTMLElement>('[data-empty]')!;
+  const dotsRow = section.querySelector<HTMLElement>('[data-dots]')!;
+  const pagerCount = section.querySelector<HTMLElement>('[data-pager-count]')!;
+  const stepButtons = [...section.querySelectorAll<HTMLButtonElement>('[data-cluster-step]')];
+  /** Past this many pieces the dots would run off a phone screen, so a count shows instead. */
+  const MOST_DOTS = 12;
 
   /**
    * Each piece and each filter has its own address, e.g. /#rustic-psalm-23-wall-art
@@ -301,12 +320,18 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
       else if (hasRendered && wrapped && spot.opacity > 0) jump(item, 0);
     });
 
-    pager.hidden = focused;
-    caption.hidden = focused;
+    const isEmpty = list.length === 0;
+    empty.hidden = !isEmpty;
+    stepButtons.forEach((button) => { button.hidden = isEmpty; });
+    pager.hidden = focused || isEmpty;
+    caption.hidden = focused || isEmpty;
     dots.forEach((dot, k) => {
       dot.hidden = k >= list.length;
       dot.classList.toggle('is-current', k === center);
     });
+    dotsRow.hidden = list.length > MOST_DOTS;
+    pagerCount.hidden = list.length <= MOST_DOTS;
+    pagerCount.textContent = `${padNumber(center + 1)} / ${padNumber(list.length)}`;
 
     stepNo.textContent = focused ? '02' : '01';
     stepLabel.innerHTML = focused ? 'Your<br>piece' : 'The<br>collection';
@@ -336,6 +361,7 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
   /** Past the last piece comes the first again, and before the first, the last. */
   function step(direction: number) {
     const count = visibleItems().length;
+    if (count === 0) return;
     centered = (Math.min(centered, count - 1) + direction + count) % count;
     render();
   }
@@ -464,7 +490,7 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     selected = -1;
     render();
   });
-  section.querySelectorAll<HTMLButtonElement>('[data-cluster-step]').forEach((button) => {
+  stepButtons.forEach((button) => {
     button.addEventListener('click', () => step(Number(button.dataset.clusterStep)));
   });
   tabs.forEach((tab) => tab.addEventListener('click', () => setFilter(tab.dataset.filter!)));
@@ -898,6 +924,31 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
   }
 
   /* On smaller screens the corner hint is hidden, so the hint sits under the pieces instead. */
+  .empty {
+    position: absolute;
+    z-index: 2;
+    top: 460px;
+    left: 24px;
+    right: 24px;
+    text-align: center;
+    font-size: 18px;
+    color: var(--color-body);
+  }
+
+  .empty a {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+
+  .pager-count {
+    min-width: 72px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    font-variant-numeric: tabular-nums;
+  }
+
   .caption {
     display: none;
     position: absolute;
@@ -952,7 +1003,9 @@ const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1);
     gap: 14px;
   }
 
-  .pager[hidden] {
+  .pager[hidden],
+  .dots[hidden],
+  [data-cluster-step][hidden] {
     display: none;
   }
 
